@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>টিম হাজিরা ও ব্যক্তিগত খাতা</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f172a;
+    --card-bg: #1e293b;
+    --accent: #38bdf8;
+    --accent-hover: #0ea5e9;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --success: #22c55e;
+    --danger: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Hind Siliguri', sans-serif;
+    padding: 30px 20px;
+    min-height: 100vh;
+  }
+  .container { max-width: 950px; margin: 0 auto; }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    margin-bottom: 25px;
+  }
+  header h1 { font-size: 1.8rem; color: var(--accent); }
+  .back-btn {
+    background: transparent; border: 1px solid var(--accent); color: var(--accent);
+    padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600;
+    text-decoration: none; font-size: 0.9rem; transition: all 0.25s;
+  }
+  .back-btn:hover { background: var(--accent); color: var(--bg); }
+  
+  .profile-tabs { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+  .tab-btn {
+    background: var(--card-bg); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 18px; font-weight: 600; border-radius: 4px; cursor: pointer; transition: all 0.2s;
+  }
+  .tab-btn:hover { border-color: var(--accent); }
+  .tab-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 24px; }
+  @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+  
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px;
+    padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin-bottom: 20px;
+  }
+  .card h2 { font-size: 1.25rem; margin-bottom: 18px; color: var(--text); border-left: 4px solid var(--accent); padding-left: 10px; }
+  
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text-muted); }
+  .form-group input, .form-group select {
+    width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); border-radius: 4px; font-family: inherit; font-size: 0.95rem;
+  }
+  
+  .btn-submit {
+    width: 100%; background: var(--accent); color: var(--bg); border: none;
+    padding: 12px; font-weight: 700; border-radius: 4px; cursor: pointer; font-size: 1rem;
+    margin-top: 10px;
+  }
+  .btn-submit:hover { background: var(--accent-hover); }
+  
+  .add-member-box { display: flex; gap: 8px; margin-top: 10px; }
+  .btn-add-member { background: var(--success); color: #fff; border: none; padding: 0 15px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
+
+  .member-manage-list { margin-top: 15px; list-style: none; }
+  .member-manage-item {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--bg); padding: 8px 12px; border-radius: 4px; margin-bottom: 6px; font-size: 0.9rem;
+  }
+  .remove-member-btn { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.8rem; }
+
+  .summary-table { width: 100%; border-collapse: collapse; }
+  .summary-table th, .summary-table td { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); }
+  .summary-table th { color: var(--accent); font-weight: 600; }
+  .summary-table td strong { color: var(--success); }
+
+  .log-list { list-style: none; max-height: 400px; overflow-y: auto; }
+  .log-item {
+    background: var(--bg); border: 1px solid var(--border); padding: 12px;
+    border-radius: 4px; margin-bottom: 10px; font-size: 0.9rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .log-info strong { color: #fff; font-size: 1rem; }
+  .log-info span { color: var(--text-muted); margin-left: 10px; }
+  .badge-hours { background: rgba(56, 189, 248, 0.2); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+  .badge-leave { background: rgba(239, 68, 68, 0.2); color: var(--danger); padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+  
+  .delete-log { background: none; border: none; color: var(--danger); cursor: pointer; font-weight: bold; font-size: 0.95rem; margin-left: 15px; }
+  .empty-msg { color: var(--text-muted); text-align: center; font-style: italic; padding: 20px 0; }
+  .current-view-title { color: var(--accent); font-weight: 600; margin-bottom: 10px; font-size: 1.05rem;}
+
+  .photo-container { margin-top: 25px; text-align: center; border-top: 1px dashed var(--border); padding-top: 20px; }
+  .photo-frame { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; background-color: var(--bg); box-shadow: 0 4px 10px rgba(56, 189, 248, 0.3); }
+  .photo-title { font-size: 0.85rem; color: var(--accent); margin-top: 8px; font-weight: 700; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div>
+      <h1>⚡ টিম হাজিরা ও ব্যক্তিগত খাতা</h1>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">প্রোফাইল ভিত্তিক আলাদা কাজের ঘণ্টা ও ছুটি ট্র্যাকার</p>
+    </div>
+    <a href="index.html" class="back-btn">← মূল সাইট</a>
+  </header>
+
+  <div class="profile-tabs" id="profileTabsZone"></div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>নতুন হাজিরা ইনপুট</h2>
+      <form id="attendanceForm">
+        <div class="form-group">
+          <label for="workDate">তারিখ:</label>
+          <input type="date" id="workDate" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="memberName">সদস্যের নাম:</label>
+          <select id="memberName" required></select>
+        </div>
+
+        <div class="form-group">
+          <label for="statusType">স্ট্যাটাস:</label>
+          <select id="statusType" required>
+            <option value="present">ডিউটি / কাজ করেছে</option>
+            <option value="leave">ছুটি (Leave)</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="hoursWrapper">
+          <label for="workHours">কাজের সময় (ঘণ্টা):</label>
+          <input type="number" id="workHours" step="0.5" placeholder="0">
+        </div>
+
+        <button type="submit" class="btn-submit">রেকর্ড সংরক্ষণ করুন</button>
+      </form>
+
+      <div class="photo-container">
+          <img class="photo-frame" src=1000203040." alt="Masum Profile Photo" style="width: 200px; height: 100px; object-fit: cover; border-radius: 6px; margin: 5px auto;">
+          
+        <div class="photo-title">ADMIN: MASUM</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <h2>ঘণ্টার সামারি হিসাব</h2>
+        <table class="summary-table">
+          <thead>
+            <tr><th>নাম</th><th>মোট কাজের সময়</th></tr>
+          </thead>
+          <tbody id="summaryBody"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>🛠️ সদস্য কন্ট্রোল প্যানেল</h2>
+        <div class="form-group">
+          <label>নতুন সদস্যের নাম লিখুন:</label>
+          <div class="add-member-box">
+            <input type="text" id="newMemberName" placeholder="উদা: মাসুম">
+            <button type="button" class="btn-add-member" id="addMemberBtn">+</button>
+          </div>
+        </div>
+        <ul id="memberManageList" class="member-manage-list"></ul>
+      </div>
+
+      <div class="card">
+        <h2>হাজিরা রেজিস্টার খাতা</h2>
+        <div id="viewTitle" class="current-view-title">দেখাচ্ছে: সবার তথ্য</div>
+        <ul id="logList" class="log-list"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let allowedMembers = JSON.parse(localStorage.getItem('team_members_list')) || ["নাজমুল", "মাসুম", "জাকির"];
+  let attendanceLogs = JSON.parse(localStorage.getItem('team_attendance_logs')) || [];
+  let currentProfileView = 'all';
+
+  document.getElementById('workDate').valueAsDate = new Date();
+
+  document.getElementById('statusType').addEventListener('change', function() {
+    const hoursWrapper = document.getElementById('hoursWrapper');
+    const workHoursInput = document.getElementById('workHours');
+    if (this.value === 'leave') {
+      hoursWrapper.style.display = 'none';
+      workHoursInput.value = '0';
+    } else {
+      hoursWrapper.style.display = 'block';
+      workHoursInput.value = '';
+    }
+  });
+
+  function renderAll() {
+    const memberSelect = document.getElementById('memberName');
+    memberSelect.innerHTML = '';
+    allowedMembers.forEach(m => {
+      memberSelect.innerHTML += `<option value="${m}">${m}</option>`;
+    });
+
+    const tabsZone = document.getElementById('profileTabsZone');
+    tabsZone.innerHTML = `<button class="tab-btn ${currentProfileView === 'all' ? 'active' : ''}" onclick="switchProfile('all')">👥 সবাই একসাথে</button>`;
+    allowedMembers.forEach(m => {
+      tabsZone.innerHTML += `<button class="tab-btn ${currentProfileView === m ? 'active' : ''}" onclick="switchProfile('${m}')">👤 ${m}</button>`;
+    });
+
+    const manageList = document.getElementById('memberManageList');
+    manageList.innerHTML = '';
+    allowedMembers.forEach((m, idx) => {
+      manageList.innerHTML += `
+        <li class="member-manage-item">
+          <span>👤 ${m}</span>
+          <button class="remove-member-btn" onclick="removeMember(${idx})">❌ নাম মুছুন</button>
+        </li>
+      `;
+    });
+
+    const summaryBody = document.getElementById('summaryBody');
+    summaryBody.innerHTML = '';
+    let totals = {};
+    allowedMembers.forEach(m => totals[m] = 0);
+    
+    attendanceLogs.forEach(log => {
+      if(totals[log.name] !== undefined) {
+        totals[log.name] += parseFloat(log.hours || 0);
+      }
+    });
+
+    allowedMembers.forEach(m => {
+      summaryBody.innerHTML += `<tr><td>${m}</td><td><strong>${totals[m]} ঘণ্টা</strong></td></tr>`;
+    });
+
+    const logList = document.getElementById('logList');
+    logList.innerHTML = '';
+    
+    let displayCount = 0;
+    for (let i = attendanceLogs.length - 1; i >= 0; i--) {
+      const log = attendanceLogs[i];
+      if (currentProfileView !== 'all' && log.name !== currentProfileView) continue;
+      
+      displayCount++;
+      const li = document.createElement('li');
+      li.className = 'log-item';
+      let badge = log.isLeave ? `<span class="badge-leave">ছুটি</span>` : `<span class="badge-hours">${log.hours} ঘণ্টা</span>`;
+      
+      li.innerHTML = `
+        <div class="log-info"><strong>${log.name}</strong> <span>📅 ${log.date}</span></div>
+        <div>${badge}<button class="delete-log" onclick="deleteRecord(${i})">❌</button></div>
+      `;
+      logList.appendChild(li);
+    }
+
+    if(displayCount === 0) {
+      logList.innerHTML = '<li class="empty-msg">কোনো রেকর্ড খুঁজে পাওয়া যায়নি।</li>';
+    }
+  }
+
+  window.switchProfile = function(name) {
+    currentProfileView = name;
+    document.getElementById('viewTitle').innerText = name === 'all' ? "দেখাচ্ছে: সবার তথ্য" : `দেখাচ্ছে: শুধুমাত্র ${name}-এর প্রোফাইল`;
+    renderAll();
+  };
+
+  document.getElementById('addMemberBtn').addEventListener('click', function() {
+    const input = document.getElementById('newMemberName');
+    const name = input.value.trim();
+    if(!name) return;
+    if(allowedMembers.includes(name)) return alert("এই নাম ইতিমধ্যে আছে!");
+    
+    allowedMembers.push(name);
+    localStorage.setItem('team_members_list', JSON.stringify(allowedMembers));
+    input.value = '';
+    renderAll();
+  });
+
+  window.removeMember = function(idx) {
+    if(confirm("সদস্যকে রিমুভ করতে চান?")) {
+      allowedMembers.splice(idx, 1);
+      localStorage.setItem('team_members_list', JSON.stringify(allowedMembers));
+      currentProfileView = 'all';
+      renderAll();
+    }
+  };
+
+  document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const date = document.getElementById('workDate').value;
+    const name = document.getElementById('memberName').value;
+    const status = document.getElementById('statusType').value;
+    const hoursInput = document.getElementById('workHours').value;
+    
+    const isLeave = status === 'leave';
+    const hours = isLeave ? 0 : parseFloat(hoursInput || 0);
+
+    attendanceLogs.push({ date, name, hours, isLeave });
+    localStorage.setItem('team_attendance_logs', JSON.stringify(attendanceLogs));
+    
+    document.getElementById('workHours').value = '';
+    renderAll();
+  });
+
+  window.deleteRecord = function(idx) {
+    if(confirm("রেকর্ডটি মুছে ফেলবেন?")) {
+      attendanceLogs.splice(idx, 1);
+      localStorage.setItem('team_attendance_logs', JSON.stringify(attendanceLogs));
+      renderAll();
+    }
+  };
+
+  renderAll();
+</script>
+</body>
+</html>
