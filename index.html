@@ -468,7 +468,138 @@
   <div class="section-inner about-grid">
 
     <div>
+<!-- ================= SEARCH & BLOG SECTION ================= -->
+<div class="blog-section" style="margin: 40px 0; font-family: 'SolaimanLipi', sans-serif;">
+    
+    <!-- লাইভ সার্চ বক্স -->
+    <input type="text" id="storySearch" onkeyup="filterStories()" placeholder="🔍 আপনার পছন্দের গল্প বা শিরোনাম সার্চ করুন..." 
+           style="width: 100%; padding: 14px; font-size: 16px; border: 2px solid #800020; border-radius: 8px; margin-bottom: 25px; outline: none; box-sizing: border-box;">
+    
+    <!-- শিরোনামের তালিকা (সার্চ করলে এটা ফিল্টার হবে) -->
+    <ul id="storyList" style="list-style: none; padding: 0; margin: 0 0 40px 0;">
+        <li style="margin-bottom: 12px; padding: 12px; border-bottom: 1px solid #eee; background: #fff; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <a href="#education-blog" style="text-decoration: none; color: #800020; font-size: 18px; font-weight: bold; display: block;">
+                📚 বাংলাদেশের শিক্ষাব্যবস্থা: মূল সমস্যা কোথায়? সমাধান কী হতে পারে? ↗
+            </a>
+        </li>
+    </ul>
 
+    <!-- মূল আর্টিকেলের কন্টেন্ট এরিয়া -->
+    <div class="story-contents">
+        
+        <!-- আর্টিকেল শুরু -->
+        <div id="education-blog" style="background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 40px; border-top: 4px solid #800020;">
+            
+            <h2 style="color: #800020; font-size: 26px; line-height: 1.4; margin-top: 0; margin-bottom: 20px;">
+                বাংলাদেশের শিক্ষাব্যবস্থা: মূল সমস্যা কোথায়? সমাধান কী হতে পারে?
+            </h2>
+            
+            <p style="line-height: 1.8; color: #333; font-size: 16px; text-align: justify;">
+                <strong>ভূমিকা:</strong> শিক্ষা একটি দেশের উন্নয়নের ভিত্তি। একটি ভালো শিক্ষাব্যবস্থা শুধু পরীক্ষায় ভালো ফল করার জন্য নয়, বরং দক্ষ, সৃজনশীল, नैतिक ও সমস্যা সমাধানে সক্ষম মানুষ তৈরির জন্য কাজ করে। কিন্তু বাংলাদেশের বর্তমান শিক্ষাব্যবস্থা নিয়ে শিক্ষার্থী, অভিভাবক ও শিক্ষকদের মধ্যে দীর্ঘদিন ধরেই নানা প্রশ্ন রয়েছে। ভালো ফলাফল ও জিপিএর প্রতিযোগিতার বাইরে বাস্তব জীবনের জন্য কতটা প্রস্তুত হচ্ছে শিক্ষার্থীরা—সেটিই এখন সবচেয়ে বড় আলোচনার বিষয়।
+            </p>
+
+            <!-- 📸 ছবি ১ (ব্যানার ইমেজ): ভূমিকা ও মূল সমস্যার মাঝে -->
+            <div style="margin: 25px 0; text-align: center;">
+                <img src="education-banner.jpg" alt="বাংলাদেশের শিক্ষাব্যবস্থা" style="width: 100%; max-width: 700px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="font-size: 13px; color: #666; font-style: italic; margin-top: 5px;">[ছবি ১: জিপিএ বনাম বাস্তব দক্ষতা]</p>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+
+            <h3 style="color: #800020; font-size: 20px;">১. মুখস্থবিদ্যার উপর অতিরিক্ত নির্ভরতা</h3>
+            <p style="line-height: 1.8; color: #444;">আমাদের শিক্ষাব্যবস্থার অন্যতম বড় সমস্যা হলো মুখস্থনির্ভর শিক্ষা। অধিকাংশ পরীক্ষায় সৃজনশীল চিন্তা, বিশ্লেষণ বা বাস্তব সমস্যা সমাধানের চেয়ে বইয়ের ভাষা মনে রাখা বেশি গুরুত্বপূর্ণ হয়ে দাঁড়ায়। এর ফলে অনেক শিক্ষার্থী ভালো ফল করলেও বাস্তব জীবনের চ্যালেঞ্জ মোকাবিলার দক্ষতা অর্জন করতে পারে না।</p>
+
+            <h3 style="color: #800020; font-size: 20px;">২. দক্ষ শিক্ষক ও মানসম্মত শিক্ষার ঘাটতি</h3>
+            <p style="line-height: 1.8; color: #444;">দেশের অনেক স্কুল ও কলেজে এখনো পর্যাপ্ত প্রশিক্ষিত ও দক্ষ শিক্ষক নেই। কোথাও নিয়মিত ক্লাস হয় না, কোথাও আবার শিক্ষার্থীরা শ্রেণিকক্ষে পর্যাপ্ত শেখার সুযোগ পায় না। ফলে অনেক শিক্ষার্থী বাধ্য হয়ে কোচিং বা প্রাইভেট টিউশনের উপর নির্ভরশীল হয়ে পড়ে।</p>
+
+            <h3 style="color: #800020; font-size: 20px;">৩. পরীক্ষা ও জিপিএ-কেন্দ্রিক মানসিকতা</h3>
+            <p style="line-height: 1.8; color: #444;">আজকের শিক্ষাব্যবক্ষায় অনেক ক্ষেত্রেই সফলতার একমাত্র মানদণ্ড হিসেবে পরীক্ষার ফলাফলকে ধরা হয়। কিন্তু বাস্তবে একজন মানুষের মূল্য শুধু একটি জিপিএ দিয়ে নির্ধারণ করা যায় না। নেতৃত্ব, যোগাযোগ, সৃজনশীলতা, প্রযুক্তি ব্যবহার, দলগত কাজ ও সমস্যা সমাধানের দক্ষতাও সমান গুরুত্বপূর্ণ।</p>
+
+            <h3 style="color: #800020; font-size: 20px;">৪. বাস্তব জীবনের দক্ষতার অভাব</h3>
+            <p style="line-height: 1.8; color: #444;">বিশ্ববিদ্যালয় শেষ করার পরও অনেক শিক্ষার্থী— একটি ভালো CV তৈরি করতে পারে না, PowerPoint প্রেজেন্টেশন বানাতে পারে না, Excel-এর মৌলিক কাজ জানে না, ইমেইল লেখার নিয়ম জানে না এবং ডিজিটাল টুল ব্যবহারে আত্মবিশ্বাসী নয়। বর্তমান চাকরির বাজারে এগুলো অত্যন্ত গুরুত্বপূর্ণ দক্ষতা।</p>
+
+            <!-- 📸 ছবি ২: বাস্তব দক্ষতার অভাব সেকশনের নিচে -->
+            <div style="margin: 25px 0; text-align: center;">
+                <img src="skills-gap.jpg" alt="বাস্তব জীবনের দক্ষতা" style="width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="font-size: 13px; color: #666; font-style: italic; margin-top: 5px;">[ছবি ২: আধুনিক চাকরির বাজারের জন্য প্রয়োজনীয় ডিজিটাল স্কিলস]</p>
+            </div>
+
+            <h3 style="color: #800020; font-size: 20px;">৫. সবার জন্য একই পথ কেন?</h3>
+            <p style="line-height: 1.8; color: #444;">প্রত্যেক মানুষের আগ্রহ ও प्रतिभा এক নয়। কেউ প্রোগ্রামিং ভালোবাসে, কেউ ভিডিও এডিটিং, কেউ ডিজাইন, কেউ ব্যবসা, কেউ কৃষি, কেউ গবেষণা কিংবা শিল্পকলা। তবুও আমাদের সমাজে এখনো অনেক সময় মনে করা হয়, সবাইকে একই ধরনের শিক্ষা গ্রহণ করে একই ধরনের চাকরির পেছনে ছুটতে হবে। এই মানসিকতা পরিবর্তন হওয়া দরকার।</p>
+
+            <h3 style="color: #800020; font-size: 20px;">৬. প্রযুক্তির সাথে তাল মিলিয়ে শিক্ষা</h3>
+            <p style="line-height: 1.8; color: #444;">কৃত্রিম বুদ্ধিমত্তা (AI), অটোমেশন ও ডিজিটাল প্রযুক্তি দ্রুত পৃথিবী বদলে দিচ্ছে। আগামী দিনের চাকরির বাজারে শুধু ডিগ্রি নয়, বরং নতুন প্রযুক্তি শেখার ক্ষমতা, দ্রুত শেখার মানসিকতা এবং বাস্তব দক্ষতাই মানুষকে এগিয়ে রাখবে। তাই শিক্ষাক্রমে AI, ডিজিটাল লিটারেসি, কোডিং, তথ্য বিশ্লেষণ, আর্থিক শিক্ষা ও উদ্যোক্তা দক্ষতার মতো বিষয় আরও গুরুত্ব পাওয়া উচিত।</p>
+
+            <h3 style="color: #800020; font-size: 20px;">৭. শিক্ষার্থীদের মানসিক চাপ</h3>
+            <p style="line-height: 1.8; color: #444;">অনেক শিক্ষার্থী ছোটবেলা থেকেই পরীক্ষা, নম্বর ও ভবিষ্যৎ নিয়ে অতিরিক্ত চাপের মধ্যে বেড়ে ওঠে। এই চাপ অনেক সময় আত্মবিশ্বাস কমিয়ে দেয় এবং সৃজনশীল চিন্তাকে বাধাগ্রস্ত করে। শিক্ষা এমন হওয়া উচিত, যেখানে শেখা আনন্দের হবে; ভয়ের নয়。</p>
+
+            <hr style="border: 0; border-top: 2px dashed #800020; margin: 30px 0;">
+
+            <!-- समाधान সেকশন -->
+            <h3 style="color: #fff; background: #800020; padding: 10px 15px; border-radius: 6px; font-size: 22px;">💡 সমাধান কী হতে পারে?</h3>
+            <ul style="line-height: 1.8; color: #333; font-size: 16px; padding-left: 20px;">
+                <li style="margin-bottom: 8px;">মুখস্থবিদ্যার পরিবর্তে সমস্যা সমাধানভিত্তিক শিক্ষা।</li>
+                <li style="margin-bottom: 8px;">শিক্ষক প্রশিক্ষণের মান উন্নয়ন।</li>
+                <li style="margin-bottom: 8px;">প্রযুক্তি ও AI-ভিত্তিক আধুনিক কারিকুলাম।</li>
+                <li style="margin-bottom: 8px;">যোগাযোগ দক্ষতা, উপস্থাপনা, লেখালেখি ও ডিজিটাল স্কিল বাধ্যতামূলক করা।</li>
+                <li style="margin-bottom: 8px;">শিক্ষার্থীদের আগ্রহ অনুযায়ী ক্যারিয়ার বেছে নেওয়ার সুযোগ বৃদ্ধি।</li>
+                <li style="margin-bottom: 8px;">উদ্যোক্তা তৈরির উপর গুরুত্ব দেওয়া।</li>
+                <li style="margin-bottom: 8px;">পরীক্ষার ফলাফলের পাশাপাশি বাস্তব দক্ষতার মূল্যায়ন।</li>
+                <li style="margin-bottom: 8px;">মানসিক স্বাস্থ্য ও ক্যারিয়ার কাউন্সেলিং চালু করা।</li>
+            </ul>
+
+            <!-- 📸 ছবি ৩: সমাধান এবং পরামর্শের মাঝে -->
+            <div style="margin: 25px 0; text-align: center;">
+                <img src="education-solution.jpg" alt="আধুনিক শিক্ষা" style="width: 100%; max-width: 600px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <p style="font-size: 13px; color: #666; font-style: italic; margin-top: 5px;">[ছবি ৩: প্রযুক্তিনির্ভর আধুনিক ও আনন্দময় শিক্ষা ব্যবস্থা]</p>
+            </div>
+
+            <!-- পরামর্শ সেকশন -->
+            <h3 style="color: #800020; font-size: 22px; border-left: 4px solid #800020; padding-left: 10px;">🎯 শিক্ষার্থীদের জন্য কিছু পরামর্শ</h3>
+            <p style="font-weight: bold; color: #333;">শুধু বই পড়লেই হবে না। প্রতিদিন নতুন কিছু শেখার চেষ্টা করুন:</p>
+            <ul style="line-height: 1.8; color: #333; padding-left: 20px;">
+                <li style="margin-bottom: 6px;">একটি বাস্তব দক্ষতা শিখুন।</li>
+                <li style="margin-bottom: 6px;">ইংরেজি ও যোগাযোগ দক্ষতা বাড়ান।</li>
+                <li style="margin-bottom: 6px;">AI টুল ব্যবহার শিখুন।</li>
+                <li style="margin-bottom: 6px;">ছোট ছোট প্রজেক্ট তৈরি করুন।</li>
+                <li style="margin-bottom: 6px;">নিজের কাজ অনলাইনে প্রকাশ করুন।</li>
+                <li style="margin-bottom: 6px;">ভুল করতে ভয় পাবেন না।</li>
+                <li style="margin-bottom: 6px;">নিয়মিত অনুশীলন করুন।</li>
+            </ul>
+            <p style="font-weight: bold; color: #800020; font-size: 17px; margin-top: 15px;">"আজকের পৃথিবীতে সবচেয়ে মূল্যবান সম্পদ শুধু ডিগ্রি নয়—দক্ষতা।"</p>
+
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
+
+            <h3 style="color: #800020; font-size: 20px;">📋 উপসংহার</h3>
+            <p style="line-height: 1.8; color: #333; text-align: justify;">
+                বাংলাদেশের শিক্ষাব্যবস্থায় ইতিবাচক দিক যেমন রয়েছে, তেমনি উন্নয়নেরও যথেষ্ট সুযোগ আছে। শিক্ষা যদি শুধু পরীক্ষা ও জিপিএর মধ্যে সীমাবদ্ধ থাকে, তাহলে ভবিষ্যতের বিশ্ব প্রতিযোগিতায় পিছিয়ে পড়ার ঝুঁকি থাকবে। একটি আধুনিক শিক্ষাব্যবস্থার লক্ষ্য হওয়া উচিত এমন মানুষ তৈরি করা, যারা শুধু ভালো পরীক্ষার্থী নয়; বরং সৃজনশীল, দক্ষ, নৈতিক, প্রযুক্তি-সচেতন এবং বাস্তব জীবনের সমস্যা সমাধানে সক্ষম নাগরিক। ডিগ্রি গুরুত্বপূর্ণ, কিন্তু দক্ষতা, চিন্তাশক্তি, সততা এবং শেখার আগ্রহ—এসবই একজন মানুষকে সত্যিকার অর্থে সফল করে তোলে।
+            </p>
+            
+        </div>
+        <!-- আর্টিকেল শেষ -->
+
+    </div>
+</div>
+
+<!-- লাইভ সার্চ কাজ করানোর জন্য জাভাস্ক্রিপ্ট কোড -->
+<script>
+function filterStories() {
+    let input = document.getElementById('storySearch').value.toLowerCase();
+    let ul = document.getElementById('storyList');
+    let li = ul.getElementsByTagName('li');
+    
+    for (let i = 0; i < li.length; i++) {
+        let a = li[i].getElementsByTagName('a')[0];
+        let txtValue = a.textContent || a.innerText;
+        if (txtValue.toLowerCase().indexOf(input) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+</script>
+<!-- ========================================================= -->
     <!-- সার্চ বক্স সেকশন -->
 <div class="search-section" style="margin: 30px 0; font-family: sans-serif;">
     
