@@ -1,0 +1,97 @@
+/* ==========================================================================
+   english-learning.css — English Learning Hub
+   style.css এর কালার/ফন্ট টোকেন ব্যবহার করে বানানো, পুরো সাইটের সাথে মিলিয়ে।
+   ========================================================================== */
+
+.el-hero{ padding: 3.4rem 1.4rem 2rem; }
+.el-hero-inner{
+  max-width: 1140px; margin:0 auto;
+  display:grid; grid-template-columns: 1.05fr 1fr; gap: 2.5rem; align-items:center;
+}
+.el-eyebrow{
+  display:inline-block; font-family: var(--font-util); font-size:.72rem;
+  letter-spacing:.16em; font-weight:700; color: var(--teal);
+  margin-bottom: .7rem;
+}
+.el-title{
+  font-size: clamp(2rem, 5vw, 3rem); color: var(--ink); margin: 0 0 1rem; line-height:1.15;
+}
+.el-subtitle{
+  color: var(--muted); font-size: 1.08rem; line-height:1.8; max-width: 46ch; margin: 0 0 1.6rem;
+}
+.el-hero-cta{ border:none; cursor:pointer; }
+.el-hero-art svg{ width:100%; height:auto; display:block; }
+.el-hero-art{ animation: floaty 6s ease-in-out infinite; }
+@keyframes floaty{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-10px); }
+}
+
+.el-main{ max-width: 1140px; margin:0 auto; padding: 0 1.4rem; }
+.el-section{ padding: 3.2rem 0; }
+.el-section--tint{
+  background: var(--paper-2); margin: 0 -1.4rem; padding: 3.2rem 1.4rem;
+}
+.el-section-head{ text-align:center; margin-bottom: 2.2rem; }
+.el-h2{ font-size: clamp(1.5rem, 3.4vw, 2.1rem); color: var(--ink); margin:0; }
+
+.book-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 1.6rem;
+}
+.el-book-card{
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 18px;
+  padding: 1.8rem 1.6rem; text-align:center; box-shadow: var(--shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.el-book-card:hover{ transform: translateY(-6px); box-shadow: 0 16px 34px rgba(27,42,69,.14); }
+.el-book-art{ display:flex; justify-content:center; margin-bottom: 1.1rem; }
+.el-book-card h3{
+  font-family: var(--font-display); color: var(--ink); font-size: 1.15rem; margin: 0 0 .6rem;
+}
+.el-book-card p{ color: var(--muted); font-size: .92rem; margin: 0 0 1.3rem; min-height: 2.6em; }
+.el-book-btn{ border:none; cursor:pointer; display:inline-block; width: 100%; text-align:center; }
+
+.tip-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: 1.2rem;
+}
+.tip-card{
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px;
+  padding: 1.3rem 1.4rem; box-shadow: var(--shadow);
+  display:flex; gap:.8rem; align-items:flex-start;
+}
+.tip-icon{ font-size: 1.4rem; line-height:1; flex-shrink:0; }
+.tip-card p{ margin:0; color: var(--charcoal); font-size: .93rem; line-height:1.7; }
+
+.resource-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(190px,1fr)); gap: 1.2rem;
+}
+.resource-card{
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 16px;
+  padding: 1.5rem 1.3rem; text-align:center; box-shadow: var(--shadow);
+  transition: transform .2s ease;
+}
+.resource-card:hover{ transform: translateY(-4px); }
+.resource-icon{ font-size: 1.8rem; display:block; margin-bottom: .6rem; }
+.resource-card h4{ font-family: var(--font-display); color: var(--ink); margin: 0 0 .4rem; font-size: 1rem; }
+.resource-card p{ color: var(--muted); font-size: .85rem; margin:0; }
+
+.el-cta{ text-align:center; padding: 3rem 0 4rem; }
+.el-cta-btn{
+  font-size: 1.05rem; padding: 1.05rem 2.4rem; border:none; cursor:pointer;
+  box-shadow: 0 10px 26px rgba(14,110,92,.32);
+}
+
+@media (max-width: 880px){
+  .el-hero-inner{ grid-template-columns: 1fr; text-align:center; }
+  .el-subtitle{ margin-left:auto; margin-right:auto; }
+  .el-hero-art{ order:-1; max-width: 420px; margin: 0 auto; }
+}
+@media (max-width: 620px){
+  .el-hero{ padding: 2.4rem 1.1rem 1.6rem; }
+  .el-section{ padding: 2.4rem 0; }
+  .el-section--tint{ padding: 2.4rem 1.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .el-hero-art{ animation: none; }
+}

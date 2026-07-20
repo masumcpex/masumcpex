@@ -1,934 +1,171 @@
-
 <!DOCTYPE html>
-
 <html lang="bn">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>মাসুম | masumcpex </title>
-
-<meta name="description" content="A clean and modern personal productivity app to manage work logs, notes, daily records, and useful links in one place.">
-
+<title>মাসুম | masumcpex</title>
+<meta name="description" content="মাসুম বিল্লাহ — লেখক, শিক্ষার্থী, বিল্ডার। বই, জার্নাল, আর্টিকেল ও প্রজেক্টের ব্যক্তিগত ডিজিটাল খাতা।">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-  :root{
-
-    --cream:#FBF5EA;
-
-    --paper:#FFFDF9;
-
-    --maroon:#6E1E2B;
-
-    --maroon-deep:#3F1119;
-
-    --gold:#B8862E;
-
-    --gold-soft:#E7CE93;
-
-    --ink:#2B1A1A;
-
-    --muted:#8A746B;
-
-    --line: rgba(110,30,43,0.15);
-
-    --dark-slate: #0f172a;
-
-  }
-
-  *{box-sizing:border-box; margin:0; padding:0;}
-
-  html{scroll-behavior:smooth;}
-
-  body{
-
-    background:var(--cream);
-
-    color:var(--ink);
-
-    font-family:'Hind Siliguri', sans-serif;
-
-    line-height:1.75;
-
-    overflow-x:hidden;
-
-  }
-
-  h1,h2,h3,.brand{
-
-    font-family:'Noto Serif Bengali', serif;
-
-    color:var(--maroon);
-
-  }
-
-  a{color:inherit; text-decoration:none;}
-
-  img{max-width:100%; display:block;}
-
-
-
-  .divider{
-
-    display:flex; align-items:center; justify-content:center;
-
-    gap:14px; margin:0 auto; width:100%; max-width:220px; padding: 6px 0;
-
-  }
-
-  .divider::before, .divider::after{
-
-    content:""; height:1px; flex:1; background:var(--gold);
-
-    opacity:.6;
-
-  }
-
-  .divider svg{ flex:none; width:22px; height:22px; }
-
-
-
-  header{
-
-    position:sticky; top:0; z-index:50;
-
-    background:rgba(251,245,234,0.92);
-
-    backdrop-filter: blur(6px);
-
-    border-bottom:1px solid var(--line);
-
-  }
-
-  .nav-wrap{
-
-    max-width:1100px; margin:0 auto; padding:16px 24px;
-
-    display:flex; align-items:center; justify-content:space-between;
-
-  }
-
-  .brand{ font-size:1.5rem; font-weight:700; letter-spacing:.5px; }
-
-  .brand span{ color:var(--gold); }
-
-  nav ul{ list-style:none; display:flex; gap:28px; }
-
-  nav a{
-
-    font-weight:600; font-size:.98rem; color:var(--ink);
-
-    position:relative; padding-bottom:4px;
-
-  }
-
-  nav a::after{
-
-    content:""; position:absolute; left:0; bottom:0; width:0; height:2px;
-
-    background:var(--gold); transition:width .25s ease;
-
-  }
-
-  nav a:hover::after{ width:100%; }
-
-  .menu-btn{ display:none; background:none; border:none; font-size:1.6rem; color:var(--maroon); cursor:pointer; }
-
-
-
-  @media (max-width:760px){
-
-    nav ul{
-
-      position:fixed; inset:64px 0 auto 0; background:var(--paper);
-
-      flex-direction:column; align-items:flex-start; gap:0;
-
-      padding:8px 24px; border-bottom:1px solid var(--line);
-
-      transform:translateY(-120%); transition:transform .3s ease;
-
-    }
-
-    nav ul.open{ transform:translateY(0); }
-
-    nav li{ width:100%; padding:14px 0; border-bottom:1px solid var(--line); }
-
-    .menu-btn{ display:block; }
-
-  }
-
-
-
-  .hero{
-
-    max-width:1100px; margin:0 auto; padding:80px 24px 60px;
-
-    display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center;
-
-  }
-
-  .hero-tagline{
-
-    color:var(--maroon); font-weight:600; font-size:1.05rem;
-
-    margin-bottom:18px;
-
-  }
-
-  .hero h1{ font-size:2.6rem; line-height:1.3; margin-bottom:20px; }
-
-  .hero h1 em{ font-style:normal; color:var(--gold); }
-
-  .hero p{ color:var(--muted); font-size:1.08rem; max-width:520px; margin-bottom:32px;}
-
-  .btn-row{ display:flex; gap:16px; flex-wrap:wrap; }
-
-  .btn{
-
-    display:inline-block; padding:14px 28px; border-radius:2px;
-
-    font-weight:700; font-size:.98rem; border:1.5px solid var(--maroon);
-
-    transition:all .25s ease; cursor:pointer;
-
-  }
-
-  .btn-solid{ background:var(--maroon); color:var(--cream); }
-
-  .btn-solid:hover{ background:var(--maroon-deep); }
-
-  .btn-outline{ color:var(--maroon); }
-
-  .btn-outline:hover{ background:var(--maroon); color:var(--cream); }
-
-
-
-  .portrait-frame{
-
-    position:relative; aspect-ratio: 4/5; border:2px solid var(--gold);
-
-    padding:14px; background: #fff;
-
-  }
-
-  .portrait-frame .inner{
-
-    width:100%; height:100%; background:#eaeaea;
-
-    display:flex; align-items:center; justify-content:center;
-
-    overflow:hidden;
-
-  }
-
-  .portrait-frame .inner img{
-
-    width:100%; height:100%; object-fit:cover; object-position:center top;
-
-  }
-
-  @media (max-width:760px){
-
-    .hero{ grid-template-columns:1fr; padding-top:40px; text-align:center;}
-
-    .hero p{ margin-left:auto; margin-right:auto; }
-
-    .btn-row{ justify-content:center; }
-
-  }
-
-
-
-  section{ padding:70px 24px; }
-
-  .section-inner{ max-width:1100px; margin:0 auto; }
-
-  .section-head{ text-align:center; margin-bottom:46px; }
-
-  .section-head h2{ font-size:2rem; margin:14px 0 10px; }
-
-  .section-head p{ color:var(--muted); max-width:560px; margin:0 auto; }
-
-  .kicker{ color:var(--gold); font-weight:700; letter-spacing:.05em; font-size:.85rem; text-transform:uppercase; }
-
-
-
-  .about{ background:var(--paper); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
-
-  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:50px; align-items:center; }
-
-  .about-grid p{ color:var(--ink); margin-bottom:16px; }
-
-  .stat-row{ display:flex; gap:36px; margin-top:26px; flex-wrap:wrap; }
-
-  .stat b{ display:block; font-family:'Noto Serif Bengali',serif; font-size:1.6rem; color:var(--maroon); }
-
-  .stat span{ color:var(--muted); font-size:.92rem; }
-
-  @media (max-width:760px){ .about-grid{ grid-template-columns:1fr; } }
-
-
-
-  .books-grid{
-
-    display:grid; grid-template-columns:repeat(3,1fr); gap:28px;
-
-  }
-
-  @media (max-width:900px){ .books-grid{ grid-template-columns:repeat(2,1fr);} }
-
-  @media (max-width:600px){ .books-grid{ grid-template-columns:1fr;} }
-
-  
-
-  .book-card{
-
-    background:var(--paper); border:1px solid var(--line);
-
-    display:flex; flex-direction:column; overflow:hidden;
-
-    transition:transform .25s ease, box-shadow .25s ease;
-
-  }
-
-  .book-card:hover{ transform:translateY(-6px); box-shadow:0 16px 30px rgba(62,17,25,0.12); }
-
-  
-
-  .book-cover{
-
-    aspect-ratio:3/4; background:linear-gradient(150deg,#7a2532,#4a1420);
-
-    display:flex; align-items:center; justify-content:center; text-align:center;
-
-    color:var(--gold-soft); font-family:'Noto Serif Bengali',serif; font-size:1.15rem;
-
-    border-bottom:3px solid var(--gold); overflow:hidden; position:relative;
-
-  }
-
-  .book-cover img{ width:100%; height:100%; object-fit:cover; }
-
-  .book-body{ padding:22px; flex:1; display:flex; flex-direction:column; }
-
-  .book-body h3{ font-size:1.15rem; margin-bottom:8px; }
-
-  .book-tag{ color:var(--gold); font-size:.8rem; font-weight:700; letter-spacing:.04em; margin-bottom:10px; }
-
-  .book-body p{ color:var(--muted); font-size:.94rem; flex:1; margin-bottom:16px; }
-
-  .book-link{ font-weight:700; color:var(--maroon); font-size:.92rem; cursor:pointer;}
-
-  .book-link:hover{ color:var(--gold); }
-
-
-
-  /* Cicada Mystery Section Style */
-
-  .cicada-box {
-
-    background: #090d16; color: #00ffcc; font-family: 'Courier New', monospace;
-
-    padding: 40px; border: 2px solid #00ffcc; text-align: center; border-radius: 4px;
-
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.2); max-width: 680px; margin: 0 auto;
-
-  }
-
-  .cicada-title { color: #00ffcc; font-family: 'Courier New', monospace; font-weight: bold; letter-spacing: 3px; }
-
-  .qr-holder { background: white; padding: 12px; display: inline-block; margin: 20px 0; border-radius: 4px; }
-
-
-
-  .quote-wrap{ position:relative; max-width:760px; margin:0 auto; text-align:center; }
-
-  .quote-card{ background:var(--maroon); color:var(--cream); padding:52px 40px; position:relative; }
-
-  .quote-card::before{
-
-    content:"“"; font-family:'Noto Serif Bengali',serif; font-size:5rem;
-
-    color:var(--gold); position:absolute; top:-6px; left:24px; line-height:1;
-
-  }
-
-  .quote-text{ font-family:'Noto Serif Bengali',serif; font-size:1.4rem; line-height:1.8; margin-bottom:18px; }
-
-  .quote-source{ color:var(--gold-soft); font-size:.95rem; font-weight:600; }
-
-
-
-  .socials { background: var(--maroon-deep); color: var(--cream); }
-
-  .social-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-
-  @media (max-width:760px){ .social-grid{ grid-template-columns: repeat(2, 1fr); } }
-
-  .social-card {
-
-    border: 1px solid rgba(231,206,147,0.3); padding: 20px; text-align: center;
-
-    background: rgba(255,255,255,0.02); transition: all 0.25s;
-
-  }
-
-  .social-card:hover { background: var(--gold); color: var(--maroon-deep); border-color: var(--gold); }
-
-
-
-  footer{ background:var(--maroon-deep); color:var(--gold-soft); padding:40px 24px 26px; text-align:center; }
-
-  footer .brand{ color:var(--cream); font-size:1.3rem; margin-bottom:14px; }
-
-</style>
-
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
+<!-- ================= HEADER / NAV ================= -->
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a href="#home" class="brand" data-nav="home">
+  <span class="brand-mark">
+    <img src="logo.png" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; display: block;">
+  </span>
+  <span class="brand-name">মাসুম</span>
+</a>
 
-
-<header>
-
-  <div class="nav-wrap">
-
-    <div class="brand"><img src="masum.png" alt="Masum" style="height: 40px; width: auto; display: inline-block; vertical-align: middle; object-fit: contain;"></div>
-
-    <button class="menu-btn" id="menuBtn">☰</button>
-
-    <nav>
-
-      <ul id="navList">
-
-        <li><a href="#about">পরিচিতি</a></li>
-
-        <li><a href="#apps">ওয়েব অ্যাপস</a></li>
-
-        <li><a href="#books">বইসমূহ</a></li>
-
-        <li><a href="#mystery">রহস্য গেম</a></li>
-
-        <li><a href="#connect">যোগাযোগ</a></li>
-
-      </ul>
-
+    <nav class="main-nav" id="mainNav">
+      <a href="#home" data-nav="home"><span class="ic">🏠</span>Home</a>
+      <a href="knowledge-hub.html"><span class="ic">🗂️</span>Knowledge Hub</a>
+      <a href="#about" data-nav="about"><span class="ic">👤</span>About</a>
+      <a href="#library" data-nav="library"><span class="ic">📚</span>Library</a>
+      <a href="#journal" data-nav="journal"><span class="ic">📖</span>Journal</a>
+      <a href="#projects" data-nav="projects"><span class="ic">💻</span>Projects</a>
+      <a href="#articles" data-nav="articles"><span class="ic">📝</span>Articles</a>
+      <a href="#mystery" data-nav="mystery"><span class="ic">🎮</span>Mystery</a>
+      <a href="#contact" data-nav="contact"><span class="ic">📩</span>Contact</a>
     </nav>
 
+    <div class="header-tools">
+      <button class="icon-btn" id="searchToggle" aria-label="সার্চ">🔍</button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="মেনু">☰</button>
+    </div>
   </div>
 
+  <!-- সার্চ বার -->
+  <div class="search-panel" id="searchPanel">
+    <div class="search-panel-inner">
+      <input type="text" id="searchInput" placeholder="বই, জার্নাল, আর্টিকেল বা প্রজেক্ট খুঁজুন...">
+      <button class="icon-btn" id="searchClose">✕</button>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </div>
 </header>
 
+<main>
 
+  <!-- ================= HOME ================= -->
+  <section class="page active" id="home">
 
-<section class="hero">
-
-  <div>
-
-    <div class="hero-tagline">লিখি, শেখাই, ভাবনা শেয়ার করি</div>
-
-    <h1>শব্দের ভেতর দিয়ে <em>জীবনকে</em> ছোঁয়ার চেষ্টা</h1>
-
-    <p>আমি মাসুম। বই লিখতে ভালোবাসি, অনুভূতি ও ইসলামিক সজাগতা ছড়িয়ে দিতে পছন্দ করি এবং একই সাথে স্মার্ট ওয়েব টুলস তৈরি করি।</p>
-
-    <div class="btn-row">
-
-      <a href="#books" class="btn btn-solid">আমার বইসমূহ</a>
-
-      <a href="#apps" class="btn btn-outline">কাজের ট্র্যাকার অ্যাপ</a>
-
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-photo-wrap">
+        <img class="hero-photo" id="heroPhoto" src="" alt="Masum Billah">
+      </div>
+      <h1 class="hero-name" id="heroName"></h1>
+      <p class="hero-role" id="heroRole"></p>
+      <p class="hero-tagline" id="heroTagline"></p>
+      <a class="btn btn-primary" id="heroCta" href="#library"></a>
     </div>
 
+    <!-- Homepage highlight strips -->
+    <div class="section-block">
+      <div class="eyebrow">সর্বশেষ</div>
+      <h2 class="section-title">এই মুহূর্তে যা নতুন</h2>
+      <div class="highlight-grid" id="homeHighlights"><!-- JS injects: Latest Book / Journal / Article / Featured Project --></div>
+    </div>
+
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section class="page" id="about">
+    <div class="page-inner narrow">
+      <div class="eyebrow">পরিচিতি</div>
+      <h2 class="section-title" id="aboutTitle"></h2>
+      <div class="about-grid">
+        <img class="about-photo" id="aboutPhoto" src="" alt="Masum">
+        <div class="about-text" id="aboutText"></div>
+      </div>
+      <div class="stat-row" id="aboutStats"></div>
+    </div>
+  </section>
+
+  <!-- ================= LIBRARY ================= -->
+  <section class="page" id="library">
+    <div class="page-inner">
+      <div class="eyebrow">Library</div>
+      <h2 class="section-title">আমার প্রকাশিত ই-বুক সমূহ</h2>
+      <p class="section-sub">নিচের তালিকা থেকে আপনার পছন্দের বইটি নির্বাচন করুন এবং সরাসরি পড়ুন বা ডাউনলোড করুন।</p>
+      <div class="card-grid" id="bookGrid"><!-- JS injects book cards --></div>
+    </div>
+  </section>
+
+  <!-- ================= JOURNAL ================= -->
+  <section class="page" id="journal">
+    <div class="page-inner">
+      <div class="eyebrow">Journal</div>
+      <h2 class="section-title">ব্যক্তিগত জার্নাল</h2>
+      <p class="section-sub">গল্প, অনুভূতি আর দৈনন্দিন ভাবনার পাতা।</p>
+      <div class="filter-row" id="journalFilters"><!-- JS injects category chips --></div>
+      <div class="list-grid" id="journalList"><!-- JS injects journal cards --></div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section class="page" id="projects">
+    <div class="page-inner">
+      <div class="eyebrow">Projects</div>
+      <h2 class="section-title">যা তৈরি করছি</h2>
+      <div class="card-grid projects-grid" id="projectGrid"><!-- JS injects project cards --></div>
+    </div>
+  </section>
+
+  <!-- ================= ARTICLES ================= -->
+  <section class="page" id="articles">
+    <div class="page-inner">
+      <div class="eyebrow">Articles</div>
+      <h2 class="section-title">ব্লগ ও লেখালেখি</h2>
+      <div class="filter-row" id="articleFilters"><!-- JS injects category chips --></div>
+      <div class="list-grid" id="articleList"><!-- JS injects article cards --></div>
+    </div>
+  </section>
+
+  <!-- ================= MYSTERY ================= -->
+  <section class="page" id="mystery">
+    <div class="page-inner narrow center">
+      <h2 class="mystery-title" id="mysteryTitle"></h2>
+      <p class="mystery-notice" id="mysteryNotice"></p>
+      <a class="btn btn-outline" id="mysteryBtn" href="#" target="_blank" rel="noopener"></a>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section class="page" id="contact">
+    <div class="page-inner narrow center">
+      <div class="eyebrow">যোগাযোগ</div>
+      <h2 class="section-title">কানেক্ট করুন</h2>
+      <p class="section-sub">যেকোনো বিষয়ে সরাসরি ইমেইল, ফোন অথবা সোশ্যাল লিংকের মাধ্যমে যুক্ত হোন।</p>
+      <p class="contact-line" id="contactPhone"></p>
+      <p class="contact-line" id="contactEmails"></p>
+      <div class="social-row" id="socialRow"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= READ MODAL (জার্নাল/আর্টিকেল বিস্তারিত পড়ার জন্য) ================= -->
+<div class="modal-overlay" id="readModal">
+  <div class="modal-box">
+    <button class="icon-btn modal-close" id="modalClose">✕</button>
+    <div class="modal-eyebrow" id="modalCategory"></div>
+    <h3 class="modal-title" id="modalTitle"></h3>
+    <div class="modal-date" id="modalDate"></div>
+    <div class="modal-content" id="modalContent"></div>
   </div>
-
-  <div class="portrait-frame">
-
-    <div class="inner">
-
-      <img src="1000004949.jpg" alt="মো: মাসুম মিয়া" onerror="this.style.display='none'; this.parentNode.innerText='[পাঞ্জাবি পরা প্রোফাইল ফটো]';">
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<section id="about" class="about">
-
-  <div class="section-inner about-grid">
-
-    <div>
-
-      <span class="kicker">সংক্ষিপ্ত পরিচিতি</span>
-
-      <h2>জীবনকে সুন্দর ফ্রেম ও কোডিংয়ে সাজানো</h2>
-
-      <div style="margin-top:20px; border: 1px solid var(--line); padding:6px; background:#fff; max-width:260px;">
-
-        <p style="font-style: italic; color: #666; margin-top: 15px; padding: 10px; border-left: 3px solid #333;">
-    "কল্পনাকে কোডের মাধ্যমে বাস্তবে রূপান্তর করাই আমার কাজ।"
-</p>
-
-      </div>
-
-    </div>
-
-    <div>
-
-      <p>লেখালেখি আমার কাছে অনুভূতি প্রকাশের একটি অন্যতম মাধ্যম। পাশাপাশি প্রোডাক্টিভ কোডিং সলিউশন তৈরি করে লাইফকে সহজ করতে আমি পছন্দ করি।</p>
-
-      <div class="stat-row">
-
-        <div class="stat"><b>৬টি</b><span>সংরক্ষিত ই-বুক</span></div>
-
-        <div class="stat"><b>১টি</b><span>কাজের ঘণ্টা ট্র্যাকার</span></div>
-
-        <div class="stat"><b>১০০%</b><span>স্মার্ট ডিজাইন</span></div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<section id="apps">
-
-  <div class="section-inner">
-
-    <div class="section-head">
-
-      <span class="kicker">স্মার্ট ওয়েব অ্যাপ</span>
-
-      <h2>পার্সোনাল প্রোডাক্টিভিটি সিস্টেম</h2>
-
-      <p>A clean and modern personal productivity app to manage work logs, notes, daily records, and useful links in one place.</p>
-
-    </div>
-
-    <div style="max-width: 550px; margin: 0 auto;">
-
-      <div class="book-card" style="text-align: center;">
-
-        <div class="book-cover" style="aspect-ratio: 16/7; background: linear-gradient(135deg, #1e293b, #0f172a); color: #06b6d4;">
-
-          <h2 style="color:#06b6d4; font-family:monospace;">⚡ MASUM WORKLOG</h2>
-
-        </div>
-
-        <div class="book-body">
-
-          <div class="book-tag" style="align-self:center;">SYSTEM APP</div>
-
-          <h3>ঘণ্টা খাতা ও টাস্ক ম্যানেজার</h3>
-
-          <p>কর্মীদের কাজের দৈনিক ঘণ্টা হিসাব, উপস্থিতি ট্র্যাকিং এবং ফাইল ও লিংক ম্যানেজমেন্টের জন্য তৈরি বিশেষ ডিজিটাল খাতা।</p>
-
-          <a href="worklog.html" class="btn btn-solid" style="align-self: center;">অ্যাপ্লিকেশন ওপেন করুন →</a>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<section id="books" class="about" style="background: var(--paper);">
-
-  <div class="section-inner">
-
-    <div class="section-head">
-
-      <span class="kicker">ই-বুক কালেকশন</span>
-
-      <h2>আমার প্রকাশিত ই-বুক সমূহ</h2>
-
-      <p>নিচের তালিকা থেকে আপনার পছন্দের বইটি নির্বাচন করুন এবং সরাসরি গুগল ড্রাইভ থেকে ডাউনলোড বা রিড করুন।</p>
-
-    </div>
-
-    
-
-    <div class="books-grid">
-
-      <div class="book-card">
-
-        <div class="book-cover"><img src="book1.png" style="width: 100%; height: 100%; object-fit: cover;"></div>
-
-
-        <div class="book-body">
-
-          <div class="book-tag">অনুপ্রেরণা ও জীবন</div>
-
-          <h3>১. যার জন্যে কাঁদি সে কাঁদার যোগ্য নয়</h3>
-
-          <p>হৃদয়ের গল্প ও আত্মোপলব্ধির সাবলীল সমন্বয়।</p>
-
-          <a class="book-link" href="https://drive.google.com/file/d/1ciB-tX7PDKU8ytY1Ja22iqE5_gydopoE/view?usp=drivesdk" target="_blank">পিডিএফ লিংক →</a>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="book-card">
-
-        <div class="book-cover"><img src="eka.jpg" style="width: 100%; height: 100%; object-fit: cover;"></div>
-          
-
-        <div class="book-body">
-
-          <div class="book-tag">ভাবনা ও ডায়েরি</div>
-
-          <h3>২. একাকিত্বের নোটবুক</h3>
-
-          <p>নিঃসঙ্গতার প্রহরে ডায়েরির পাতায় আঁকা কিছু অনুভূতি।</p>
-
-          <a class="book-link" href="https://drive.google.com/file/d/10q4PqYsGaV97mrpzry8J0h4mw94kcdlF/view?usp=drivesdk" target="_blank">পিডিএফ লিংক →</a>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="book-card">
-
-        <div class="book-cover"><img src="book3.png" style="width: 100%; height: 100%; object-fit: cover;"></div>
-
-        <div class="book-body">
-
-          <div class="book-tag">শিক্ষা ও ক্যারিয়ার</div>
-
-          <h3>৩. ইংলিশ শেখার সহজ রোডম্যাপ</h3>
-
-          <p>সহজ গাইডলাইনে ইংরেজি শেখার সম্পূর্ণ পথ রেখা।</p>
-
-          <a class="book-link" href="https://drive.google.com/file/d/1R3BcEq1E3dPNwdVMxgIpnYkqWNMHRncv/view?usp=drivesdk" target="_blank">পিডিএফ লিংক →</a>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="book-card">
-
-        <div class="book-cover"><img src="enhlishsmart.png" style="width: 100%; height: 100%; object-fit: cover;"></div>
-
-        <div class="book-body">
-
-          <div class="book-tag">ভাষা ও স্কিল</div>
-
-          <h3>৪. Smart Spoken English</h3>
-
-          <p>স্মার্টলি ও অনর্গল ইংরেজি বলার প্র্যাক্টিক্যাল বই।</p>
-
-          <a class="book-link" href="https://drive.google.com/file/d/1jCStUE4-T6l50Y1jKDI0_tAzqX-f8JZE/view?usp=drivesdk" target="_blank">পিডিএফ লিংক →</a>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="book-card">
-
-     <div class="book-cover"><img src="bookb.png" style="width: 100%; height: 100%; object-fit: cover;"></div>
-
-        <div class="book-body">
-
-          <div class="book-tag">ভাষা ও স্কিল</div>
-
-          <h3>৫. Easy English Mastery</h3>
-
-          <p>সহজ নিয়মে ইংরেজি গ্রামার ও স্পোকেন আয়ত্ত করার গাইড।</p>
-
-          <a class="book-link" href="https://drive.google.com/file/d/1BydwswVhKcKPrW7EPScfCyUEs6LXakN-/view?usp=drivesdk" target="_blank">পিডিএফ লিংক →</a>
-
-        </div>
-
-      </div>
-
-
-
-      <div class="book-card" style="border: 1px dashed var(--maroon);">
-
-        <div class="book-cover"><img src="cpex.png" style="width: 100%; height: 100%; object-fit: cover;"></div>
-
-        <div class="book-body">
-
-          <div class="book-tag" style="color:red;">🔒 সিক্রেট / পার্সোনাল</div>
-
-          <h3>৬. চলার পথে আমার গল্প</h3>
-
-          <p>এই বইটি সবার জন্য উন্মুক্ত নয়। এটি একটি বিশেষ ব্যক্তিগত সংস্করণ।</p>
-
-          <a class="book-link" style="color: red;" onclick="openSecretBook()">অনুমতি নিয়ে প্রবেশ করুন →</a>
-
-        </div>
-
-      </div>
-
-
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<section id="mystery" style="background: #0b0f19;">
-
-  <div class="section-inner">
-
-    <div class="cicada-box">
-
-      <h2 class="cicada-title">⚠️ CICADA 3301 MYSTERY PUZZLE ⚠️</h2>
-
-      <p style="margin-top: 14px; font-size: 0.9rem; color: #88ffcc;">
-
-        [SYSTEM NOTICE]: একটি অত্যন্ত জটিল ধাঁধা এবং বুদ্ধিমত্তার খেলা আপনার জন্য অপেক্ষা করছে। আপনি কি চ্যালেঞ্জটি নিতে প্রস্তুত?
-
-      </p>
-
-      
-
-      <div class="qr-holder">
-
-        <img id="qrImage" src="" alt="Mystery QR Code" style="width:180px; height:180px;">
-
-      </div>
-
-      
-
-      <p style="font-size: 0.85rem; margin-bottom: 20px; color:#a3b8cc;">উপরের QR কোডটি স্ক্যান করুন অথবা নিচের বাটনে ক্লিক করে ধাঁধার রহস্য ভেদ করুন।</p>
-
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSeUXTUT5i4McPtrl27yQj3L3BYl_wGWjVKEDpnMpLnD8Sn3YQ/viewform" target="_blank" class="btn" style="border-color: #00ffcc; color: #00ffcc; background: transparent;">মিশনে প্রবেশ করুন</a>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<section id="connect" class="socials">
-
-  <div class="section-inner">
-
-    <div class="section-head">
-
-      <span class="kicker" style="color: var(--gold-soft);">কানেক্ট করুন</span>
-
-      <h2 style="color: #fff;">কন্টাক্ট এবং নেটওয়ার্ক</h2>
-
-      <p style="color: var(--gold-soft);">যেকোনো বিষয়ে সরাসরি ইমেইল, ফোন অথবা Beacons লিঙ্কের মাধ্যমে যুক্ত হোন।</p>
-
-    </div>
-
-    
-
-    <div style="text-align: center; margin-bottom: 40px; font-size: 1.1rem;">
-
-      <p>📞 মোবাইল নম্বর: <strong style="color: #fff;">01133192963</strong></p>
-
-      <p>📧 ইমেইল ১: <span style="color: var(--gold-soft);">masumcpex@gmail.com</span> | ইমেইল ২: <span style="color: var(--gold-soft);">masumcpex@yahoo.com</span></p>
-
-    </div>
-
-
-
-<!-- সোশ্যাল মিডিয়া আইকন সেকশন শুরু -->
-<style>
-    .masum-social-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-        width: 100%;
-        margin-top: 20px;
-    }
-    .masum-social-card {
-        text-decoration: none;
-        color: #ffffff !important;
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        padding: 20px 10px;
-        border-radius: 12px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(5px);
-    }
-    .masum-social-card:hover {
-        transform: translateY(-4px);
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-    .masum-social-card svg {
-        width: 35px;
-        height: 35px;
-        margin-bottom: 8px;
-        fill: #ffffff;
-    }
-    .masum-social-card span {
-        font-size: 14px;
-        font-weight: 500;
-        font-family: sans-serif;
-    }
-</style>
-
-<div class="masum-social-grid">
-    <!-- Facebook -->
-    <a href="https://www.facebook.com/share/1HM1rZJg3a/" target="_blank" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        <span>Facebook</span>
-    </a>
-
-    <!-- Instagram -->
-    <a href="https://www.instagram.com/masum.171" target="_blank" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-        <span>Instagram</span>
-    </a>
-
-    <!-- TikTok -->
-    <a href="https://www.tiktok.com/@masum__171" target="_blank" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.52-4.06-1.37-.47-.34-.89-.75-1.26-1.21v8.72c0 1.01-.15 2.04-.57 2.96-.77 1.76-2.44 3.06-4.35 3.39-2.04.37-4.24-.26-5.74-1.69-1.67-1.57-2.43-4.04-1.84-6.28.52-2.07 2.16-3.8 4.23-4.28 1.02-.24 2.11-.18 3.12.14v4.21c-.69-.25-1.46-.31-2.16-.13-1.07.27-1.92 1.25-2.11 2.34-.23 1.27.42 2.6 1.59 3.14 1 .47 2.21.32 3.06-.38.48-.4.76-.99.82-1.61.03-1.85.01-13.89.01-13.89z"/></svg>
-        <span>TikTok</span>
-    </a>
-
-    <!-- Telegram -->
-    <a href="https://t.me/masum171" target="_blank" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.503-1.359 8.627-.168.9-.501 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.911.177-.184 3.249-2.978 3.308-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.481-.428-.008-1.252-.241-1.865-.44-.752-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.14.12.097.154.228.168.321.015.098.032.319.016.486z"/></svg>
-        <span>Telegram</span>
-    </a>
-
-    <!-- Medium -->
-    <a href="https://medium.com/@masumcpex" target="_blank" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M13.54 12a6.8 6.8 0 0 1-6.77 6.82A6.8 6.8 0 0 1 0 12a6.8 6.8 0 0 1 6.77-6.82A6.8 6.8 0 0 1 13.54 12zm7.42 0c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42zm3.04 0c0 3.22-.43 5.84-.97 5.84s-.96-2.62-.96-5.84.43-5.84.96-5.84.97 2.62.97 5.84z"/></svg>
-        <span>Medium</span>
-    </a>
-
-    <!-- Tumblr -->
-    <a href="https://www.tumblr.com/masum171" target="_blank" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M14.536 17.522c-1.488.053-1.874-.897-1.88-1.696v-6.38h3.334V6.012h-3.334v-4.72h-3.13c-.07 1.008-.528 2.593-2.126 3.73v2.446h1.76v5.82c.005 3.722 2.768 5.485 5.922 5.234v-3.01z"/></svg>
-        <span>Tumblr</span>
-    </a>
-
-    <!-- Blogger -->
-    <a href="https://masum171.blogspot.com/" target="_blank" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M16.193 11.233c 1.055-.17 1.837-1.11 1.837-2.193 0-1.39-1.077-2.433-2.584-2.433H9.284c-1.28 0-2.316 1.036-2.316 2.316v10.125c0 1.28 1.036 2.316 2.316 2.316h6.64c1.802 0 3.076-1.385 3.076-3.125 0-1.464-.937-2.632-2.327-3.006zM10.97 8.8h3.812c.563 0 1.02.425 1.02.95 0 .525-.457.95-1.02.95H10.97V8.8zm4.453 9.425H10.97v-3.1h4.453c.69 0 1.25.518 1.25 1.15s-.56 1.95-1.25 1.95z"/></svg>
-        <span>Blogger</span>
-    </a>
-
-    <!-- Gmail -->
-    <a href="mailto:masumcpex@gmail.com" class="masum-social-card">
-        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        <span>Gmail</span>
-    </a>
 </div>
-<!-- সোশ্যাল মিডিয়া আইকন সেকশন শেষ -->    
 
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<footer>
-
-  <div class="brand">মাসুম <span>।</span></div>
-
-  <div class="copyright">
-
-    &copy; ২০২৬ ডিজিটাল স্পেস। সর্বস্বত্ব সংরক্ষিত। | ডিজাইন ও ডেভেলপমেন্ট: <strong>মাসুম</strong>
-
-  </div>
-
+<footer class="site-footer">
+  <p>মাসুম । © ২০২৬ ডিজিটাল স্পেস। সর্বস্বত্ব সংরক্ষিত়। | ডিজাইন ও ডেভেলপমেন্ট: <strong>মাসুম</strong></p>
 </footer>
 
-
-
-<script>
-
-  // মোবাইল নেভিগেশন মেনু কন্ট্রোল
-
-  const menuBtn = document.getElementById('menuBtn');
-
-  const navList = document.getElementById('navList');
-
-  menuBtn.addEventListener('click', () => {
-
-    navList.classList.toggle('open');
-
-  });
-
-
-
-  // সিক্রেট পার্সোনাল ই-বুক প্রোটেকশন অ্যালার্ট ফাংশন
-
-  function openSecretBook() {
-
-    alert("এটি একটি পাসওয়ার্ড প্রোটেক্টেড ব্যক্তিগত বই। শুধুমাত্র অনুমতিপ্রাপ্ত ব্যক্তিরাই অ্যাক্সেস করতে পারবেন।");
-
-function openSecretBook() {
-    var password = prompt("এটি একটি পাসওয়ার্ড প্রটেক্টেড ব্যক্তিগত বই। প্রবেশ করতে পাসওয়ার্ড দিন:");
-    
-    // এখানে '1234' এর জায়গায় আপনার পছন্দমতো যেকোনো পাসওয়ার্ড লিখে দিতে পারেন
-    if (password === "masum.com") { 
-        alert("পাসওয়ার্ড সঠিক হয়েছে! বইটিতে প্রবেশ করছেন...");
-        window.open("https://drive.google.com/file/d/102JjI2ICp93QlyGq7jOK4Z54X1e1SWFy/view?usp=sharing", "_blank"); 
-    } else {
-        alert("ভুল পাসওয়ার্ড! আপনি এই বইটি পড়ার অনুমতিপ্রাপ্ত নন।");
-    }
-}
-
-
-
-  // Cicada 3301 গুগল ফর্ম লিঙ্কের কিউআর কোড অটোমেটিক জেনারেশন স্ক্রিপ্ট
-
-  window.addEventListener('DOMContentLoaded', () => {
-
-    const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSeUXTUT5i4McPtrl27yQj3L3BYl_wGWjVKEDpnMpLnD8Sn3YQ/viewform";
-
-    const qrImage = document.getElementById('qrImage');
-
-    // api.qrserver.com সিডিএন ব্যবহার করে অটো কিউআর ইমেজ জেনারেশন
-
-    qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(formUrl)}`;
-
-  });
-
-</script>
-
-
+<script src="data.js"></script>
+<script src="script.js"></script>
 </body>
-
 </html>

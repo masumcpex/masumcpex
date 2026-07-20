@@ -1,0 +1,248 @@
+/* ==========================================================================
+   article.css — প্রিমিয়াম লং-ফর্ম আর্টিকেল পেজের জন্য।
+   style.css এর কালার/ফন্ট টোকেন ব্যবহার করে বানানো, যাতে পুরো সাইটের সাথে
+   ডিজাইন মিলে যায়। ভবিষ্যতে নতুন আর্টিকেল বানালে এই একই ফাইল ব্যবহার করা যাবে।
+   ========================================================================== */
+
+/* ---------------- রিডিং প্রোগ্রেস বার ---------------- */
+.reading-progress{
+  position: fixed; top:0; left:0; right:0; height: 4px;
+  background: rgba(0,0,0,.08); z-index: 60;
+}
+.reading-progress-fill{
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  transition: width .1s linear;
+}
+
+/* ---------------- হিরো সেকশন ---------------- */
+.article-hero{
+  background: linear-gradient(160deg, var(--ink) 0%, var(--ink-2) 100%);
+  padding: 3.6rem 1.4rem 3rem;
+  text-align:center;
+}
+.article-hero-inner{ max-width: 780px; margin:0 auto; }
+.article-tag{
+  display:inline-block; font-family: var(--font-util); font-size:.75rem;
+  letter-spacing:.1em; font-weight:700; color: var(--ink);
+  background: var(--gold); padding:.35rem .9rem; border-radius:999px;
+  margin-bottom: 1.2rem;
+}
+.article-title{
+  color:#fff; font-size: clamp(1.7rem, 4.5vw, 2.6rem); line-height:1.3;
+  margin: 0 0 1rem;
+}
+.article-dek{
+  color: rgba(255,255,255,.82); font-size: 1.05rem; line-height:1.8;
+  max-width: 640px; margin: 0 auto 1.4rem;
+}
+.article-meta{
+  display:flex; justify-content:center; flex-wrap:wrap; gap:.5rem;
+  color: var(--gold); font-family: var(--font-util); font-size:.85rem; font-weight:600;
+}
+
+/* ---------------- আর্টিকেল বডি ---------------- */
+.article-body{
+  max-width: 740px; margin: 0 auto; padding: 3rem 1.4rem 2rem;
+  color: var(--charcoal); font-size: 1.05rem; line-height: 1.95;
+}
+.article-body h2{
+  font-size: clamp(1.3rem, 3vw, 1.65rem); margin: 2.4rem 0 1rem;
+  color: var(--ink); border-bottom: 2px solid var(--line); padding-bottom: .5rem;
+}
+.article-body p{ margin: 0 0 1.2rem; }
+.article-body strong{ color: var(--ink); }
+.lead-para{ font-size: 1.15rem; color: var(--ink); font-weight:500; }
+.article-list{ padding-left: 1.3rem; margin: 0 0 1.4rem; }
+.article-list li{ margin-bottom: .6rem; }
+code{
+  background: var(--paper-2); padding: .15rem .4rem; border-radius:5px;
+  font-family: 'Courier New', monospace; font-size: .92rem; color: var(--teal-dark);
+}
+
+/* ---------------- কোড ব্লক ---------------- */
+.code-block{
+  background: #1B2029; border-radius: 12px; overflow:hidden; margin: 1.4rem 0;
+  box-shadow: var(--shadow);
+}
+.code-block-label{
+  font-family: var(--font-util); font-size:.72rem; letter-spacing:.08em;
+  color: var(--gold); background: rgba(255,255,255,.06);
+  padding: .5rem 1rem; text-transform: uppercase; font-weight:700;
+}
+.code-block pre{ margin:0; padding: 1.1rem 1.2rem; overflow-x:auto; }
+.code-block code{
+  background:none; color: #E8E6DD; font-size: .9rem; line-height:1.7; padding:0;
+}
+
+/* ---------------- কলআউট বক্স ---------------- */
+.callout{
+  display:flex; gap: .9rem; align-items:flex-start;
+  border-radius: 12px; padding: 1.2rem 1.4rem; margin: 1.6rem 0;
+  border-left: 5px solid var(--teal);
+  background: var(--card-bg);
+}
+.callout-icon{ font-size: 1.4rem; line-height:1; }
+.callout p{ margin:0; }
+.callout-quote{
+  border-left-color: var(--gold);
+  font-family: var(--font-display); font-style: italic; color: var(--ink);
+  flex-direction: column; gap:.5rem;
+}
+.callout-quote p{ font-size: 1.15rem; margin:0; }
+.callout-source{ font-family: var(--font-util); font-style:normal; font-size:.82rem; color: var(--muted); }
+.callout-tip{ border-left-color: #3B82F6; }
+.callout-info{ border-left-color: var(--teal); }
+
+/* ---------------- সামারি কার্ড গ্রিড ---------------- */
+.summary-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1rem;
+  margin: 1.6rem 0 2rem;
+}
+.summary-card{
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px;
+  padding: 1.2rem; box-shadow: var(--shadow);
+}
+.summary-icon{ font-size: 1.6rem; margin-bottom:.5rem; }
+.summary-card h4{ font-family: var(--font-display); color: var(--ink); font-size: 1rem; margin:0 0 .4rem; }
+.summary-card p{ font-size: .88rem; color: var(--muted); margin:0; }
+
+/* ---------------- রোডম্যাপ ---------------- */
+.roadmap{ position: relative; margin: 1.6rem 0 2rem; padding-left: 2.2rem; }
+.roadmap::before{
+  content:""; position:absolute; left: 17px; top: 6px; bottom: 6px; width: 2px;
+  background: repeating-linear-gradient(to bottom, var(--gold) 0 6px, transparent 6px 12px);
+}
+.roadmap-step{ position: relative; margin-bottom: 1.8rem; }
+.roadmap-num{
+  position:absolute; left: -2.2rem; top:0;
+  width: 36px; height:36px; border-radius:50%;
+  background: var(--teal); color:#fff; font-family: var(--font-display); font-weight:700;
+  display:flex; align-items:center; justify-content:center; font-size:1rem;
+  box-shadow: 0 4px 10px rgba(14,110,92,.35);
+}
+.roadmap-content h4{ font-family: var(--font-display); color: var(--ink); margin: 0 0 .4rem; font-size: 1.08rem; }
+.roadmap-content p{ margin:0; color: var(--charcoal); font-size: .96rem; }
+
+/* ---------------- FAQ (accordion, native details/summary) ---------------- */
+.faq-list{ margin: 1.4rem 0 2rem; }
+.faq-item{
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 12px;
+  padding: .95rem 1.2rem; margin-bottom: .8rem;
+}
+.faq-item summary{
+  cursor:pointer; font-weight:700; color: var(--ink); font-family: var(--font-body);
+  list-style: none; display:flex; justify-content:space-between; align-items:center; gap: 1rem;
+}
+.faq-item summary::-webkit-details-marker{ display:none; }
+.faq-item summary::after{ content:"+"; font-size:1.3rem; color: var(--teal); flex-shrink:0; }
+.faq-item[open] summary::after{ content:"–"; }
+.faq-item p{ margin: .8rem 0 0; color: var(--charcoal); font-size: .95rem; }
+
+/* ---------------- কী-টেকওয়ে কার্ড ---------------- */
+.takeaway-card{
+  background: linear-gradient(155deg, var(--ink), var(--ink-2));
+  color:#fff; border-radius: 16px; padding: 1.6rem 1.8rem; margin: 1.6rem 0;
+}
+.takeaway-card h4{ font-family: var(--font-display); color: var(--gold); margin:0 0 .8rem; font-size:1.15rem; }
+.takeaway-card ul{ margin:0; padding-left: 1.2rem; }
+.takeaway-card li{ margin-bottom: .6rem; line-height:1.6; }
+
+.signature-line{ text-align:right; color: var(--muted); font-style: italic; margin-top: 2rem; }
+
+/* ---------------- আর্টিকেল নেভিগেশন (Back / Prev / Next) ---------------- */
+.article-nav-section{
+  max-width: 900px; margin: 1rem auto 3rem; padding: 0 1.4rem;
+  display:flex; flex-direction:column; gap: 1.2rem; align-items:flex-start;
+}
+.prev-next-row{ display:flex; gap: 1rem; width:100%; flex-wrap:wrap; }
+.prev-next-card{
+  flex: 1 1 260px; background: var(--card-bg); border: 1px solid var(--line);
+  border-radius: 14px; padding: 1rem 1.2rem; box-shadow: var(--shadow);
+  display:flex; flex-direction:column; gap:.3rem; transition: transform .15s;
+}
+.prev-next-card:hover{ transform: translateY(-2px); }
+.prev-next-card.align-right{ text-align:right; align-items:flex-end; }
+.pn-label{ font-family: var(--font-util); font-size:.72rem; letter-spacing:.06em; color: var(--gold); font-weight:700; text-transform:uppercase; }
+.pn-title{ font-family: var(--font-display); color: var(--ink); font-size: .98rem; }
+
+/* ---------------- রেসপন্সিভ ---------------- */
+@media (max-width: 620px){
+  .article-body{ font-size: 1rem; padding: 2.2rem 1.1rem 1.5rem; }
+  .article-hero{ padding: 2.6rem 1.1rem 2.2rem; }
+  .callout{ flex-direction: column; }
+  .roadmap{ padding-left: 1.8rem; }
+  .roadmap-num{ left: -1.8rem; width:30px; height:30px; font-size:.85rem; }
+}
+
+/* ==========================================================================
+   নিচের ক্লাসগুলো নতুন — কোনো পুরনো ক্লাস বদলানো হয়নি, তাই আগের আর্টিকেল
+   (article-ai-programming.html সহ) ভাঙার কোনো ঝুঁকি নেই।
+   ========================================================================== */
+
+/* ---------------- Author Card ---------------- */
+.author-card{
+  display:flex; align-items:center; gap: .9rem; max-width: 780px; margin: 0 auto 2.2rem;
+  padding: 1rem 1.3rem; background: var(--card-bg); border: 1px solid var(--line);
+  border-radius: 14px; box-shadow: var(--shadow);
+}
+.author-avatar{
+  width: 46px; height:46px; border-radius:50%; object-fit:cover; flex-shrink:0;
+  border: 2px solid var(--gold);
+}
+.author-name{ font-family: var(--font-display); color: var(--ink); font-weight:700; font-size: .96rem; }
+.author-role{ color: var(--muted); font-size: .82rem; }
+
+/* ---------------- Sticky Table of Contents ---------------- */
+.article-toc{
+  max-width: 780px; margin: 0 auto 2rem; background: var(--card-bg);
+  border: 1px solid var(--line); border-radius: 14px; padding: 1.2rem 1.4rem;
+  box-shadow: var(--shadow); position: sticky; top: 10px; z-index: 20;
+}
+.article-toc h5{
+  font-family: var(--font-util); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  color: var(--gold); margin: 0 0 .7rem; font-weight:700;
+}
+.article-toc ol{ margin:0; padding-left: 1.1rem; }
+.article-toc li{ margin-bottom: .4rem; }
+.article-toc a{ color: var(--ink); font-size: .9rem; font-weight:600; text-decoration:none; }
+.article-toc a:hover{ color: var(--teal); }
+
+/* ---------------- শেয়ার / কপি লিংক ---------------- */
+.share-row{
+  display:flex; gap: .6rem; flex-wrap:wrap; justify-content:center;
+  max-width: 780px; margin: 2.2rem auto; padding-top: 1.6rem; border-top: 1px solid var(--line);
+}
+.share-btn{
+  display:inline-flex; align-items:center; gap:.4rem; padding: .6rem 1.1rem;
+  border-radius: 999px; border: 1.5px solid var(--line); background: var(--card-bg);
+  color: var(--ink); font-size:.85rem; font-weight:600; cursor:pointer; font-family: var(--font-body);
+  text-decoration:none; transition: all .18s ease;
+}
+.share-btn:hover{ background: var(--teal); color:#fff; border-color: var(--teal); }
+
+/* ---------------- চেকলিস্ট ---------------- */
+.checklist-box{
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px;
+  padding: 1.3rem 1.5rem; margin: 1.6rem 0;
+}
+.checklist-item{
+  display:flex; align-items:flex-start; gap:.7rem; padding: .55rem 0;
+  border-bottom: 1px solid var(--line); font-size: .96rem;
+}
+.checklist-item:last-child{ border-bottom:none; }
+.checklist-item input[type=checkbox]{ width:19px; height:19px; margin-top:2px; accent-color: var(--teal); flex-shrink:0; }
+
+/* ---------------- উপসংহার কার্ড ---------------- */
+.conclusion-card{
+  background: linear-gradient(150deg, var(--teal), var(--teal-dark)); color:#fff;
+  border-radius: 16px; padding: 1.8rem 2rem; margin: 2rem 0; text-align:center;
+}
+.conclusion-card p{ margin:0; font-size: 1.02rem; line-height:1.85; }
+
+/* ---------------- ফুটার কোট ---------------- */
+.footer-quote-block{
+  text-align:center; padding: 2.6rem 1.4rem; background: var(--ink); color: var(--gold);
+  font-family: var(--font-display); font-size: 1.1rem; line-height:1.85;
+}
+

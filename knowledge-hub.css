@@ -1,0 +1,143 @@
+/* ==========================================================================
+   knowledge-hub.css — style.css এর color/font টোকেন ব্যবহার করে
+   ========================================================================== */
+
+.kh-header{
+  background: var(--ink);
+  padding: .9rem 1.4rem;
+  position: sticky; top:0; z-index: 20;
+  box-shadow: 0 2px 14px rgba(0,0,0,.18);
+}
+.kh-header-inner{
+  max-width: 900px; margin: 0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.kh-header .brand-name{ color:#fff; }
+
+.kh-main{ max-width: 900px; margin: 0 auto; padding: 2.5rem 1.4rem 4rem; }
+.kh-intro{ margin-bottom: 2.2rem; }
+.kh-intro .section-sub{ max-width: none; }
+
+.kh-card{
+  background: var(--card-bg); border:1px solid var(--line); border-radius: 16px;
+  border-top: 5px solid var(--line);
+  padding: 1.6rem 1.6rem 1.8rem; margin-bottom: 1.6rem; box-shadow: var(--shadow);
+}
+.kh-card--mint{   border-top-color: #2ECC71; }
+.kh-card--sky{    border-top-color: #3B82F6; }
+.kh-card--amber{  border-top-color: #F5A623; }
+.kh-card--violet{ border-top-color: #9B59B6; }
+
+.kh-card-title{ font-family: var(--font-display); color: var(--ink); font-size: 1.15rem; margin: 0 0 1.1rem; }
+
+/* ---------------- রঙিন 3D বাটন সিস্টেম ---------------- */
+.btn3d{
+  display:inline-block;
+  border:none; cursor:pointer;
+  font-family: var(--font-body); font-weight:700; font-size:.92rem;
+  color:#fff; border-radius: 12px; padding: .75rem 1.5rem;
+  box-shadow: 0 5px 0 var(--btn-shadow, #333), 0 8px 16px rgba(0,0,0,.18);
+  transform: translateY(0);
+  transition: transform .12s ease, box-shadow .12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn3d:hover{ filter: brightness(1.05); }
+.btn3d:active{
+  transform: translateY(5px);
+  box-shadow: 0 0 0 var(--btn-shadow, #333), 0 2px 6px rgba(0,0,0,.18);
+}
+.btn3d:disabled{ opacity:.5; cursor:not-allowed; transform:none !important; }
+
+.btn-mint{   background:#2ECC71; --btn-shadow:#1E9A56; }
+.btn-sky{    background:#3B82F6; --btn-shadow:#1D4ED8; }
+.btn-coral{  background:#FF6B6B; --btn-shadow:#C0392B; }
+.btn-violet{ background:#9B59B6; --btn-shadow:#6C3483; }
+.btn-amber{  background:#F5A623; --btn-shadow:#B9770E; }
+.btn-indigo{ background:#6C5CE7; --btn-shadow:#4834B4; }
+.btn-rose{   background:#FF4D79; --btn-shadow:#C22B54; }
+.btn-teal{   background:#12B5A6; --btn-shadow:#0B8479; }
+
+.kh-back.btn3d{ padding: .6rem 1.2rem; font-size: .85rem; }
+
+/* ছোট আইকন-বাটন (রেজিস্টার রো ডিলিট, চিপ রিমুভ) এর জন্য হালকা সংস্করণ */
+.btn3d.btn-small{
+  padding: .4rem .6rem; border-radius: 8px; font-size:.85rem;
+  box-shadow: 0 3px 0 var(--btn-shadow, #333), 0 5px 10px rgba(0,0,0,.15);
+}
+.btn3d.btn-small:active{ transform: translateY(3px); box-shadow: 0 0 0 var(--btn-shadow, #333); }
+
+.kh-add-row{ display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom: 1rem; }
+.kh-add-row input{
+  flex:1; min-width: 200px; padding:.7rem 1rem; border-radius:10px; border:1px solid var(--line);
+  font-family: var(--font-body); font-size: .95rem; background:#fff;
+}
+
+.chip-row{ display:flex; flex-wrap:wrap; gap:.7rem; }
+.member-chip{
+  display:flex; align-items:center; gap:.6rem;
+  border-radius: 999px; padding: .45rem .5rem .45rem 1.1rem;
+  font-size:.92rem; font-weight:700; color:#fff;
+  box-shadow: 0 4px 0 rgba(0,0,0,.18), 0 6px 10px rgba(0,0,0,.12);
+}
+.member-chip button{
+  border:none; cursor:pointer; color:#fff; font-size:.8rem; font-weight:700;
+  width: 24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  background: rgba(0,0,0,.18);
+  transition: transform .12s ease, background .15s ease;
+}
+.member-chip button:hover{ background: rgba(0,0,0,.32); }
+.member-chip button:active{ transform: translateY(2px) scale(.92); }
+
+.chip-mint{   background:#2ECC71; }
+.chip-sky{    background:#3B82F6; }
+.chip-coral{  background:#FF6B6B; }
+.chip-violet{ background:#9B59B6; }
+.chip-amber{  background:#F5A623; }
+.chip-indigo{ background:#6C5CE7; }
+.chip-rose{   background:#FF4D79; }
+.chip-teal{   background:#12B5A6; }
+
+.kh-empty-note{ color: var(--muted); font-size:.9rem; margin-top: .8rem; }
+
+.kh-form{ display:grid; gap: 1.1rem; grid-template-columns: 1fr 1fr; }
+.kh-field{ display:flex; flex-direction:column; gap:.4rem; }
+.kh-field label{ font-size:.85rem; color: var(--muted); font-weight:600; }
+.kh-field input[type="date"],
+.kh-field input[type="number"],
+.kh-field select{
+  padding:.65rem .9rem; border-radius:10px; border:1px solid var(--line);
+  font-family: var(--font-body); font-size:.95rem; background:#fff; color: var(--charcoal);
+}
+.radio-row{ display:flex; gap: 1.2rem; font-size:.9rem; align-items:center; padding-top:.3rem; }
+.radio-row label{ display:flex; align-items:center; gap:.4rem; font-weight:400; color: var(--charcoal); }
+.kh-save-btn{ grid-column: 1 / -1; border:none; cursor:pointer; justify-self:start; }
+
+@media (max-width: 620px){
+  .kh-form{ grid-template-columns: 1fr; }
+}
+
+.table-wrap{ overflow-x:auto; }
+.kh-table{ width:100%; border-collapse: collapse; font-size:.9rem; }
+.kh-table th, .kh-table td{ text-align:left; padding:.65rem .8rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.kh-table th{ color: var(--muted); font-family: var(--font-util); font-size:.75rem; letter-spacing:.06em; text-transform:uppercase; }
+.kh-table td.status-leave{ color: var(--gold); font-weight:600; }
+.kh-table td.status-duty{ color: var(--teal); font-weight:600; }
+.kh-table .row-delete{
+  background:#FF6B6B; border:none; color:#fff; cursor:pointer; font-size:.85rem;
+  border-radius:8px; padding:.35rem .55rem;
+  box-shadow: 0 3px 0 #C0392B, 0 5px 8px rgba(0,0,0,.15);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.kh-table .row-delete:active{ transform: translateY(3px); box-shadow: 0 0 0 #C0392B; }
+
+.filter-row select{
+  padding:.55rem .9rem; border-radius: 10px; border: 2px solid #9B59B6;
+  font-family: var(--font-body); background:#fff; margin-bottom: 1rem;
+}
+
+.kh-card--sky .kh-field input,
+.kh-card--sky .kh-field select{ border: 2px solid #3B82F6; }
+.kh-card--mint .kh-add-row input{ border: 2px solid #2ECC71; }
+
+
+  
