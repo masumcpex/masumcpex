@@ -369,7 +369,7 @@ const SITE_DATA = {
       icon: "🗣️",
       description: "স্মার্ট স্পোকেন ইংলিশ শেখার একটি ইন্টারঅ্যাক্টিভ প্ল্যাটফর্ম।",
       status: "পরিকল্পনায়",
-      url: "#"
+      url: "english-learning.html"
     },
     {
       id: "p5",
