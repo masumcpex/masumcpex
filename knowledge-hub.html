@@ -27,14 +27,13 @@
   <div class="kh-intro">
     <div class="eyebrow">Knowledge Hub</div>
     <h1 class="section-title">টিম হাজিরা ও কাজের ঘণ্টা খাতা</h1>
-    <p class="section-sub">এখানে প্রতিদিনের কাজের ঘণ্টার হিসাব সবাই দেখতে পারবেন। নতুন এন্ট্রি যোগ, সম্পাদনা বা মুছে ফেলার কাজ শুধু এডমিন লগইন করেই করা যাবে — ডেটা এখন থেকে সব ডিভাইসে সিঙ্ক হয়ে থাকবে।</p>
+    <p class="section-sub">এখানে প্রতিদিনের কাজের ঘণ্টার হিসাব সবাই দেখতে ও লিখতে পারবেন — কোনো লগইনের দরকার নেই। ডেটা এখন থেকে Firestore-এ স্থায়ীভাবে সংরক্ষিত থাকে, তাই মোবাইল হারালেও বা বদলালেও ডেটা নষ্ট হবে না।</p>
   </div>
 
-  <!-- ---------------- এডমিন লগইন বার (নতুন) ---------------- -->
-  <div class="kh-admin-bar" id="khAdminBar" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:#FBF7EC; border:1px solid #E4D9B8; border-radius:12px; padding:12px 16px; margin-bottom:22px;">
-    <span id="khAuthStatus" style="font-size:.88rem; font-weight:600;">🔓 পাবলিক ভিউ — শুধু দেখা যাচ্ছে</span>
-    <button type="button" id="khLoginBtn" class="btn3d btn-indigo">Google দিয়ে এডমিন লগইন</button>
-    <button type="button" id="khLogoutBtn" class="btn3d" style="display:none; background:#B33A3A;">লগআউট</button>
+  <!-- ---------------- তথ্য বার ---------------- -->
+  <div class="kh-admin-bar" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; background:#FBF7EC; border:1px solid #E4D9B8; border-radius:12px; padding:12px 16px; margin-bottom:22px;">
+    <span style="font-size:.88rem; font-weight:600;">🔓 সবার জন্য উন্মুক্ত — যে কেউ দেখতে ও লিখতে পারবেন</span>
+    <span id="khSyncStatus" style="font-size:.8rem; color:#7A6F5D;">সংযোগ হচ্ছে...</span>
   </div>
 
   <!-- ---------------- সদস্য ব্যবস্থাপনা ---------------- -->
@@ -118,8 +117,6 @@
   <p>Knowledge Hub — Firestore-এ নিরাপদে সিঙ্ক করা। | ডিজাইন ও ডেভেলপমেন্ট: <strong>মাসুম</strong></p>
 </footer>
 
-<script type="module" src="firebase.js"></script>
 <script type="module" src="knowledge-hub.js"></script>
 </body>
 </html>
-

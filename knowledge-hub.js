@@ -1,10 +1,7 @@
 /* ==========================================================================
-   knowledge-hub.js (Firestore ভার্সন)
-   এখন সব ডেটা Firebase Firestore-এ থাকে — তাই যেকোনো ডিভাইস থেকে হাজিরা
-   দিলে সবাই সেটা দেখতে পাবে। কোনো লগইন/পাসওয়ার্ড লাগে না — যে কেউ
-   সরাসরি নাম যোগ করতে ও হাজিরা লিখতে পারবে (আগের মতোই খোলা)।
-
-   HTML/CSS-এর কোনো id/class বদলানো হয়নি, তাই ডিজাইনের কিছুই ভাঙবে না।
+   knowledge-hub.js (Firestore ভার্সন — লগইন ছাড়া, সবার জন্য উন্মুক্ত)
+   সব ডেটা Firebase Firestore-এ থাকে — তাই মোবাইল হারালে/বদলালেও ডেটা
+   থাকবে, আর যেকোনো ডিভাইস থেকে দেখা/লেখা যাবে। কোনো লগইন/পাসওয়ার্ড নেই।
    ========================================================================== */
 
 import { db, collection, addDoc, deleteDoc, doc, onSnapshot, query } from "./firebase.js";
@@ -28,10 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const hoursField    = document.getElementById("hoursField");
   const entryForm     = document.getElementById("entryForm");
   const addMemberBtn  = document.getElementById("addMemberBtn");
+  const summaryMonth  = document.getElementById("summaryMonth");
+  const exportMonthBtn = document.getElementById("exportMonthBtn");
+  const closeMonthBtn  = document.getElementById("closeMonthBtn");
+  const syncStatus    = document.getElementById("khSyncStatus");
 
-  entryDate.value = new Date().toISOString().slice(0, 10);
+  const todayStr = new Date().toISOString().slice(0, 10);
+  entryDate.value = todayStr;
+  summaryMonth.value = todayStr.slice(0, 7); // YYYY-MM
 
-  /* ---------------- লোডিং অবস্থা দেখানো (কানেকশন স্লো হলে ইউজার বুঝবে) ---------------- */
+  /* ---------------- লোডিং অবস্থা ---------------- */
   memberChips.innerHTML = `<span style="color:#7A6F5D; font-size:.9rem;">⏳ লোড হচ্ছে...</span>`;
 
   /* ---------------- সদস্য রেন্ডার ---------------- */
@@ -89,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- স্ট্যাটাস টগল (ছুটি হলে ঘণ্টা ইনপুট বন্ধ) ---------------- */
+  /* ---------------- স্ট্যাটাস টগল ---------------- */
   entryForm.querySelectorAll('input[name="status"]').forEach(radio => {
     radio.addEventListener("change", () => {
       const isLeave = entryForm.querySelector('input[name="status"]:checked').value === "leave";
@@ -123,18 +126,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- সামারি টেবিল ---------------- */
+  /* ---------------- সামারি টেবিল (নির্বাচিত মাস অনুযায়ী) ---------------- */
+  function recordsForSelectedMonth(){
+    const month = summaryMonth.value; // "YYYY-MM"
+    if(!month) return records;
+    return records.filter(r => r.date && r.date.slice(0, 7) === month);
+  }
+
   function renderSummary(){
     const tbody = document.querySelector("#summaryTable tbody");
     const noSummaryNote = document.getElementById("noSummaryNote");
-    if(!records.length){
+    const monthRecords = recordsForSelectedMonth();
+    if(!monthRecords.length){
       tbody.innerHTML = "";
       noSummaryNote.style.display = "block";
       return;
     }
     noSummaryNote.style.display = "none";
     const byMember = {};
-    records.forEach(r => {
+    monthRecords.forEach(r => {
       if(!byMember[r.member]) byMember[r.member] = { days:0, leaves:0, hours:0 };
       if(r.status === "duty"){ byMember[r.member].days++; byMember[r.member].hours += r.hours; }
       else{ byMember[r.member].leaves++; }
@@ -145,7 +155,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }).join("");
   }
 
-  /* ---------------- রেজিস্টার টেবিল ---------------- */
+  summaryMonth.addEventListener("change", renderSummary);
+
+  /* ---------------- CSV এক্সপোর্ট (নির্বাচিত মাস) ---------------- */
+  exportMonthBtn.addEventListener("click", () => {
+    const month = summaryMonth.value;
+    const monthRecords = recordsForSelectedMonth().slice().sort((a,b) => a.date.localeCompare(b.date));
+    if(!monthRecords.length){ alert("এই মাসে কোনো রেকর্ড নেই।"); return; }
+    const header = "তারিখ,নাম,স্ট্যাটাস,ঘণ্টা\n";
+    const rows = monthRecords.map(r =>
+      `${r.date},${r.member},${r.status === "duty" ? "ডিউটি" : "ছুটি"},${r.status === "duty" ? r.hours : 0}`
+    ).join("\n");
+    const csv = "\uFEFF" + header + rows;
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `hajira-report-${month || "all"}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  /* ---------------- এই মাসের হিসাব মুছে ফেলা ---------------- */
+  closeMonthBtn.addEventListener("click", async () => {
+    const month = summaryMonth.value;
+    const monthRecords = recordsForSelectedMonth();
+    if(!monthRecords.length){ alert("এই মাসে মুছে ফেলার মতো কোনো রেকর্ড নেই।"); return; }
+    if(!confirm(`"${month}" মাসের সব হাজিরা রেকর্ড স্থায়ীভাবে মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না। ডাউনলোড করে কপি রাখা হয়েছে তো?`)) return;
+    closeMonthBtn.disabled = true;
+    closeMonthBtn.textContent = "মুছে ফেলা হচ্ছে...";
+    try{
+      await Promise.all(monthRecords.map(r => deleteDoc(doc(db, "kh_records", r.id))));
+    }catch(err){
+      alert("মুছে ফেলা যায়নি, আবার চেষ্টা করুন।");
+      console.error(err);
+    }finally{
+      closeMonthBtn.disabled = false;
+      closeMonthBtn.textContent = "🗑️ এই মাসের হিসাব মুছে ফেলুন";
+    }
+  });
+
+  /* ---------------- রেজিস্টার টেবিল (সব সময়ের, সদস্য দিয়ে ফিল্টার) ---------------- */
   function renderRegister(){
     const tbody = document.querySelector("#registerTable tbody");
     const noRecordsNote = document.getElementById("noRecordsNote");
@@ -187,9 +239,11 @@ document.addEventListener("DOMContentLoaded", () => {
   onSnapshot(query(membersCol), snap => {
     members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderMembers();
+    if(syncStatus) syncStatus.textContent = "✅ সংযুক্ত — লাইভ সিঙ্ক চালু";
   }, err => {
     console.error(err);
     memberChips.innerHTML = `<span style="color:#c0392b;">সংযোগ করা যায়নি — ইন্টারনেট চেক করুন।</span>`;
+    if(syncStatus) syncStatus.textContent = "⚠️ সংযোগ বিচ্ছিন্ন";
   });
 
   onSnapshot(query(recordsCol), snap => {
