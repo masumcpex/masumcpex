@@ -37,7 +37,7 @@ import {
 
 // আপনার Firebase প্রজেক্ট কনফিগ (masumcpex-f65cf)
 const firebaseConfig = {
-  apiKey: "AIzaSyDp8J-8XI-wGtn3MYNjauEyDHoIt7WhnCY",
+  apiKey: "AIzaSyDp8J-8XI-wGtn3MYNjauEyDHolt7WhnCY",
   authDomain: "masumcpex-f65cf.firebaseapp.com",
   projectId: "masumcpex-f65cf",
   storageBucket: "masumcpex-f65cf.firebasestorage.app",
