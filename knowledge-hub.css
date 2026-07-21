@@ -141,3 +141,6 @@
 
 
   
+
+/* ---------------- মাস নির্বাচন সারি (নতুন — কোনো পুরনো ক্লাস স্পর্শ করা হয়নি) ---------------- */
+.kh-month-row{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
