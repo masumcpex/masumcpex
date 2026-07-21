@@ -1,6 +1,6 @@
 /* ==========================================================================
    firebase.js
-   Masum Notes — Firebase App + Firestore + Auth initialization
+   masumcpex — Firebase App + Firestore + Auth initialization
 
    দুইটা মোড সাপোর্ট করে:
    ১) Anonymous (no-login) — knowledge-hub.html / knowledge-hub.js ব্যবহার করে
