@@ -240,9 +240,20 @@ const SITE_DATA = {
       excerpt: "ভালোবাসা, বন্ধুত্ব, কষ্ট, বিশ্বাস আর জীবনের ছোট ছোট উপলব্ধির একগুচ্ছ ভাঙা টুকরো — কিছু মুহূর্তের ডায়েরি, যা হয়তো আপনারও চেনা লাগবে।",
       url: "journal-unfinished-feelings.html",
       content: ""
+    },
+    {
+      id: "j6",
+      title: "Social Media Honey Trap: অনলাইন যৌন প্রতারণা ও ব্ল্যাকমেইলের নেপথ্য কাহিনি",
+      category: "জীবন ও মানসিকতা",
+      date: "২০২৬-০৭-১৯",
+      readingTime: "১৪ মিনিট",
+      image: "",
+      excerpt: "Facebook, IMO, Bigo Live-এ ছড়িয়ে থাকা ভুয়া প্রোফাইল, হানি ট্র্যাপ কৌশল, ব্ল্যাকমেইল আর প্রবাসীদের টার্গেট করার পদ্ধতি নিয়ে একটি অনুসন্ধানী প্রতিবেদন — সাথে নিরাপত্তা টিপস।",
+      url: "article-honeytrap-scam.html",
+      content: ""
     }
   ],
-  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা"],
+  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা"],
 
   articles: [
     {
@@ -325,6 +336,17 @@ const SITE_DATA = {
       image: "",
       excerpt: "ভালোবাসা, বন্ধুত্ব, কষ্ট, বিশ্বাস আর জীবনের ছোট ছোট উপলব্ধির একগুচ্ছ ভাঙা টুকরো — কিছু মুহূর্তের ডায়েরি, যা হয়তো আপনারও চেনা লাগবে।",
       url: "journal-unfinished-feelings.html",
+      content: ""
+    },
+    {
+      id: "a8",
+      title: "Social Media Honey Trap: অনলাইন যৌন প্রতারণা ও ব্ল্যাকমেইলের নেপথ্য কাহিনি",
+      category: "সাইবার নিরাপত্তা",
+      date: "২০২৬-০৭-১৯",
+      readingTime: "১৪ মিনিট",
+      image: "",
+      excerpt: "Facebook, IMO, Bigo Live-এ ছড়িয়ে থাকা ভুয়া প্রোফাইল, হানি ট্র্যাপ কৌশল, ব্ল্যাকমেইল আর প্রবাসীদের টার্গেট করার পদ্ধতি নিয়ে একটি অনুসন্ধানী প্রতিবেদন — সাথে নিরাপত্তা টিপস ও যাচাইযোগ্য সোর্স।",
+      url: "article-honeytrap-scam.html",
       content: ""
     }
   ],
