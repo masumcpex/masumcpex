@@ -54,13 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
     khLogoutBtn.style.display = isAdmin ? "inline-block" : "none";
     khAuthStatus.textContent  = isAdmin
       ? "🔑 এডমিন হিসেবে লগইন করা আছে — এডিট করতে পারবেন"
-      : "🔓 পাবলিক ভিউ — শুধু দেখা যাচ্ছে";
+      : "🔓 পাবলিক ভিউ — শুধু দেখা যাচ্ছে (এন্ট্রি সেভ করতে এডমিন লগইন প্রয়োজন)";
 
-    // মিউটেশন কন্ট্রোলগুলো শুধু এডমিনের জন্য চালু
+    // শুধু "সেভ/মুছুন" জাতীয় বাটনগুলোই এডমিন-নির্ভর — বাকি ইনপুট (তারিখ,
+    // ঘণ্টা, ড্রপডাউন) সবসময় স্বাভাবিকভাবে ব্যবহারযোগ্য থাকবে, যাতে পাতাটা
+    // "ভাঙা" মনে না হয়। সেভ করার সময় আবার isAdmin চেক হয়, তাই নিরাপত্তা ঠিক থাকে।
     addMemberBtn.disabled = !isAdmin;
-    memberInput.disabled  = !isAdmin;
     entryForm.querySelector(".kh-save-btn").disabled = !isAdmin || !members.length;
-    [...entryForm.elements].forEach(el => el.disabled = !isAdmin && el.type !== "submit");
     exportMonthBtn.disabled = false; // ডাউনলোড সবাই করতে পারবে, এটা শুধু পড়া
     closeMonthBtn.disabled = !isAdmin;
   }
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
   entryForm.querySelectorAll('input[name="status"]').forEach(radio => {
     radio.addEventListener("change", () => {
       const isLeave = entryForm.querySelector('input[name="status"]:checked').value === "leave";
-      entryHours.disabled = isLeave || !isAdmin;
+      entryHours.disabled = isLeave;
       hoursField.style.opacity = isLeave ? .5 : 1;
       if(isLeave) entryHours.value = "";
     });
@@ -148,7 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------------- এন্ট্রি সাবমিট ---------------- */
   entryForm.addEventListener("submit", e => {
     e.preventDefault();
-    if(!isAdmin || !members.length) return;
+    if(!isAdmin){ alert("এন্ট্রি সেভ করতে আগে উপরের 'Google দিয়ে এডমিন লগইন' বাটনে চাপুন।"); return; }
+    if(!members.length) return;
     const status = entryForm.querySelector('input[name="status"]:checked').value;
     const record = {
       id: "r" + Date.now(),
