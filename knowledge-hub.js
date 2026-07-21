@@ -1,141 +1,95 @@
 /* ==========================================================================
-   knowledge-hub.js
-   এখন ডেটা Firestore-এ রিয়েলটাইম সিঙ্ক হয় — তাই যেকোনো ডিভাইস থেকে
-   দেখলে সবাই একই তথ্য দেখবে। নতুন এন্ট্রি যোগ/সম্পাদনা/মোছা শুধু
-   এডমিন (Google লগইন করা masumcpex@gmail.com) করতে পারবে।
-   Firestore সংযোগ না থাকলে এই ব্রাউজারের localStorage ক্যাশ থেকে
-   পড়ে (offline fallback), যাতে সাইট পুরোপুরি ভেঙে না যায়।
+   knowledge-hub.js (Firestore ভার্সন)
+   এখন সব ডেটা Firebase Firestore-এ থাকে — তাই যেকোনো ডিভাইস থেকে হাজিরা
+   দিলে সবাই সেটা দেখতে পাবে। কোনো লগইন/পাসওয়ার্ড লাগে না — যে কেউ
+   সরাসরি নাম যোগ করতে ও হাজিরা লিখতে পারবে (আগের মতোই খোলা)।
+
+   HTML/CSS-এর কোনো id/class বদলানো হয়নি, তাই ডিজাইনের কিছুই ভাঙবে না।
    ========================================================================== */
 
-import { khOnAuthChange, khSignIn, khSignOut, khWatchDoc, khSaveDoc, khLogEvent } from "./firebase.js";
+import { db, collection, addDoc, deleteDoc, doc, onSnapshot, query } from "./firebase.js";
 
-const KH_MEMBERS_KEY = "kh_members";
-const KH_RECORDS_KEY = "kh_records";
-
-function khLoadMembersLocal(){
-  try{ return JSON.parse(localStorage.getItem(KH_MEMBERS_KEY)) || []; }catch(e){ return []; }
-}
-function khCacheMembersLocal(list){ localStorage.setItem(KH_MEMBERS_KEY, JSON.stringify(list)); }
-function khLoadRecordsLocal(){
-  try{ return JSON.parse(localStorage.getItem(KH_RECORDS_KEY)) || []; }catch(e){ return []; }
-}
-function khCacheRecordsLocal(list){ localStorage.setItem(KH_RECORDS_KEY, JSON.stringify(list)); }
+const membersCol = collection(db, "kh_members");
+const recordsCol = collection(db, "kh_records");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  let members = khLoadMembersLocal();   // Firestore সংযোগ না আসা পর্যন্ত local ক্যাশ দেখানো হয়
-  let records = khLoadRecordsLocal();
-  let isAdmin = false;
+  let members = [];   // [{ id, name }]
+  let records = [];   // [{ id, date, member, status, hours }]
 
   const memberChips   = document.getElementById("memberChips");
   const noMemberNote  = document.getElementById("noMemberNote");
   const noMemberWarn  = document.getElementById("noMemberWarn");
   const memberInput   = document.getElementById("memberInput");
-  const addMemberBtn  = document.getElementById("addMemberBtn");
   const entryMember   = document.getElementById("entryMember");
   const filterMember  = document.getElementById("filterMember");
   const entryDate     = document.getElementById("entryDate");
   const entryHours    = document.getElementById("entryHours");
   const hoursField    = document.getElementById("hoursField");
   const entryForm     = document.getElementById("entryForm");
-  const summaryMonth  = document.getElementById("summaryMonth");
-  const exportMonthBtn= document.getElementById("exportMonthBtn");
-  const closeMonthBtn = document.getElementById("closeMonthBtn");
-  const khAuthStatus  = document.getElementById("khAuthStatus");
-  const khLoginBtn    = document.getElementById("khLoginBtn");
-  const khLogoutBtn   = document.getElementById("khLogoutBtn");
+  const addMemberBtn  = document.getElementById("addMemberBtn");
 
-  entryDate.value = new Date().toISOString().slice(0,10);
-  summaryMonth.value = new Date().toISOString().slice(0,7);
+  entryDate.value = new Date().toISOString().slice(0, 10);
 
-  /* ---------------- এডমিন অথ স্টেট ---------------- */
-  function applyAdminUI(){
-    khLoginBtn.style.display  = isAdmin ? "none" : "inline-block";
-    khLogoutBtn.style.display = isAdmin ? "inline-block" : "none";
-    khAuthStatus.textContent  = isAdmin
-      ? "🔑 এডমিন হিসেবে লগইন করা আছে — এডিট করতে পারবেন"
-      : "🔓 পাবলিক ভিউ — শুধু দেখা যাচ্ছে (এন্ট্রি সেভ করতে এডমিন লগইন প্রয়োজন)";
-
-    // শুধু "সেভ/মুছুন" জাতীয় বাটনগুলোই এডমিন-নির্ভর — বাকি ইনপুট (তারিখ,
-    // ঘণ্টা, ড্রপডাউন) সবসময় স্বাভাবিকভাবে ব্যবহারযোগ্য থাকবে, যাতে পাতাটা
-    // "ভাঙা" মনে না হয়। সেভ করার সময় আবার isAdmin চেক হয়, তাই নিরাপত্তা ঠিক থাকে।
-    addMemberBtn.disabled = !isAdmin;
-    entryForm.querySelector(".kh-save-btn").disabled = !isAdmin || !members.length;
-    exportMonthBtn.disabled = false; // ডাউনলোড সবাই করতে পারবে, এটা শুধু পড়া
-    closeMonthBtn.disabled = !isAdmin;
-  }
-
-  khOnAuthChange((adminFlag) => {
-    isAdmin = adminFlag;
-    applyAdminUI();
-    renderMembers();
-    renderSummary();
-    renderRegister();
-  });
-
-  khLoginBtn.addEventListener("click", () => {
-    khSignIn().catch(err => alert("লগইন ব্যর্থ হয়েছে: " + err.message));
-  });
-  khLogoutBtn.addEventListener("click", () => { khSignOut(); });
-
-  /* ---------------- Firestore রিয়েলটাইম সিঙ্ক ---------------- */
-  khWatchDoc("members", (list) => {
-    if(list === null){ members = khLoadMembersLocal(); } // সংযোগ সমস্যা → local ক্যাশ
-    else{ members = list; khCacheMembersLocal(list); }
-    renderMembers();
-  });
-  khWatchDoc("records", (list) => {
-    if(list === null){ records = khLoadRecordsLocal(); }
-    else{ records = list; khCacheRecordsLocal(list); }
-    renderSummary();
-    renderRegister();
-  });
-
-  function saveMembers(){ khSaveDoc("members", members).catch(e=>alert("সেভ ব্যর্থ: "+e.message)); khCacheMembersLocal(members); }
-  function saveRecords(){ khSaveDoc("records", records).catch(e=>alert("সেভ ব্যর্থ: "+e.message)); khCacheRecordsLocal(records); }
+  /* ---------------- লোডিং অবস্থা দেখানো (কানেকশন স্লো হলে ইউজার বুঝবে) ---------------- */
+  memberChips.innerHTML = `<span style="color:#7A6F5D; font-size:.9rem;">⏳ লোড হচ্ছে...</span>`;
 
   /* ---------------- সদস্য রেন্ডার ---------------- */
   const CHIP_COLORS = ["chip-mint","chip-sky","chip-coral","chip-violet","chip-amber","chip-indigo","chip-rose","chip-teal"];
   function renderMembers(){
-    memberChips.innerHTML = members.map((name, i) => `
+    memberChips.innerHTML = members.map((m, i) => `
       <span class="member-chip ${CHIP_COLORS[i % CHIP_COLORS.length]}">
-        ${name}
-        ${isAdmin ? `<button data-name="${name}" title="বাদ দিন">✕</button>` : ""}
+        ${m.name}
+        <button data-id="${m.id}" data-name="${m.name}" title="বাদ দিন">✕</button>
       </span>`).join("");
     noMemberNote.style.display = members.length ? "none" : "block";
     noMemberWarn.style.display = members.length ? "none" : "block";
-    applyAdminUI();
+    const saveBtn = entryForm.querySelector(".kh-save-btn");
+    if(saveBtn) saveBtn.disabled = !members.length;
 
-    const opts = members.map(n => `<option value="${n}">${n}</option>`).join("");
+    const opts = members.map(m => `<option value="${m.name}">${m.name}</option>`).join("");
     entryMember.innerHTML = opts || `<option value="">— সদস্য নেই —</option>`;
+
+    const prevFilter = filterMember.value;
     filterMember.innerHTML = `<option value="সবাই">সবাই</option>` + opts;
+    if([...filterMember.options].some(o => o.value === prevFilter)) filterMember.value = prevFilter;
   }
 
-  addMemberBtn.addEventListener("click", () => {
-    if(!isAdmin) return;
+  /* ---------------- সদস্য যোগ করা ---------------- */
+  addMemberBtn.addEventListener("click", async () => {
     const name = memberInput.value.trim();
     if(!name) return;
-    if(members.includes(name)){ memberInput.value = ""; return; }
-    members.push(name);
-    saveMembers();
-    memberInput.value = "";
-    khLogEvent("kh_add_member");
+    if(members.some(m => m.name === name)){ memberInput.value = ""; return; }
+    addMemberBtn.disabled = true;
+    try{
+      await addDoc(membersCol, { name });
+      memberInput.value = "";
+    }catch(err){
+      alert("সদস্য যোগ করা যায়নি, ইন্টারনেট সংযোগ চেক করুন।");
+      console.error(err);
+    }finally{
+      addMemberBtn.disabled = false;
+    }
   });
   memberInput.addEventListener("keydown", e => {
     if(e.key === "Enter"){ e.preventDefault(); addMemberBtn.click(); }
   });
 
-  memberChips.addEventListener("click", e => {
-    if(!isAdmin) return;
-    const btn = e.target.closest("button[data-name]");
+  /* ---------------- সদস্য বাদ দেওয়া ---------------- */
+  memberChips.addEventListener("click", async e => {
+    const btn = e.target.closest("button[data-id]");
     if(!btn) return;
-    const name = btn.dataset.name;
+    const { id, name } = btn.dataset;
     if(!confirm(`"${name}" কে সদস্য তালিকা থেকে বাদ দিতে চান? (পুরনো রেকর্ড মুছে যাবে না)`)) return;
-    members = members.filter(m => m !== name);
-    saveMembers();
+    try{
+      await deleteDoc(doc(db, "kh_members", id));
+    }catch(err){
+      alert("সদস্য বাদ দেওয়া যায়নি, আবার চেষ্টা করুন।");
+      console.error(err);
+    }
   });
 
-  /* ---------------- স্ট্যাটাস টগল ---------------- */
+  /* ---------------- স্ট্যাটাস টগল (ছুটি হলে ঘণ্টা ইনপুট বন্ধ) ---------------- */
   entryForm.querySelectorAll('input[name="status"]').forEach(radio => {
     radio.addEventListener("change", () => {
       const isLeave = entryForm.querySelector('input[name="status"]:checked').value === "leave";
@@ -146,38 +100,41 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ---------------- এন্ট্রি সাবমিট ---------------- */
-  entryForm.addEventListener("submit", e => {
+  entryForm.addEventListener("submit", async e => {
     e.preventDefault();
-    if(!isAdmin){ alert("এন্ট্রি সেভ করতে আগে উপরের 'Google দিয়ে এডমিন লগইন' বাটনে চাপুন।"); return; }
     if(!members.length) return;
+    const saveBtn = entryForm.querySelector(".kh-save-btn");
     const status = entryForm.querySelector('input[name="status"]:checked').value;
     const record = {
-      id: "r" + Date.now(),
       date: entryDate.value,
       member: entryMember.value,
       status: status,
       hours: status === "duty" ? (parseFloat(entryHours.value) || 0) : 0
     };
-    records.push(record);
-    saveRecords();
-    entryHours.value = "";
-    khLogEvent("kh_add_record");
+    if(saveBtn){ saveBtn.disabled = true; saveBtn.textContent = "সংরক্ষণ হচ্ছে..."; }
+    try{
+      await addDoc(recordsCol, record);
+      entryHours.value = "";
+    }catch(err){
+      alert("রেকর্ড সংরক্ষণ করা যায়নি, ইন্টারনেট সংযোগ চেক করুন।");
+      console.error(err);
+    }finally{
+      if(saveBtn){ saveBtn.disabled = !members.length; saveBtn.textContent = "রেকর্ড সংরক্ষণ করুন"; }
+    }
   });
 
-  /* ---------------- সামারি টেবিল (নির্বাচিত মাস অনুযায়ী) ---------------- */
+  /* ---------------- সামারি টেবিল ---------------- */
   function renderSummary(){
     const tbody = document.querySelector("#summaryTable tbody");
     const noSummaryNote = document.getElementById("noSummaryNote");
-    const month = summaryMonth.value;
-    const monthRecords = records.filter(r => r.date.startsWith(month));
-    if(!monthRecords.length){
+    if(!records.length){
       tbody.innerHTML = "";
       noSummaryNote.style.display = "block";
       return;
     }
     noSummaryNote.style.display = "none";
     const byMember = {};
-    monthRecords.forEach(r => {
+    records.forEach(r => {
       if(!byMember[r.member]) byMember[r.member] = { days:0, leaves:0, hours:0 };
       if(r.status === "duty"){ byMember[r.member].days++; byMember[r.member].hours += r.hours; }
       else{ byMember[r.member].leaves++; }
@@ -187,40 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return `<tr><td>${name}</td><td>${d.days}</td><td>${d.leaves}</td><td>${d.hours}</td></tr>`;
     }).join("");
   }
-  summaryMonth.addEventListener("change", renderSummary);
-
-  /* ---------------- CSV ডাউনলোড (সবাই করতে পারবে — শুধু পড়া) ---------------- */
-  exportMonthBtn.addEventListener("click", () => {
-    const month = summaryMonth.value;
-    const monthRecords = records.filter(r => r.date.startsWith(month));
-    if(!monthRecords.length){ alert("এই মাসে কোনো রেকর্ড নেই।"); return; }
-    let csv = "তারিখ,নাম,স্ট্যাটাস,ঘণ্টা\n";
-    monthRecords.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(r=>{
-      csv += `${r.date},${r.member},${r.status === "duty" ? "ডিউটি" : "ছুটি"},${r.status === "duty" ? r.hours : 0}\n`;
-    });
-    const blob = new Blob(["\uFEFF"+csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = `hajira-report-${month}.csv`; a.click();
-    URL.revokeObjectURL(url);
-    khLogEvent("kh_export_csv");
-  });
-
-  /* ---------------- মাসের হিসাব মুছে ফেলুন (শুধু এডমিন) ---------------- */
-  closeMonthBtn.addEventListener("click", () => {
-    if(!isAdmin) return;
-    const month = summaryMonth.value;
-    const monthRecords = records.filter(r => r.date.startsWith(month));
-    if(!monthRecords.length){ alert("এই মাসে মোছার মতো কোনো রেকর্ড নেই।"); return; }
-    const ok1 = confirm(`"${month}" মাসের ${monthRecords.length}টি রেকর্ড স্থায়ীভাবে মুছে ফেলা হবে।\n\nআপনি কি আগে "📥 ডাউনলোড" বাটনে চেপে একটা কপি সংরক্ষণ করেছেন?`);
-    if(!ok1) return;
-    const ok2 = confirm("নিশ্চিত করুন — এটা আর ফেরত আনা যাবে না। মুছে ফেলতে চান?");
-    if(!ok2) return;
-    records = records.filter(r => !r.date.startsWith(month));
-    saveRecords();
-    alert("এই মাসের হিসাব মুছে ফেলা হয়েছে। নতুন মাসের এন্ট্রি এখন থেকে শুরু করতে পারেন।");
-    khLogEvent("kh_close_month");
-  });
 
   /* ---------------- রেজিস্টার টেবিল ---------------- */
   function renderRegister(){
@@ -242,23 +165,37 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${r.member}</td>
         <td class="status-${r.status}">${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
         <td>${r.status === "duty" ? r.hours : "—"}</td>
-        <td>${isAdmin ? `<button class="row-delete" data-id="${r.id}" title="মুছুন">🗑️</button>` : ""}</td>
+        <td><button class="row-delete" data-id="${r.id}" title="মুছুন">🗑️</button></td>
       </tr>`).join("");
   }
 
-  document.querySelector("#registerTable tbody").addEventListener("click", e => {
-    if(!isAdmin) return;
+  document.querySelector("#registerTable tbody").addEventListener("click", async e => {
     const btn = e.target.closest(".row-delete");
     if(!btn) return;
     if(!confirm("এই এন্ট্রিটি মুছে ফেলতে চান?")) return;
-    records = records.filter(r => r.id !== btn.dataset.id);
-    saveRecords();
+    try{
+      await deleteDoc(doc(db, "kh_records", btn.dataset.id));
+    }catch(err){
+      alert("এন্ট্রি মুছা যায়নি, আবার চেষ্টা করুন।");
+      console.error(err);
+    }
   });
 
   filterMember.addEventListener("change", renderRegister);
 
-  applyAdminUI();
-  renderMembers();
-  renderSummary();
-  renderRegister();
+  /* ---------------- Firestore থেকে লাইভ ডেটা শোনা (Real-time sync) ---------------- */
+  onSnapshot(query(membersCol), snap => {
+    members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderMembers();
+  }, err => {
+    console.error(err);
+    memberChips.innerHTML = `<span style="color:#c0392b;">সংযোগ করা যায়নি — ইন্টারনেট চেক করুন।</span>`;
+  });
+
+  onSnapshot(query(recordsCol), snap => {
+    records = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderSummary();
+    renderRegister();
+  }, err => console.error(err));
+
 });
