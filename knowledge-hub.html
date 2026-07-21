@@ -27,7 +27,7 @@
   <div class="kh-intro">
     <div class="eyebrow">Knowledge Hub</div>
     <h1 class="section-title">টিম হাজিরা ও কাজের ঘণ্টা খাতা</h1>
-    <p class="section-sub">এখানে প্রতিদিনের কাজের ঘণ্টা লিখে রাখুন, নতুন সদস্য যোগ করুন বা বাদ দিন। এই তথ্য শুধু এই ডিভাইস/ব্রাউজারেই সংরক্ষিত থাকে — অন্য কেউ অন্য ডিভাইস থেকে খুললে তাদের জন্য এটি ফাঁকা থাকবে, তারা নিজের মতো করে সদস্য যোগ করে নিতে পারবে।</p>
+    <p class="section-sub">এখানে প্রতিদিনের কাজের ঘণ্টা লিখে রাখুন, নতুন সদস্য যোগ করুন বা বাদ দিন। এই তথ্য এখন ক্লাউডে (Firebase) সংরক্ষিত হয় — তাই যেকোনো ডিভাইস বা ব্রাউজার থেকে খুললেই একই ডেটা রিয়েল-টাইমে দেখতে ও আপডেট করতে পারবেন।</p>
   </div>
 
   <!-- ---------------- সদস্য ব্যবস্থাপনা ---------------- -->
@@ -84,9 +84,21 @@
   <!-- ---------------- রেজিস্টার খাতা ---------------- -->
   <section class="kh-card kh-card--violet">
     <h2 class="kh-card-title">📔 হাজিরা রেজিস্টার খাতা</h2>
+
+    <p class="kh-loading" id="registerLoading">
+      <span class="kh-dot"></span><span class="kh-dot"></span><span class="kh-dot"></span>
+      ডেটা লোড হচ্ছে...
+    </p>
+
     <div class="filter-row">
       <select id="filterMember"><option value="সবাই">সবাই</option></select>
     </div>
+
+    <div class="kh-register-actions">
+      <button type="button" class="btn3d btn-download" id="downloadCsvBtn">📥 এই মাসের রিপোর্ট ডাউনলোড (CSV)</button>
+      <button type="button" class="btn3d btn-danger" id="deleteMonthBtn">🗑️ এই মাসের হিসাব মুছে ফেলুন</button>
+    </div>
+
     <div class="table-wrap">
       <table class="kh-table" id="registerTable">
         <thead><tr><th>তারিখ</th><th>নাম</th><th>স্ট্যাটাস</th><th>ঘণ্টা</th><th></th></tr></thead>
@@ -99,10 +111,10 @@
 </main>
 
 <footer class="site-footer">
-  <p>Knowledge Hub — ব্যক্তিগত ডিভাইসে সংরক্ষিত। | ডিজাইন ও ডেভেলপমেন্ট: <strong>মাসুম</strong></p>
+  <p>Knowledge Hub — ক্লাউডে (Firebase) নিরাপদে সংরক্ষিত। | ডিজাইন ও ডেভেলপমেন্ট: <strong>মাসুম</strong></p>
 </footer>
 
-<script src="knowledge-hub.js"></script>
+<script type="module" src="knowledge-hub.js"></script>
 </body>
 </html>
 
