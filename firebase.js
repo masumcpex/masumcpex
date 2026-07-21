@@ -13,7 +13,7 @@ import {
   getFirestore, doc, onSnapshot, setDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
-  getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
+  getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   getAnalytics, logEvent
@@ -39,8 +39,14 @@ try { analytics = getAnalytics(app); } catch (e) { console.warn("Analytics init 
 
 const ADMIN_EMAIL = "masumcpex@gmail.com";
 
-function khSignIn(){ return signInWithPopup(auth, provider); }
+function khSignIn(){ return signInWithRedirect(auth, provider); }
 function khSignOut(){ return signOut(auth); }
+
+// পেজ লোড হওয়ার সাথে সাথে চেক করে, রিডাইরেক্ট থেকে ফিরে আসার পর লগইন সম্পূর্ণ হলো কিনা
+getRedirectResult(auth).catch((err) => {
+  console.error("Google sign-in redirect error:", err);
+  alert("লগইনে সমস্যা হয়েছে: " + err.message + "\n\nFirebase Console-এ Authorized domain-এ masumcpex.github.io যোগ করা আছে কিনা চেক করুন।");
+});
 // callback(isAdmin: boolean, user: object|null)
 function khOnAuthChange(callback){
   onAuthStateChanged(auth, (user) => {
