@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>আমার ব্যর্থ ভালোবাসার গল্প | masumcpex</title>
+<meta name="description" content="একটি নীরব ভালোবাসা, দীর্ঘ অপেক্ষা, অপূর্ণ অনুভূতি এবং বাস্তবতার গল্প।">
+<meta name="keywords" content="masumcpex, journal, love story, diary, heartbreak, personal journal">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0f1117; --card:#171b22; --primary:#4F8CFF; --accent:#00C896;
+    --danger:#FF5E5E; --quote:#FFD166; --text:#ECECEC; --text2:#A4A9B6;
+    --line:rgba(255,255,255,0.08); --shadow: 0 10px 30px rgba(0,0,0,0.4);
+    --radius:16px; --ease:cubic-bezier(.4,0,.2,1);
+  }
+  body.light{
+    --bg:#F6F5F2; --card:#FFFFFF; --text:#20232B; --text2:#5B6270; --line:rgba(20,20,30,0.08);
+    --shadow: 0 10px 26px rgba(20,20,30,0.08);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg); color:var(--text); font-family:'Hind Siliguri',sans-serif;
+    line-height:1.95; transition:background .3s var(--ease), color .3s var(--ease);
+  }
+  h1,h2,h3{ font-family:'Noto Serif Bengali',serif; }
+  a{ color:inherit; }
+
+  #progressBar{ position:fixed; top:0; left:0; height:3px; background:linear-gradient(90deg,var(--primary),var(--accent)); width:0%; z-index:100; }
+
+  .topbar{
+    position:sticky; top:0; z-index:90; background:rgba(15,17,23,0.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line); padding:14px 20px; display:flex; justify-content:space-between; align-items:center;
+  }
+  body.light .topbar{ background:rgba(246,245,242,0.85); }
+  .topbar a.back{ font-size:.85rem; font-weight:700; color:var(--text2); }
+  #darkToggle{ background:none; border:1px solid var(--line); color:var(--text); width:38px; height:38px; border-radius:10px; cursor:pointer; font-size:1rem; }
+
+  .hero{ text-align:center; padding:60px 24px 40px; }
+  .hero .broken-heart{ font-size:4rem; margin-bottom:10px; filter: drop-shadow(0 0 20px rgba(255,94,94,0.35)); }
+  .hero h1{ font-size:2rem; color:var(--text); margin-bottom:10px; }
+  .hero .sub{ color:var(--text2); font-size:.95rem; margin-bottom:22px; }
+  .hero-meta{ display:flex; gap:16px; justify-content:center; flex-wrap:wrap; font-size:.82rem; color:var(--text2); margin-bottom:26px; }
+
+  .info-card{
+    max-width:640px; margin:0 auto 40px; background:rgba(79,140,255,0.08); border:1px solid rgba(79,140,255,0.25);
+    border-radius:var(--radius); padding:20px 24px; display:grid; grid-template-columns:1fr 1fr; gap:12px 20px;
+  }
+  .info-card .label{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--primary); font-weight:700; }
+  .info-card .value{ font-size:.92rem; color:var(--text); margin-top:2px; }
+
+  main{ max-width:700px; margin:0 auto; padding:0 22px 80px; }
+
+  .timeline{ display:flex; overflow-x:auto; gap:10px; padding:6px 0 30px; margin-bottom:20px; border-bottom:1px solid var(--line); }
+  .timeline-step{ flex:none; text-align:center; min-width:88px; font-size:.78rem; color:var(--text2); }
+  .timeline-step .emoji{ font-size:1.4rem; display:block; margin-bottom:4px; }
+
+  section.chapter{ margin-bottom:46px; }
+  .chapter-head{ display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .chapter-emoji{ font-size:1.5rem; }
+  .chapter-head h2{ font-size:1.3rem; color:var(--text); }
+  .chapter p{ margin-bottom:16px; font-size:1.02rem; color:var(--text); }
+  .chapter p.dropcap:first-letter{
+    font-family:'Noto Serif Bengali',serif; font-size:3.2rem; float:left; line-height:.8;
+    padding:6px 10px 0 0; color:var(--primary); font-weight:800;
+  }
+
+  blockquote.quote-block{
+    border-left:3px solid var(--text2); padding:10px 22px; margin:22px 0; font-style:italic;
+    font-size:1.15rem; color:var(--quote); font-family:'Noto Serif Bengali',serif; line-height:1.8;
+  }
+  .highlight-box{
+    background:rgba(79,140,255,0.1); border:1px solid rgba(79,140,255,0.25); border-radius:14px;
+    padding:18px 22px; margin:20px 0; font-size:1rem; color:var(--text); box-shadow:var(--shadow);
+  }
+
+  .ending-card{
+    text-align:center; background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:36px 26px; margin:40px 0; box-shadow:var(--shadow);
+  }
+  .ending-card .leaf{ font-size:2rem; margin-bottom:14px; }
+  .ending-card p{ font-family:'Noto Serif Bengali',serif; font-size:1.15rem; color:var(--accent); line-height:1.9; }
+
+  footer.site{
+    text-align:center; padding:30px 20px; border-top:1px solid var(--line); color:var(--text2); font-size:.85rem;
+  }
+  footer.site strong{ color:var(--text); }
+
+  .float-btns{ position:fixed; bottom:22px; right:22px; display:flex; flex-direction:column; gap:10px; z-index:80; }
+  .float-btns button{
+    width:46px; height:46px; border-radius:50%; border:none; background:var(--card); color:var(--text);
+    box-shadow:var(--shadow); font-size:1.1rem; cursor:pointer; border:1px solid var(--line);
+  }
+  #backToTop{ display:none; }
+  #backToTop.show{ display:block; }
+
+  @media (max-width:480px){
+    .info-card{ grid-template-columns:1fr; }
+    .hero h1{ font-size:1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<div class="topbar">
+  <a class="back" href="index.html#journal">← Journal-এ ফিরুন</a>
+  <button id="darkToggle">☀️</button>
+</div>
+
+<div class="hero">
+  <div class="broken-heart">💔</div>
+  <h1>আমার ব্যর্থ ভালোবাসার গল্প</h1>
+  <p class="sub">একটি নীরব ভালোবাসা, কিছু অপূর্ণ অপেক্ষা, আর নিজের ভেতরে লুকিয়ে রাখা অনুভূতির গল্প।</p>
+  <div class="hero-meta">
+    <span>✍️ Masum</span><span>•</span><span>masumcpex</span><span>•</span><span>⏱ ৮-১০ মিনিট</span><span>•</span><span id="todayDate"></span>
+  </div>
+
+  <div class="info-card">
+    <div><div class="label">📖 Journal</div><div class="value">ব্যক্তিগত জার্নাল</div></div>
+    <div><div class="label">Category</div><div class="value">Personal Experience</div></div>
+    <div><div class="label">Mood</div><div class="value">😔 Sad</div></div>
+    <div><div class="label">Relationship</div><div class="value">One-sided Love</div></div>
+    <div><div class="label">Visibility</div><div class="value">🌐 Public</div></div>
+  </div>
+</div>
+
+<main>
+
+  <div class="timeline">
+    <div class="timeline-step"><span class="emoji">❤️</span>প্রথম দেখা</div>
+    <div class="timeline-step"><span class="emoji">💬</span>প্রোপোজ</div>
+    <div class="timeline-step"><span class="emoji">⏳</span>অপেক্ষা</div>
+    <div class="timeline-step"><span class="emoji">💔</span>বিচ্ছেদ</div>
+    <div class="timeline-step"><span class="emoji">📩</span>আবার যোগাযোগ</div>
+    <div class="timeline-step"><span class="emoji">🚫</span>ব্লক</div>
+    <div class="timeline-step"><span class="emoji">🌅</span>নতুন শুরু</div>
+  </div>
+
+  <section class="chapter">
+    <div class="chapter-head"><span class="chapter-emoji">🌸</span><h2>প্রথম অনুভূতি</h2></div>
+    <p class="dropcap">হ্যাঁ আমি হয়তো কখনো রিলেশন করিনি, করিনি কাউকে ভালোবাসিনি, তবে হয়তো কোনো এক মানবের মায়ায় পড়ে গেছিলাম। যেটা ছিলো খুব গোপনে নিজের মনেই সীমাবদ্ধ কারণ সে নিজেও জানতো না। তারে লুকিয়ে লুকিয়ে দেখতাম, আমি ওদের স্কুলে গিয়ে ক্লাস শেষ করলে দেখতে যেতাম, প্রায়ই দেখা হত।</p>
+    <p>ভার, কথা বলা ভঙ্গি, সবকিছুই আমার মনে গভীরভাবে দাগ কেটেছিল। ভাললাগতো তাকে, এক কথায় আমার ছোট্ট মনে এক প্রথম ছোট্ট অনুভূতি জন্মাইছিলো তারে দেখে — তার আগে কখনো কারো প্রতি হয়নি।</p>
+  </section>
+
+  <section class="chapter">
+    <div class="chapter-head"><span class="chapter-emoji">⏳</span><h2>অপেক্ষার দিনগুলো</h2></div>
+    <p>অনেকদিন লুকিয়ে ভালোবাসার পর একদিন সাহস করে আমি তাকে প্রোপোজ করলাম। সে প্রথমে কিছুটা হেসে বলে, আমি এখনো কিছু ভাবিনি, আমাকে সময় দাও। আমি আশা নিয়ে অপেক্ষা করতে থাকি।</p>
+    <p>তারপর এভাবেই আরো আড়াই বছর কাটিয়ে দেই, কিন্তু সে কখনোই বোঝার চেষ্টা করেনি, সব সময় ইগনোর করে যেত।</p>
+  </section>
+
+  <section class="chapter">
+    <div class="chapter-head"><span class="chapter-emoji">💔</span><h2>সত্যিটা বুঝতে পারা</h2></div>
+    <p>কিছুদিন পর আমি লক্ষ করি সে আরও অনেক ছেলের সাথে ঘনিষ্ঠভাবে মিশছে। সে সোশ্যাল মিডিয়ায় তাদের সাথে ছবি শেয়ার করে, রাত জেগে চ্যাট করে, এমনকি কখনো কখনো সন্ধ্যার পরে তাদের সাথে আড্ডাও দেয়। আমি সেটা দেখে মনে অনেক কষ্ট জমতে থাকে, কিন্তু আমি কিছু বলিনি, কেননা হয়তো সে নিজের জীবন, তার নিজের পছন্দ।</p>
+    <p>একদিন আমি দেখি তাকে আরেকটা ছেলের সাথে হাত ধরে হাঁটছে। সেদিন আমার মনে প্রচণ্ড কষ্ট হয়। আমি বুঝতে পারি, তার কাছে আমি শুধুই একটা 'অপশন'। তার জীবনে অনেক ছেলে আছে, আর আমি তাদের মধ্যে শুধু একজন।</p>
+
+    <blockquote class="quote-block">"তার কাছে আমি শুধুই একটা 'অপশন'।"</blockquote>
+
+    <p>আমি তাকে জিজ্ঞাসা করি, তুমি কি কখনো আমাকে সিরিয়াসলি নিয়েছ? নাকি আমি শুধু তোমার সময় কাটানোর একটা মাধ্যম? সে উত্তর দেয়, "মাসুম, তুমি ভালো ছেলে, কিন্তু আমি এখনো কাউকে সিরিয়াসলি নিতে পারিনি। আমার অনেক বন্ধু আছে, আমি তাদের সাথে সময় কাটাই। তুমি যদি এটা মেনে নিতে না পারো, তাহলে আমাদের দূরত্ব বাড়ানোই ভালো।"</p>
+
+    <div class="highlight-box">আমার মনে প্রচণ্ড কষ্ট হয়। আমি বুঝতে পেরেছি, তার কাছে আমার ভালোবাসার কোনো মূল্য নেই।</div>
+
+    <p>আমি তাকে ছেড়ে চলে যাই, কিন্তু আমার মন থেকে তার নাম, কল্পনা মুছে যায় না। আমি অনেক কষ্ট পাই, কিন্তু আমি বুঝতে পেরেছি — কখনো কখনো ভালোবাসা একতরফা হয়, আর সেই ভালোবাসায় শুধু কষ্টই জমে।</p>
+
+    <blockquote class="quote-block">"কখনো কখনো ভালোবাসা একতরফা হয়, আর সেই ভালোবাসায় শুধু কষ্টই জমে।"</blockquote>
+  </section>
+
+  <section class="chapter">
+    <div class="chapter-head"><span class="chapter-emoji">🌧</span><h2>হারিয়ে যাওয়ার পরে</h2></div>
+    <p>কিন্তু তারপর সে হারিয়ে যাওয়ার পর প্রচণ্ড মিস করতাম আমি, খুব দেখতে মন চাইতো, এমনকি আজও চায় — এই ২ বছরের মাঝে। এর মধ্যে দ্বিতীয় কাউকে ভালো লাগেনি আমার, না করেছি রিলেশন আর না ভালোবেসেছি কাউকে।</p>
+    <p>আমার আজও তাকে দেখার তীব্র আকাঙ্ক্ষা আছে, এবং সেটি গোপনেই। আমি শুধু এখন অপ্রকাশিতই হয়ে থাকতে চাই...!!</p>
+  </section>
+
+  <section class="chapter">
+    <div class="chapter-head"><span class="chapter-emoji">📩</span><h2>তিন বছর পরে</h2></div>
+    <p>তিন বছর কেটে গিয়েছিল। হঠাৎ একদিন, এক অজানা নাম্বার থেকে ম্যাসেজ এলো। প্রথমে চিনতে পারিনি, কিন্তু কথার সুর, শব্দচয়নে বুঝলাম — সে। নিজেকে গোপন রেখে কথা বলতে শুরু করল। আবারও সেই পুরনো আবেশ, সেই আশা।</p>
+    <p>পরে বুঝলাম, সে-ই — যাকে আমি একদিন নিঃশব্দে ভালোবেসেছিলাম। এবার সে-ই নিজে যোগাযোগ করেছে। নাম প্রকাশ না করে, পরিচয় গোপন রেখেই, যেন কোনো দূর অতীত থেকে ফিরে এসেছে।</p>
+    <p>আমরা প্রায়ই কথা বলতাম। হাসি-মজা, গল্প — সবই চলছিল। আমি ভেবেছিলাম, হয়তো এবার কিছু একটা বদলাবে।</p>
+  </section>
+
+  <section class="chapter">
+    <div class="chapter-head"><span class="chapter-emoji">🥀</span><h2>শেষ অধ্যায়</h2></div>
+    <p>কিন্তু বাস্তবতা বড়ই নির্মম। একদিন হঠাৎ করেই তার সোশ্যাল মিডিয়া থেকে এমন কিছু জানতে পারলাম, যা বিশ্বাস করাটা কষ্টকর ছিল। সে একাধিক ১৮+ গ্রুপে যুক্ত। অশ্লীল পোস্ট, খারাপ কমেন্ট — সবই করে। অনেক ছেলের সঙ্গে ব্যক্তিগতভাবে কথা বলে, ভিডিও চায়। এমনকি বিভিন্ন ছেলেকে গ্রুপে অ্যাড করার অনুরোধও করে।</p>
+    <p>আমি ভীষণ কষ্ট পেয়েছিলাম। মনটা একদম ভেঙে গিয়েছিল।</p>
+    <p>তাকে খুবই শান্তভাবে বলেছিলাম, "তুমি এসব করছো কেন?"</p>
+    <p>কিন্তু সে কোনো জবাব না দিয়ে আমাকে ব্লক করে দেয়।</p>
+  </section>
+
+  <div class="ending-card">
+    <div class="leaf">🌿</div>
+    <p>"সব গল্পের শেষ মিলনে হয় না। কিছু গল্প মানুষকে বদলে দেওয়ার জন্যই আসে।"</p>
+  </div>
+
+  <p style="font-size:.82rem; color:var(--text2); text-align:center; margin-top:10px;">📝 নোট: এই লেখাটি লেখকের ব্যক্তিগত অভিজ্ঞতা ও অনুভূতির প্রকাশ। এখানে বর্ণিত ঘটনাগুলো লেখকের নিজস্ব দৃষ্টিভঙ্গি থেকে তুলে ধরা হয়েছে।</p>
+
+</main>
+
+<footer class="site">
+  <p>Written by <strong>Masum</strong> | Website: <strong>masumcpex</strong> | Category: Journal</p>
+</footer>
+
+<div class="float-btns">
+  <button id="shareBtn" title="শেয়ার">🔗</button>
+  <button id="copyBtn" title="Copy Link">📋</button>
+  <button id="backToTop" title="Back to Top">↑</button>
+</div>
+
+<script>
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('bn-BD', { day:'numeric', month:'long', year:'numeric' });
+
+  function applyTheme(){
+    const light = localStorage.getItem('journal_theme') === 'light';
+    document.body.classList.toggle('light', light);
+    document.getElementById('darkToggle').textContent = light ? '🌙' : '☀️';
+  }
+  document.getElementById('darkToggle').addEventListener('click', () => {
+    const isLight = document.body.classList.contains('light');
+    localStorage.setItem('journal_theme', isLight ? 'dark' : 'light');
+    applyTheme();
+  });
+  applyTheme();
+
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    document.getElementById('progressBar').style.width = scrolled + '%';
+    document.getElementById('backToTop').classList.toggle('show', h.scrollTop > 500);
+  });
+  document.getElementById('backToTop').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+  document.getElementById('shareBtn').addEventListener('click', () => {
+    if(navigator.share){ navigator.share({ title: document.title, url: location.href }); }
+    else{ navigator.clipboard.writeText(location.href); alert('লিংক কপি হয়েছে!'); }
+  });
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    navigator.clipboard.writeText(location.href).then(()=> alert('লিংক কপি হয়েছে!'));
+  });
+</script>
+
+</body>
+</html>

@@ -251,6 +251,17 @@ const SITE_DATA = {
       excerpt: "Facebook, IMO, Bigo Live-এ ছড়িয়ে থাকা ভুয়া প্রোফাইল, হানি ট্র্যাপ কৌশল, ব্ল্যাকমেইল আর প্রবাসীদের টার্গেট করার পদ্ধতি নিয়ে একটি অনুসন্ধানী প্রতিবেদন — সাথে নিরাপত্তা টিপস।",
       url: "article-honeytrap-scam.html",
       content: ""
+    },
+    {
+      id: "j7",
+      title: "💔 আমার ব্যর্থ ভালোবাসার গল্প",
+      category: "ব্যক্তিগত গল্প",
+      date: "২০২৬-০৭-১৯",
+      readingTime: "৮-১০ মিনিট",
+      image: "",
+      excerpt: "একটি নীরব ভালোবাসা, কিছু অপূর্ণ অপেক্ষা, আর নিজের ভেতরে লুকিয়ে রাখা অনুভূতির গল্প।",
+      url: "journal-first-love-story.html",
+      content: ""
     }
   ],
   articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা"],
