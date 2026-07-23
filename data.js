@@ -264,7 +264,7 @@ const SITE_DATA = {
       content: ""
     }
   ],
-  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা"],
+  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা", "Leadership"],
 
   articles: [
     {
@@ -358,6 +358,17 @@ const SITE_DATA = {
       image: "",
       excerpt: "Facebook, IMO, Bigo Live-এ ছড়িয়ে থাকা ভুয়া প্রোফাইল, হানি ট্র্যাপ কৌশল, ব্ল্যাকমেইল আর প্রবাসীদের টার্গেট করার পদ্ধতি নিয়ে একটি অনুসন্ধানী প্রতিবেদন — সাথে নিরাপত্তা টিপস ও যাচাইযোগ্য সোর্স।",
       url: "article-honeytrap-scam.html",
+      content: ""
+    },
+    {
+      id: "a9",
+      title: "বিশ্বমঞ্চে ভারতীয়দের সিইও জয়জয়কার: নেপথ্যের কারণ ও আমাদের শিক্ষাভাবনা",
+      category: "Leadership",
+      date: "২০২৬-০৭-১৯",
+      readingTime: "১২ মিনিট",
+      image: "",
+      excerpt: "সুন্দর পিচাই, সত্য নাদেলা, অরবিন্দ কৃষ্ণা থেকে শান্তনু নারায়েন — কেন বিশ্বের শীর্ষ কোম্পানিগুলোর CEO পদে ভারতীয়দের এই জয়জয়কার, আর বাংলাদেশ কী শিখতে পারে তা থেকে।",
+      url: "article-indian-ceos.html",
       content: ""
     }
   ],
