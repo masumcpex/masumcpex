@@ -24,6 +24,8 @@ import {
   FacebookAuthProvider,
   RecaptchaVerifier,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithPhoneNumber,
   signOut,
   onAuthStateChanged
@@ -50,5 +52,6 @@ export {
   collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, where, getDocs,
   serverTimestamp, writeBatch,
   GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
-  signInWithPopup, signInWithPhoneNumber, signOut, onAuthStateChanged
+  signInWithPopup, signInWithRedirect, getRedirectResult,
+  signInWithPhoneNumber, signOut, onAuthStateChanged
 };

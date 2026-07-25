@@ -8,7 +8,8 @@
 
 import {
   auth, db, GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
-  signInWithPopup, signInWithPhoneNumber, signOut, onAuthStateChanged,
+  signInWithPopup, signInWithRedirect, getRedirectResult,
+  signInWithPhoneNumber, signOut, onAuthStateChanged,
   collection, getDocs, writeBatch
 } from "./firebase.js";
 import { initKhApp } from "./khApp.js";
@@ -40,16 +41,19 @@ document.addEventListener("DOMContentLoaded", () => {
     authError.style.display = "block";
   }
 
-  /* ---------------- Google ---------------- */
+  /* ---------------- Google ----------------
+     signInWithPopup-এর বদলে signInWithRedirect ব্যবহার করা হচ্ছে —
+     মোবাইল/Chromebook-এ পপআপ ব্লক হওয়ার সমস্যা এড়াতে। ক্লিক করলে পুরো পেজ
+     Google-এর লগইন পেজে চলে যাবে, লগইনের পর আবার সাইটে ফিরে আসবে —
+     সেই ফলাফল নিচের getRedirectResult() ধরবে। */
   signInBtn.addEventListener("click", async () => {
     authError.style.display = "none";
     signInBtn.disabled = true;
     try{
-      await signInWithPopup(auth, new GoogleAuthProvider());
+      await signInWithRedirect(auth, new GoogleAuthProvider());
     }catch(err){
       console.error(err);
       showAuthError("Google দিয়ে লগইন করা যায়নি। আবার চেষ্টা করুন।");
-    }finally{
       signInBtn.disabled = false;
     }
   });
@@ -59,13 +63,20 @@ document.addEventListener("DOMContentLoaded", () => {
     authError.style.display = "none";
     fbSignInBtn.disabled = true;
     try{
-      await signInWithPopup(auth, new FacebookAuthProvider());
+      await signInWithRedirect(auth, new FacebookAuthProvider());
     }catch(err){
       console.error(err);
       showAuthError("Facebook দিয়ে লগইন করা যায়নি। Facebook Login এখনো Firebase-এ ঠিকমতো সেটআপ না হয়ে থাকলে এই এরর আসতে পারে।");
-    }finally{
       fbSignInBtn.disabled = false;
     }
+  });
+
+  /* ---------------- রিডাইরেক্ট থেকে ফেরার পর ফলাফল/এরর ধরা ----------------
+     signInWithRedirect ব্যবহার করলে পেজ রিলোড হয়ে যায়, তাই লগইনের এরর
+     (যেমন ভুল ডোমেইন, প্রোভাইডার বন্ধ ইত্যাদি) এখানে ধরে দেখাতে হয়। */
+  getRedirectResult(auth).catch((err) => {
+    console.error(err);
+    showAuthError("লগইন সম্পন্ন হয়নি: " + (err.code || err.message || "অজানা সমস্যা"));
   });
 
   /* ---------------- ফোন নম্বর (OTP) ---------------- */
