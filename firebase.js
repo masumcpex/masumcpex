@@ -1,8 +1,6 @@
 /* ==========================================================================
    firebase.js
-   Firebase অ্যাপ শুরু করে, Firestore আর Analytics চালু করে।
-   এই ফাইলটা module হিসেবে import করা হয় — অন্য কোনো ফাইলে Firebase-এর
-   কনফিগ কপি করার দরকার নেই, সবাই এখান থেকেই `db` নিয়ে ব্যবহার করবে।
+   Firebase অ্যাপ শুরু করে, Firestore, Auth (Google লগইন), আর Analytics চালু করে।
    ========================================================================== */
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -16,8 +14,20 @@ import {
   onSnapshot,
   query,
   where,
-  getDocs
+  getDocs,
+  serverTimestamp,
+  writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  RecaptchaVerifier,
+  signInWithPopup,
+  signInWithPhoneNumber,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
 const firebaseConfig = {
@@ -32,11 +42,13 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
 
-/* Analytics মাঝেমধ্যে কিছু ব্রাউজার/ইনকগনিটোতে সাপোর্ট করে না,
-   তাই সাপোর্ট চেক করে নিয়ে তারপর চালু করছি, যাতে এরর না আসে। */
 isSupported().then((ok) => { if (ok) getAnalytics(app); }).catch(() => {});
 
-/* বাকি ফাইলগুলো (knowledge-hub.js ইত্যাদি) থেকে সহজে ব্যবহারের জন্য
-   দরকারি Firestore ফাংশনগুলোও এখান থেকে re-export করে দিলাম। */
-export { collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, where, getDocs };
+export {
+  collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, where, getDocs,
+  serverTimestamp, writeBatch,
+  GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
+  signInWithPopup, signInWithPhoneNumber, signOut, onAuthStateChanged
+};

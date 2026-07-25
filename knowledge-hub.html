@@ -14,15 +14,65 @@
 
 <header class="kh-header">
   <div class="kh-header-inner">
-    <a href="index.html" class="brand">
-      <span class="brand-mark">ম</span>
-      <span class="brand-name">মাসুম <em>· Knowledge Hub</em></span>
+    <a href="index.html" class="brand kh-brand">
+      <img class="kh-profile-photo" src="https://masumcpex.github.io/masumcpex/1000004949.jpg" alt="Masum Billah">
+      <span class="brand-mark kh-logo-mark">ম</span>
+      <span class="brand-name kh-brand-name">
+        <span class="kh-brand-main">মাসুম</span>
+        <span class="kh-brand-sub">Knowledge Hub</span>
+      </span>
     </a>
     <a class="btn3d btn-indigo kh-back" href="index.html">← মূল সাইট</a>
   </div>
 </header>
 
-<main class="kh-main">
+<!-- ================= লগইন গেট (লগইন ছাড়া কিছুই দেখা যাবে না) ================= -->
+<div id="khAuthGate" class="kh-auth-gate">
+  <div class="kh-auth-box">
+    <div class="kh-auth-icon">🔒</div>
+    <h2>এটি একটি ব্যক্তিগত হাজিরা খাতা</h2>
+    <p>নিজের হাজিরা দেখতে ও লিখতে সাইন-ইন করুন। প্রতিটি অ্যাকাউন্ট শুধু নিজের ডেটাই দেখতে পাবে।</p>
+
+    <button id="googleSignInBtn" class="btn3d btn-sky kh-provider-btn">
+      <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="" class="kh-provider-icon">
+      Google দিয়ে সাইন-ইন করুন
+    </button>
+
+    <button id="facebookSignInBtn" class="btn3d btn-indigo kh-provider-btn">
+      <span class="kh-provider-icon kh-fb-icon">f</span>
+      Facebook দিয়ে সাইন-ইন করুন
+    </button>
+
+    <button id="showPhoneFormBtn" class="btn3d btn-mint kh-provider-btn">
+      <span class="kh-provider-icon">📱</span>
+      ফোন নম্বর দিয়ে সাইন-ইন করুন
+    </button>
+
+    <!-- ফোন নম্বর ফর্ম (ডিফল্টে লুকানো) -->
+    <div id="khPhoneForm" class="kh-phone-form" style="display:none;">
+      <input type="tel" id="khPhoneInput" placeholder="+8801XXXXXXXXX" class="kh-phone-input">
+      <button id="khSendCodeBtn" class="btn3d btn-mint kh-provider-btn">কোড পাঠান</button>
+
+      <div id="khCodeRow" class="kh-code-row" style="display:none;">
+        <input type="text" id="khCodeInput" placeholder="৬-সংখ্যার কোড" class="kh-phone-input">
+        <button id="khVerifyCodeBtn" class="btn3d btn-sky kh-provider-btn">যাচাই করুন</button>
+      </div>
+    </div>
+
+    <div id="khRecaptchaContainer"></div>
+
+    <p class="kh-auth-error" id="khAuthError" style="display:none;"></p>
+  </div>
+</div>
+
+<!-- ================= ইউজার বার (লগইনের পর দেখা যাবে) ================= -->
+<div id="khUserBar" class="kh-user-bar" style="display:none;">
+  <span id="khUserEmail" class="kh-user-email"></span>
+  <button id="khClaimOldDataBtn" class="btn3d btn-amber" style="display:none;">🗂️ পুরনো ডেটা নিজের করে নিন</button>
+  <button id="khSignOutBtn" class="btn3d btn-coral">লগআউট</button>
+</div>
+
+<main class="kh-main" id="khMain" style="display:none;">
 
   <div class="kh-intro">
     <div class="eyebrow">Knowledge Hub</div>
@@ -116,7 +166,7 @@
 
 <script type="module" src="firebase.js"></script>
 <script type="module" src="khApp.js"></script>
-<script type="module" src="knowledge-hub.js"></script>
+<script type="module" src="kh-auth.js"></script>
 
 </body>
 </html>
