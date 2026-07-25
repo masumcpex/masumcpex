@@ -33,7 +33,7 @@ import {
 import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDp8J-8XI-wGtn3MYNjauEyDHoIt7WhnCY",
+  apiKey: "AIzaSyDp8J-8XI-wGtn3MYNjauEyDHolt7WhnCY",
   authDomain: "masumcpex-f65cf.firebaseapp.com",
   projectId: "masumcpex-f65cf",
   storageBucket: "masumcpex-f65cf.firebasestorage.app",
