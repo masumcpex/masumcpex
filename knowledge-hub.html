@@ -12,6 +12,25 @@
 </head>
 <body>
 
+<!-- ================= সাময়িক ডিবাগ বক্স ====================
+     কোনো JS এরর হলে এখানে লাল লেখায় দেখাবে — কাজ ঠিক হয়ে গেলে
+     এই পুরো <script> ব্লক আর <div id="khDebugBox"> মুছে ফেলা যাবে। -->
+<div id="khDebugBox" style="display:none; background:#4a0000; color:#fff; padding:14px; font-family:monospace; font-size:13px; white-space:pre-wrap; word-break:break-word; position:relative; z-index:9999;"></div>
+<script>
+  function khShowDebug(msg){
+    var box = document.getElementById('khDebugBox');
+    box.style.display = 'block';
+    box.textContent += msg + "\n\n";
+  }
+  window.addEventListener('error', function(e){
+    khShowDebug('এরর: ' + e.message + ' (ফাইল: ' + e.filename + ', লাইন: ' + e.lineno + ')');
+  });
+  window.addEventListener('unhandledrejection', function(e){
+    khShowDebug('প্রমিজ এরর: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+</script>
+
+
 <header class="kh-header">
   <div class="kh-header-inner">
     <a href="index.html" class="brand kh-brand">
