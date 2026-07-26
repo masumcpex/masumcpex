@@ -131,7 +131,25 @@
   .kh-register-actions .btn3d{ flex-basis:auto; }
 }
 
-/* ---------------- সামারি টেবিলের অগ্রিম (Advance) ইনপুট — প্রিমিয়াম পিল-কার্ড স্টাইল ---------------- */
+/* ---------------- ডুপ্লিকেট হাজিরা সতর্কতা মোডাল ---------------- */
+.kh-modal-overlay{
+  display:none; position:fixed; inset:0; z-index:10000;
+  background: rgba(27,42,69,.55); align-items:center; justify-content:center;
+  padding: 1.2rem;
+}
+.kh-modal-card{
+  background: var(--card-bg, #FFF8EC); border-radius:18px;
+  padding: 1.9rem 1.6rem; max-width: 380px; width:100%; text-align:center;
+  border-top: 5px solid #F5A623;
+  box-shadow: 0 20px 45px rgba(0,0,0,.3);
+}
+.kh-modal-icon{ font-size:2rem; margin:0 0 .6rem; }
+.kh-modal-text{
+  font-family: var(--font-body); color: var(--ink); font-size:1rem;
+  line-height:1.55; margin: 0 0 1.5rem;
+}
+.kh-modal-actions{ display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
+.kh-modal-actions .btn3d{ flex:1 1 140px; padding:.75rem 1rem; font-size:.88rem; }
 .kh-advance-wrap{
   display:inline-flex; align-items:center; gap:.4rem;
   background:#fff; border:1.5px solid var(--line, #D8CBB0); border-radius: 12px;

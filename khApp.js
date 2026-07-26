@@ -121,6 +121,63 @@ export function initKhApp(uid){
     });
   });
 
+  /* ---------------- ডুপ্লিকেট এন্ট্রি সংক্রান্ত সাহায্যকারী ফাংশন ---------------- */
+  function findExistingRecord(date, member){
+    return records.find(r => r.date === date && r.member === member);
+  }
+
+  /* একই সদস্য+তারিখ নির্বাচন করলে আগের এন্ট্রি ফর্মে স্বয়ংক্রিয়ভাবে দেখানো (শুধু প্রিভিউ, এখনো সংরক্ষণ হয়নি) */
+  function autoFillFromExisting(){
+    const existing = findExistingRecord(entryDate.value, entryMember.value);
+    if(!existing) return;
+    const radio = entryForm.querySelector(`input[name="status"][value="${existing.status}"]`);
+    if(radio){ radio.checked = true; }
+    const isLeave = existing.status === "leave";
+    entryHours.disabled = isLeave;
+    hoursField.style.opacity = isLeave ? .5 : 1;
+    entryHours.value = isLeave ? "" : existing.hours;
+  }
+  entryMember.addEventListener("change", autoFillFromExisting);
+  entryDate.addEventListener("change", autoFillFromExisting);
+
+  /* প্রিমিয়াম "ডুপ্লিকেট পাওয়া গেছে" মোডাল — থিমের সাথে মিলিয়ে, alert()-এর বদলে */
+  function ensureDuplicateModal(){
+    let overlay = document.getElementById("khDupModalOverlay");
+    if(overlay) return overlay;
+    overlay = document.createElement("div");
+    overlay.id = "khDupModalOverlay";
+    overlay.className = "kh-modal-overlay";
+    overlay.innerHTML = `
+      <div class="kh-modal-card">
+        <p class="kh-modal-icon">⚠️</p>
+        <p class="kh-modal-text">এই সদস্যের জন্য এই তারিখের হাজিরা ইতিমধ্যেই সংরক্ষিত আছে।</p>
+        <div class="kh-modal-actions">
+          <button type="button" class="btn3d btn-mint" id="khDupUpdateBtn">✏️ Update Record</button>
+          <button type="button" class="btn3d btn-coral" id="khDupCancelBtn">❌ Cancel</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+  function askDuplicateAction(){
+    return new Promise(resolve => {
+      const overlay = ensureDuplicateModal();
+      overlay.style.display = "flex";
+      const updateBtn = overlay.querySelector("#khDupUpdateBtn");
+      const cancelBtn = overlay.querySelector("#khDupCancelBtn");
+      function cleanup(result){
+        overlay.style.display = "none";
+        updateBtn.removeEventListener("click", onUpdate);
+        cancelBtn.removeEventListener("click", onCancel);
+        resolve(result);
+      }
+      function onUpdate(){ cleanup("update"); }
+      function onCancel(){ cleanup("cancel"); }
+      updateBtn.addEventListener("click", onUpdate);
+      cancelBtn.addEventListener("click", onCancel);
+    });
+  }
+
   /* ---------------- এন্ট্রি সাবমিট ---------------- */
   entryForm.addEventListener("submit", async e => {
     e.preventDefault();
@@ -135,9 +192,22 @@ export function initKhApp(uid){
       ownerId: uid,
       createdAt: serverTimestamp()
     };
+
+    const existing = findExistingRecord(record.date, record.member);
+
     saveBtn.disabled = true;
     try{
-      await addDoc(recordsCol, record);
+      if(existing){
+        const action = await askDuplicateAction();
+        if(action === "cancel"){ return; }
+        await updateDoc(doc(db, "kh_records", existing.id), {
+          status: record.status,
+          hours: record.hours,
+          updatedAt: serverTimestamp()
+        });
+      }else{
+        await addDoc(recordsCol, record);
+      }
       entryHours.value = "";
     }catch(err){
       console.error(err);
