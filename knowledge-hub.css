@@ -99,6 +99,64 @@
 
 .kh-back.btn3d{ padding: .6rem 1.2rem; font-size: .85rem; }
 
+/* ---------------- রেজিস্টার খাতার নিচের অ্যাকশন বাটন (CSV / মুছে ফেলুন) ---------------- */
+.kh-register-actions{
+  display:flex; flex-wrap:wrap; gap:1rem; margin: 0 0 1.3rem;
+}
+.kh-register-actions .btn3d{
+  flex: 1 1 240px; text-align:center;
+  padding: .9rem 1.4rem; font-size: .95rem; border-radius: 14px;
+  letter-spacing:.2px;
+}
+.btn-download{
+  background: linear-gradient(180deg, #34D399, #1FA971);
+  --btn-shadow:#0E7A50;
+  box-shadow: 0 5px 0 var(--btn-shadow), 0 10px 20px rgba(16,150,100,.28);
+}
+.btn-danger{
+  background: linear-gradient(180deg, #FF6B6B, #E5372F);
+  --btn-shadow:#A81F1A;
+  box-shadow: 0 5px 0 var(--btn-shadow), 0 10px 20px rgba(200,40,30,.28);
+}
+.btn-download:hover, .btn-danger:hover{
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+.btn-download:active, .btn-danger:active{
+  transform: translateY(5px);
+  box-shadow: 0 0 0 var(--btn-shadow), 0 3px 8px rgba(0,0,0,.2);
+}
+@media (max-width:520px){
+  .kh-register-actions{ flex-direction:column; }
+  .kh-register-actions .btn3d{ flex-basis:auto; }
+}
+
+/* ---------------- সামারি টেবিলের অগ্রিম (Advance) ইনপুট — প্রিমিয়াম পিল-কার্ড স্টাইল ---------------- */
+.kh-advance-wrap{
+  display:inline-flex; align-items:center; gap:.4rem;
+  background:#fff; border:1.5px solid var(--line, #D8CBB0); border-radius: 12px;
+  padding:.3rem .6rem;
+  box-shadow: 0 2px 0 rgba(0,0,0,.06), 0 4px 10px rgba(0,0,0,.08);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.kh-advance-wrap:focus-within{
+  border-color:#F5A623; box-shadow: 0 2px 0 rgba(0,0,0,.06), 0 0 0 3px rgba(245,166,35,.22);
+}
+.kh-advance-prefix{
+  font-family: var(--font-display); font-weight:700; font-size:.82rem;
+  color:#B9770E; letter-spacing:.3px;
+}
+.kh-advance-input{
+  width: 5.2rem; border:none; background:transparent; padding:.15rem 0;
+  font-family: var(--font-body); font-weight:600; font-size:.92rem; color: var(--ink);
+}
+.kh-advance-input:focus{ outline:none; }
+.kh-advance-input:disabled{ opacity:.6; }
+@media (max-width:520px){
+  .kh-advance-wrap{ padding:.25rem .5rem; }
+  .kh-advance-input{ width:4.2rem; }
+}
+
 /* ছোট আইকন-বাটন (রেজিস্টার রো ডিলিট, চিপ রিমুভ) এর জন্য হালকা সংস্করণ */
 .btn3d.btn-small{
   padding: .4rem .6rem; border-radius: 8px; font-size:.85rem;

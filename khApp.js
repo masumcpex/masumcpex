@@ -8,7 +8,7 @@
    ========================================================================== */
 
 import {
-  db, collection, addDoc, deleteDoc, doc, onSnapshot,
+  db, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot,
   query, where, serverTimestamp, writeBatch
 } from "./firebase.js";
 
@@ -165,9 +165,34 @@ export function initKhApp(uid){
     });
     tbody.innerHTML = Object.keys(byMember).map(name => {
       const d = byMember[name];
-      return `<tr><td>${name}</td><td>${d.days}</td><td>${d.leaves}</td><td>${d.hours}</td></tr>`;
+      const m = members.find(x => x.name === name);
+      const advanceVal = m && typeof m.advance === "number" ? m.advance : 0;
+      const advanceCell = m
+        ? `<div class="kh-advance-wrap">
+             <span class="kh-advance-prefix">RM</span>
+             <input type="number" class="kh-advance-input" data-id="${m.id}" value="${advanceVal}" step="0.01" min="0" placeholder="0">
+           </div>`
+        : `<span class="kh-advance-prefix">RM 0</span>`;
+      return `<tr><td>${name}</td><td>${d.days}</td><td>${d.leaves}</td><td>${d.hours}</td><td>${advanceCell}</td></tr>`;
     }).join("");
   }
+
+  /* সামারি টেবিলে অগ্রিম (advance) ইনপুট বদলালে kh_members ডকুমেন্টে সংরক্ষণ */
+  document.querySelector("#summaryTable tbody").addEventListener("change", async e => {
+    const input = e.target.closest(".kh-advance-input");
+    if(!input) return;
+    const val = parseFloat(input.value);
+    const safeVal = isNaN(val) ? 0 : val;
+    input.disabled = true;
+    try{
+      await updateDoc(doc(db, "kh_members", input.dataset.id), { advance: safeVal });
+    }catch(err){
+      console.error(err);
+      alert("অগ্রিম সংরক্ষণ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    }finally{
+      input.disabled = false;
+    }
+  });
 
   /* ---------------- রেজিস্টার টেবিল ---------------- */
   function renderRegister(){
