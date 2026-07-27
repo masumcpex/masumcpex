@@ -55,16 +55,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- Facebook ---------------- */
+  /* ---------------- Facebook ----------------
+     মোবাইলে Facebook-এর "আগে লগইন করেছিলেন, Continue করবেন?" কনফার্মেশন
+     ধাপটা নতুন ট্যাবে খোলার প্রবণতা আছে, যেটা popup-এর sessionStorage
+     ভেঙে দেয় ("missing initial state" এরর)। তাই এখানে redirect ব্যবহার
+     করা হচ্ছে — পুরো পেজ একই ট্যাবে Facebook-এ যাবে, তারপর ফিরে আসবে। */
   fbSignInBtn.addEventListener("click", async () => {
     authError.style.display = "none";
     fbSignInBtn.disabled = true;
     try{
-      await signInWithPopup(auth, new FacebookAuthProvider());
+      await signInWithRedirect(auth, new FacebookAuthProvider());
     }catch(err){
       console.error(err);
       showAuthError("Facebook দিয়ে লগইন করা যায়নি: " + (err.code || err.message || "অজানা সমস্যা"));
-    }finally{
       fbSignInBtn.disabled = false;
     }
   });
@@ -148,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------------- পুরনো (ownerId ছাড়া) ডেটা অ্যাডমিনের নামে করে দেওয়া ----------------
      এটা একবারই চালানো উচিত, টিমের অন্য কেউ লগইন করে নতুন ডেটা লেখার আগে। */
   async function claimOldData(uid, btn){
-    if(!confirm("পুরনো সব হাজিরা/সদস্য ডেটা আপনার অ্যাকাউন্টের নামে করে দেওয়া হবে। এটা একবারই করা উচিত। এগিয়ে যেতে চান?")) return;
+    if(!confirm("লগইন সিস্টেম চালু হওয়ার আগের সব হাজিরা/সদস্য ডেটা (আগের ownerId যাই থাকুক) আপনার এই অ্যাকাউন্টের নামে করে দেওয়া হবে। এটা একবারই করা উচিত। এগিয়ে যেতে চান?")) return;
     btn.disabled = true;
     btn.textContent = "কাজ চলছে...";
     try{
@@ -157,12 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const membersSnap = await getDocs(collection(db, "kh_members"));
       membersSnap.forEach(d => {
-        if(!("ownerId" in d.data())){ batch.update(d.ref, { ownerId: uid }); count++; }
+        if(d.data().ownerId !== uid){ batch.update(d.ref, { ownerId: uid }); count++; }
       });
 
       const recordsSnap = await getDocs(collection(db, "kh_records"));
       recordsSnap.forEach(d => {
-        if(!("ownerId" in d.data())){ batch.update(d.ref, { ownerId: uid }); count++; }
+        if(d.data().ownerId !== uid){ batch.update(d.ref, { ownerId: uid }); count++; }
       });
 
       if(count > 0) await batch.commit();
