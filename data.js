@@ -370,6 +370,17 @@ const SITE_DATA = {
       excerpt: "সুন্দর পিচাই, সত্য নাদেলা, অরবিন্দ কৃষ্ণা থেকে শান্তনু নারায়েন — কেন বিশ্বের শীর্ষ কোম্পানিগুলোর CEO পদে ভারতীয়দের এই জয়জয়কার, আর বাংলাদেশ কী শিখতে পারে তা থেকে।",
       url: "article-indian-ceos.html",
       content: ""
+    },
+    {
+      id: "a10",
+      title: "English Learning Hub — জিরো থেকে আত্মবিশ্বাসের সাথে ইংরেজি শিখুন",
+      category: "ইংরেজি শেখা",
+      date: "২০২৬-০৭-২৮",
+      readingTime: "৫ মিনিট",
+      image: "",
+      excerpt: "সহজ পদ্ধতিতে ইংরেজি শেখার রিসোর্স, ফ্রি পিডিএফ বই এবং ডেইলি লার্নিং টিপস নিয়ে তৈরি বিশেষ লার্নিং হাব।",
+      url: "english-learning.html",
+      content: ""
     }
   ],
 
@@ -412,7 +423,7 @@ const SITE_DATA = {
       title: "English Learning",
       icon: "🗣️",
       description: "স্মার্ট স্পোকেন ইংলিশ শেখার একটি ইন্টারঅ্যাক্টিভ প্ল্যাটফর্ম।",
-      status: "পরিকল্পনায়",
+      status: "লাইভ",
       url: "english-learning.html"
     },
     {
