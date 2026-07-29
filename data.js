@@ -273,7 +273,7 @@ const SITE_DATA = {
       category: "বাংলাদেশের শিক্ষাব্যবস্থা",
       date: "২০২৬-০৭-১২",
       readingTime: "১৮ মিনিট",
-      image: "education-banner.jpg",
+      image: "education-banner.jpg.png",
       excerpt: "শিক্ষা একটি দেশের উন্নয়নের ভিত্তি। ভালো ফলাফল ও জিপিএর প্রতিযোগিতার বাইরে বাস্তব জীবনের জন্য কতটা প্রস্তুত হচ্ছে শিক্ষার্থীরা—সেটিই এখন সবচেয়ে বড় আলোচনার বিষয়।",
       url: "education-system-bangladesh.html",
       content: `
@@ -283,6 +283,17 @@ const SITE_DATA = {
         <p style="background: #e2e8f0; padding: 12px; border-left: 4px solid #046a38; font-weight: bold; margin: 20px 0;">আজকের পৃথিবীতে সবচেয়ে মূল্যবান সম্পদ শুধু ডিগ্রি নয়—দক্ষতা।</p>
         <div style="text-align: center; margin-top: 40px; font-weight: bold; color: #718096; border-top: 1px solid #e2e8f0; padding-top: 15px; font-size: 1.1rem;">প্রতিবেদন তৈরি ও প্রকাশনায়: masumcpex</div>
       `
+    },
+    {
+      id: "a10",
+      title: "📚 বাংলাদেশের মাদ্রাসা শিক্ষা: ইতিহাস, বর্তমান সংকট ও আধুনিকায়নের ভাবধারা",
+      category: "বাংলাদেশের শিক্ষাব্যবস্থা",
+      date: "২০২৬-০৭-২৯",
+      readingTime: "১২–১৫ মিনিট",
+      image: "education-banner.jpg.png",
+      excerpt: "বাংলাদেশের মাদ্রাসা শিক্ষার ইতিহাস, বর্তমান বাস্তবতা, কাঠামোগত সীমাবদ্ধতা এবং আধুনিকায়নের সম্ভাবনা নিয়ে একটি গবেষণাধর্মী বিশ্লেষণ।",
+      url: "bangladesh-madrasa-education.html",
+      content: ""
     },
     {
       id: "a2",
