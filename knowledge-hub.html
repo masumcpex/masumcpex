@@ -147,22 +147,38 @@
 
     <div class="kh-register-actions">
       <button type="button" class="btn3d btn-download" id="downloadCsvBtn">📥 এই মাসের রিপোর্ট ডাউনলোড (CSV)</button>
-      <button type="button" class="btn3d btn-danger" id="deleteMonthBtn">🗑️ এই মাসের হিসাব মুছে ফেলুন</button>
     </div>
 
-    <div class="table-wrap">
-      <table class="kh-table" id="registerTable">
-        <thead><tr><th>তারিখ</th><th>নাম</th><th>স্ট্যাটাস</th><th>ঘণ্টা</th><th></th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <div id="registerGroups"><!-- JS প্রতিটা মাসকে আলাদা collapsible সেকশন হিসেবে বসায় --></div>
     <p class="kh-empty-note" id="noRecordsNote" style="display:none;">এখনো কোনো এন্ট্রি নেই।</p>
   </section>
 
 </main>
 
+<style>
+  /* নতুন — শুধু মাস-ভিত্তিক গ্রুপিংয়ের জন্য, পুরনো কোনো ক্লাস ছোঁয়া হয়নি */
+  .kh-month-group{
+    background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+    margin-bottom: 14px; overflow: hidden;
+  }
+  .kh-month-summary{
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 14px 18px; cursor: pointer; list-style: none; font-weight: 700;
+  }
+  .kh-month-summary::-webkit-details-marker{ display:none; }
+  .kh-month-summary::before{ content: "▸"; transition: transform .2s ease; }
+  .kh-month-group[open] .kh-month-summary::before{ transform: rotate(90deg); }
+  .kh-month-label{ font-size: 1.02rem; }
+  .kh-month-count{
+    font-size: .78rem; font-weight: 700; color: #6d5f00; background: rgba(212,175,55,0.18);
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .kh-month-delete{ margin-left: auto; padding: 6px 12px !important; font-size: .8rem !important; }
+  .kh-month-group .table-wrap{ padding: 0 14px 14px; }
+</style>
+
 <footer class="site-footer">
-  <p>Knowledge Hub — নিরাপদে সংরক্ষিত। | ডিজাইন ও ডেভেলপমেন্ট: <strong>Masum</strong></p>
+  <p>Knowledge Hub — (Firebase) নিরাপদে সংরক্ষিত। | ডিজাইন ও ডেভেলপমেন্ট: <strong>Masum</strong></p>
 </footer>
 
 <script type="module" src="firebase.js"></script>

@@ -40,7 +40,7 @@ export function initKhApp(uid){
   const addMemberBtn  = document.getElementById("addMemberBtn");
   const registerLoading = document.getElementById("registerLoading");
   const downloadCsvBtn  = document.getElementById("downloadCsvBtn");
-  const deleteMonthBtn  = document.getElementById("deleteMonthBtn");
+  const registerGroups  = document.getElementById("registerGroups");
 
   entryDate.value = new Date().toISOString().slice(0,10);
 
@@ -139,6 +139,46 @@ export function initKhApp(uid){
   }
   entryMember.addEventListener("change", autoFillFromExisting);
   entryDate.addEventListener("change", autoFillFromExisting);
+
+  /* ---------------- সাধারণ নিশ্চিতকরণ মোডাল (মাস মুছে ফেলার জন্য ব্যবহৃত) ---------------- */
+  function ensureConfirmModal(){
+    let overlay = document.getElementById("khConfirmModalOverlay");
+    if(overlay) return overlay;
+    overlay = document.createElement("div");
+    overlay.id = "khConfirmModalOverlay";
+    overlay.className = "kh-modal-overlay";
+    overlay.innerHTML = `
+      <div class="kh-modal-card">
+        <p class="kh-modal-icon" id="khConfirmIcon">⚠️</p>
+        <p class="kh-modal-text" id="khConfirmText"></p>
+        <div class="kh-modal-actions">
+          <button type="button" class="btn3d btn-coral" id="khConfirmYesBtn">হ্যাঁ, নিশ্চিত</button>
+          <button type="button" class="btn3d btn-mint" id="khConfirmNoBtn">বাতিল</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    return overlay;
+  }
+  function askConfirm(message, icon){
+    return new Promise(resolve => {
+      const overlay = ensureConfirmModal();
+      overlay.querySelector("#khConfirmText").textContent = message;
+      overlay.querySelector("#khConfirmIcon").textContent = icon || "⚠️";
+      overlay.style.display = "flex";
+      const yesBtn = overlay.querySelector("#khConfirmYesBtn");
+      const noBtn  = overlay.querySelector("#khConfirmNoBtn");
+      function cleanup(result){
+        overlay.style.display = "none";
+        yesBtn.removeEventListener("click", onYes);
+        noBtn.removeEventListener("click", onNo);
+        resolve(result);
+      }
+      function onYes(){ cleanup(true); }
+      function onNo(){ cleanup(false); }
+      yesBtn.addEventListener("click", onYes);
+      noBtn.addEventListener("click", onNo);
+    });
+  }
 
   /* প্রিমিয়াম "ডুপ্লিকেট পাওয়া গেছে" মোডাল — থিমের সাথে মিলিয়ে, alert()-এর বদলে */
   function ensureDuplicateModal(){
@@ -264,40 +304,113 @@ export function initKhApp(uid){
     }
   });
 
-  /* ---------------- রেজিস্টার টেবিল ---------------- */
+  /* ---------------- বাংলা মাস/সংখ্যা হেল্পার ---------------- */
+  const BN_MONTHS = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
+  const BN_DIGITS = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+  function toBn(n){ return String(n).split("").map(ch => /[0-9]/.test(ch) ? BN_DIGITS[ch] : ch).join(""); }
+  function monthLabel(ym){ // "2026-08" -> "আগস্ট ২০২৬"
+    const [y, m] = ym.split("-").map(Number);
+    return `${BN_MONTHS[m-1]} ${toBn(y)}`;
+  }
+
+  /* ---------------- রেজিস্টার: মাস অনুযায়ী গ্রুপ করে collapsible সেকশনে দেখানো ---------------- */
   function renderRegister(){
-    const tbody = document.querySelector("#registerTable tbody");
     const noRecordsNote = document.getElementById("noRecordsNote");
     const filter = filterMember.value;
-    const list = (filter === "সবাই" ? records : records.filter(r => r.member === filter))
-      .slice().sort((a,b) => b.date.localeCompare(a.date));
+    const filtered = filter === "সবাই" ? records : records.filter(r => r.member === filter);
 
-    if(!list.length){
-      tbody.innerHTML = "";
+    if(!filtered.length){
+      registerGroups.innerHTML = "";
       noRecordsNote.style.display = "block";
       return;
     }
     noRecordsNote.style.display = "none";
-    tbody.innerHTML = list.map(r => `
-      <tr>
-        <td>${r.date}</td>
-        <td>${r.member}</td>
-        <td class="status-${r.status}">${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
-        <td>${r.status === "duty" ? r.hours : "—"}</td>
-        <td><button class="row-delete" data-id="${r.id}" title="মুছুন">🗑️</button></td>
-      </tr>`).join("");
+
+    const groups = {};
+    filtered.forEach(r => {
+      const ym = r.date.slice(0,7);
+      (groups[ym] = groups[ym] || []).push(r);
+    });
+    const months = Object.keys(groups).sort((a,b) => b.localeCompare(a));
+
+    registerGroups.innerHTML = months.map((ym, idx) => {
+      const list = groups[ym].slice().sort((a,b) => b.date.localeCompare(a.date));
+      const rows = list.map(r => `
+        <tr>
+          <td>${r.date}</td>
+          <td>${r.member}</td>
+          <td class="status-${r.status}">${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
+          <td>${r.status === "duty" ? r.hours : "—"}</td>
+          <td><button class="row-delete" data-id="${r.id}" title="মুছুন">🗑️</button></td>
+        </tr>`).join("");
+      return `
+        <details class="kh-month-group"${idx === 0 ? " open" : ""}>
+          <summary class="kh-month-summary">
+            <span class="kh-month-label">${monthLabel(ym)}</span>
+            <span class="kh-month-count">${toBn(list.length)}টি এন্ট্রি</span>
+            <button type="button" class="btn3d btn-danger kh-month-delete" data-ym="${ym}">🗑️ এই মাস মুছুন</button>
+          </summary>
+          <div class="table-wrap">
+            <table class="kh-table">
+              <thead><tr><th>তারিখ</th><th>নাম</th><th>স্ট্যাটাস</th><th>ঘণ্টা</th><th></th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        </details>`;
+    }).join("");
   }
 
-  document.querySelector("#registerTable tbody").addEventListener("click", async e => {
-    const btn = e.target.closest(".row-delete");
-    if(!btn) return;
-    if(!confirm("এই এন্ট্রিটি মুছে ফেলতে চান?")) return;
-    khBounce(btn);
+  /* একটা নির্দিষ্ট মাস (ym = "YYYY-MM") এর সব রেকর্ড মুছে ফেলা — যেকোনো মাসের জন্যই কাজ করে, শুধু চলতি মাস না */
+  async function deleteMonthRecords(ym, btn){
+    const monthRecords = records.filter(r => r.date.startsWith(ym));
+    if(!monthRecords.length) return;
+
+    const ok = await askConfirm(
+      `"${monthLabel(ym)}" মাসের মোট ${toBn(monthRecords.length)}টি এন্ট্রি স্থায়ীভাবে মুছে ফেলা হবে। এই কাজটি আর ফেরানো যাবে না।`,
+      "🗑️"
+    );
+    if(!ok) return;
+
+    if(btn) btn.disabled = true;
     try{
-      await deleteDoc(doc(db, "kh_records", btn.dataset.id));
+      // Firestore ব্যাচে একসাথে ৫০০টির বেশি অপারেশন করা যায় না, তাই ৪০০টি করে ভাগ করে ডিলিট করা হচ্ছে
+      const chunkSize = 400;
+      for(let i = 0; i < monthRecords.length; i += chunkSize){
+        const batch = writeBatch(db);
+        monthRecords.slice(i, i + chunkSize).forEach(r => batch.delete(doc(db, "kh_records", r.id)));
+        await batch.commit();
+      }
     }catch(err){
       console.error(err);
-      alert("এন্ট্রি মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      alert("এই মাসের হিসাব মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    }finally{
+      if(btn) btn.disabled = false;
+    }
+  }
+
+  /* একক এন্ট্রি ডিলিট + মাস ডিলিট — দুটোই এখন #registerGroups-এর ভেতরে থাকা বাটনে ক্লিক থেকে ধরা হয় */
+  registerGroups.addEventListener("click", async e => {
+    const rowDeleteBtn = e.target.closest(".row-delete");
+    if(rowDeleteBtn){
+      const ok = await askConfirm("এই এন্ট্রিটি মুছে ফেলতে চান?", "🗑️");
+      if(!ok) return;
+      khBounce(rowDeleteBtn);
+      try{
+        await deleteDoc(doc(db, "kh_records", rowDeleteBtn.dataset.id));
+      }catch(err){
+        console.error(err);
+        alert("এন্ট্রি মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      }
+      return;
+    }
+
+    const monthDeleteBtn = e.target.closest(".kh-month-delete");
+    if(monthDeleteBtn){
+      // <summary>-এর ভেতরের বাটন হওয়ায় ক্লিক করলে <details> টা খুলে/বন্ধ না হয়ে যায় সেটা আটকানো
+      e.preventDefault();
+      e.stopPropagation();
+      khBounce(monthDeleteBtn);
+      await deleteMonthRecords(monthDeleteBtn.dataset.ym, monthDeleteBtn);
     }
   });
 
@@ -343,37 +456,6 @@ export function initKhApp(uid){
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  });
-
-  /* ---------------- এই মাসের হিসাব মুছে ফেলুন ---------------- */
-  deleteMonthBtn.addEventListener("click", async () => {
-    khBounce(deleteMonthBtn);
-    const ym = currentYearMonth();
-    const monthRecords = records.filter(r => r.date.startsWith(ym));
-
-    if(!monthRecords.length){
-      alert("এই মাসে মুছে ফেলার মতো কোনো রেকর্ড নেই।");
-      return;
-    }
-    if(!confirm(`এই মাসের মোট ${monthRecords.length}টি এন্ট্রি স্থায়ীভাবে মুছে ফেলতে চান? এই কাজটি আর ফেরানো যাবে না।`)) return;
-
-    deleteMonthBtn.disabled = true;
-    try{
-      // Firestore ব্যাচে একসাথে ৫০০টির বেশি অপারেশন করা যায় না, তাই ৪০০টি করে ভাগ করে ডিলিট করা হচ্ছে
-      const chunkSize = 400;
-      for(let i = 0; i < monthRecords.length; i += chunkSize){
-        const batch = writeBatch(db);
-        monthRecords.slice(i, i + chunkSize).forEach(r => {
-          batch.delete(doc(db, "kh_records", r.id));
-        });
-        await batch.commit();
-      }
-    }catch(err){
-      console.error(err);
-      alert("এই মাসের হিসাব মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
-    }finally{
-      deleteMonthBtn.disabled = false;
-    }
   });
 
   /* ---------------- লোডিং ইন্ডিকেটর ---------------- */

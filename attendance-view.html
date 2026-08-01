@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>হাজিরা দেখুন | Knowledge Hub</title>
+<meta name="description" content="টিমের হাজিরা ও কাজের ঘণ্টার হিসাব — শুধু দেখার জন্য।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="knowledge-hub.css">
+</head>
+<body>
+
+<header class="kh-header">
+  <div class="kh-header-inner">
+    <a href="index.html" class="brand kh-brand">
+      <img class="kh-profile-photo" src="https://masumcpex.github.io/masumcpex/1000004949.jpg" alt="Masum Billah">
+      <span class="brand-mark kh-logo-mark">ম</span>
+      <span class="brand-name kh-brand-name">
+        <span class="kh-brand-main">মাসুম</span>
+        <span class="kh-brand-sub">হাজিরা — শুধু দেখার পেজ</span>
+      </span>
+    </a>
+    <a class="btn3d btn-indigo kh-back" href="index.html">← মূল সাইট</a>
+  </div>
+</header>
+
+<main class="kh-main">
+
+  <div class="kh-intro">
+    <div class="eyebrow">Knowledge Hub • পাবলিক ভিউ</div>
+    <h1 class="section-title">টিম হাজিরা — শুধু দেখার জন্য</h1>
+    <p class="section-sub">এখানে সবাই হাজিরা ও কাজের ঘণ্টার হিসাব দেখতে পারবেন। এখান থেকে কিছু যোগ, সম্পাদনা বা মোছা যাবে না — এন্ট্রি দিতে এডমিনকে <a href="knowledge-hub.html">মূল খাতায়</a> লগইন করতে হবে।</p>
+  </div>
+
+  <!-- ---------------- সামারি ---------------- -->
+  <section class="kh-card kh-card--amber">
+    <h2 class="kh-card-title">📊 ঘণ্টার সামারি হিসাব</h2>
+    <div class="table-wrap">
+      <table class="kh-table" id="summaryTable">
+        <thead><tr><th>নাম</th><th>মোট কাজের দিন</th><th>মোট ছুটি</th><th>মোট কাজের সময় (ঘণ্টা)</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="kh-empty-note" id="noSummaryNote" style="display:none;">এখনো কোনো রেকর্ড নেই।</p>
+  </section>
+
+  <!-- ---------------- রেজিস্টার খাতা (শুধু দেখার জন্য) ---------------- -->
+  <section class="kh-card kh-card--violet">
+    <h2 class="kh-card-title">📔 হাজিরা রেজিস্টার খাতা</h2>
+
+    <p class="kh-loading" id="registerLoading">
+      <span class="kh-dot"></span><span class="kh-dot"></span><span class="kh-dot"></span>
+      ডেটা লোড হচ্ছে...
+    </p>
+
+    <div class="filter-row">
+      <select id="filterMember"><option value="সবাই">সবাই</option></select>
+    </div>
+
+    <div id="registerGroups"></div>
+    <p class="kh-empty-note" id="noRecordsNote" style="display:none;">এখনো কোনো এন্ট্রি নেই।</p>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Knowledge Hub — পাবলিক ভিউ (শুধু দেখা যায়, এডিট করা যায় না) | ডিজাইন ও ডেভেলপমেন্ট: <strong>Masum</strong></p>
+</footer>
+
+<style>
+  /* নতুন — শুধু মাস-ভিত্তিক গ্রুপিংয়ের জন্য, admin পেজের সাথে একই ডিজাইন */
+  .kh-month-group{
+    background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+    margin-bottom: 14px; overflow: hidden;
+  }
+  .kh-month-summary{
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 14px 18px; cursor: pointer; list-style: none; font-weight: 700;
+  }
+  .kh-month-summary::-webkit-details-marker{ display:none; }
+  .kh-month-summary::before{ content: "▸"; transition: transform .2s ease; }
+  .kh-month-group[open] .kh-month-summary::before{ transform: rotate(90deg); }
+  .kh-month-label{ font-size: 1.02rem; }
+  .kh-month-count{
+    font-size: .78rem; font-weight: 700; color: #6d5f00; background: rgba(212,175,55,0.18);
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .kh-month-group .table-wrap{ padding: 0 14px 14px; }
+</style>
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="khAppPublic.js"></script>
+
+</body>
+</html>
