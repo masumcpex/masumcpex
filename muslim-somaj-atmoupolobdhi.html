@@ -212,6 +212,22 @@
     .article-body{ font-size:1.05rem; }
     .quote-box{ padding:1.4rem 1.2rem 1.4rem 2.4rem; font-size:1.08rem; }
   }
+
+  /* Hero header fix: prevent title overflow/clipping and ensure text
+     stays visible against the navy hero background on small screens. */
+  .article-hero .article-title{
+    white-space:normal;
+    overflow-wrap:break-word;
+    color:var(--color-paper,#faf6ee);
+    font-size:clamp(1.4rem, 5vw, 2.4rem);
+    line-height:1.35;
+  }
+  .article-hero .article-subtitle,
+  .article-hero .article-meta-top,
+  .article-hero .article-meta-bottom{
+    color:var(--color-paper,#faf6ee);
+    opacity:.92;
+  }
 </style>
 </head>
 <body>
