@@ -15,6 +15,8 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
+  runTransaction,
   serverTimestamp,
   writeBatch
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -49,7 +51,7 @@ export const auth = getAuth(app);
 isSupported().then((ok) => { if (ok) getAnalytics(app); }).catch(() => {});
 
 export {
-  collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, where, getDocs,
+  collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, where, getDocs, getDoc, runTransaction,
   serverTimestamp, writeBatch,
   GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
   signInWithPopup, signInWithRedirect, getRedirectResult,

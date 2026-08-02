@@ -1,14 +1,22 @@
 /* ==========================================================================
    khAppPublic.js
    পাবলিক "শুধু দেখার" পেজের জন্য — কোনো লগইন লাগে না, কোনো Add/Edit/Delete/
-   Export বাটন নেই। শুধু Summary আর মাস-ভিত্তিক Register পড়ে দেখানো হয়।
+   Export বাটন নেই।
 
-   এটা khApp.js থেকে সম্পূর্ণ আলাদা ফাইল — তাই এডমিন পেজের কোনো কোড এখানে
+   URL-এ ?id=JAKIR-0001 থাকলে শুধু সেই নির্দিষ্ট সদস্যের হাজিরা দেখাবে
+   (ব্যক্তিগত শেয়ার লিংক)। ?id= না থাকলে আগের মতোই সবার সামারি+রেজিস্টার
+   একসাথে দেখাবে (এডমিনের সাধারণ ওভারভিউ)।
+
+   এটা khApp.js থেকে সম্পূর্ণ আলাদা ফাইল — এডমিন পেজের কোনো কোড এখানে
    ছোঁয়া হয়নি, এডমিন পেজ ঠিক আগের মতোই কাজ করবে।
 
-   ⚠️ এই পেজ কাজ করতে হলে Firestore Rules-এ kh_members ও kh_records
-   কালেকশনে পাবলিক read অনুমতি (allow read: if true;) দিতে হবে —
-   write আগের মতোই শুধু লগইন করা মালিকের জন্য সীমাবদ্ধ থাকবে।
+   ⚠️ নিরাপত্তা সম্পর্কে সততার কথা: Member ID URL-এ থাকে বলে এটা একটা
+   "গোপন লিংক"-এর মতো কাজ করে (যাকে দেবেন সে-ই দেখতে পারবে), কিন্তু
+   Firestore rules "allow read: if true" থাকায় টেকনিক্যালি কেউ চাইলে
+   ব্রাউজার ডেভেলপার টুলস দিয়ে সরাসরি ডেটাবেজ কোয়েরি করেও অন্যদের তথ্য
+   দেখতে পারবে। এটা লগইন-ভিত্তিক কড়া নিরাপত্তা না, বরং "যার কাছে লিংক
+   আছে সে দেখতে পারবে" ধরনের সুবিধা — হাজিরার মতো কম-স্পর্শকাতর তথ্যের
+   জন্য সাধারণত যথেষ্ট, কিন্তু সেটা মাথায় রাখা ভালো।
    ========================================================================== */
 
 import { db, collection, onSnapshot } from "./firebase.js";
@@ -19,6 +27,9 @@ const recordsCol = collection(db, "kh_records");
 let members = [];
 let records = [];
 
+const urlParams = new URLSearchParams(window.location.search);
+const targetMemberId = urlParams.get("id"); // যেমন "JAKIR-0001", না থাকলে null
+
 const BN_MONTHS = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
 const BN_DIGITS = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
 function toBn(n){ return String(n).split("").map(ch => /[0-9]/.test(ch) ? BN_DIGITS[ch] : ch).join(""); }
@@ -26,24 +37,33 @@ function monthLabel(ym){
   const [y, m] = ym.split("-").map(Number);
   return `${BN_MONTHS[m-1]} ${toBn(y)}`;
 }
+function currentYearMonth(){ return new Date().toISOString().slice(0,7); }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const filterMember = document.getElementById("filterMember");
+  const filterMember   = document.getElementById("filterMember");
+  const filterRow       = document.getElementById("filterRow");
   const registerGroups = document.getElementById("registerGroups");
   const registerLoading = document.getElementById("registerLoading");
-  const noRecordsNote = document.getElementById("noRecordsNote");
-  const noSummaryNote = document.getElementById("noSummaryNote");
+  const noRecordsNote  = document.getElementById("noRecordsNote");
+  const noSummaryNote  = document.getElementById("noSummaryNote");
+  const summarySection = document.getElementById("summarySection");
+  const memberHeader   = document.getElementById("memberHeader");
+  const currentMonthCard = document.getElementById("currentMonthCard");
+  const notFoundNote   = document.getElementById("notFoundNote");
 
   let membersLoaded = false, recordsLoaded = false;
   function checkLoaded(){
-    if(membersLoaded && recordsLoaded) registerLoading.style.display = "none";
+    if(membersLoaded && recordsLoaded){
+      registerLoading.style.display = "none";
+      if(targetMemberId) renderMemberOnlyView();
+    }
   }
 
   onSnapshot(membersCol, snapshot => {
     members = snapshot.docs.map(d => ({ id: d.id, ...d.data() }))
       .sort((a,b) => (a.name || "").localeCompare(b.name || "", "bn"));
     membersLoaded = true;
-    renderFilterOptions();
+    if(!targetMemberId) renderFilterOptions();
     checkLoaded();
   }, err => {
     console.error(err);
@@ -53,13 +73,50 @@ document.addEventListener("DOMContentLoaded", () => {
   onSnapshot(recordsCol, snapshot => {
     records = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
     recordsLoaded = true;
-    renderSummary();
-    renderRegister();
+    if(!targetMemberId){ renderSummary(records); renderRegister(records); }
     checkLoaded();
   }, err => {
     console.error(err);
     registerLoading.textContent = "ডেটা লোড করতে সমস্যা হয়েছে — এই পেজ দেখতে Firestore-এ পাবলিক read অনুমতি প্রয়োজন।";
   });
+
+  /* ---------------- ?id= দেওয়া থাকলে: শুধু সেই একজনের ভিউ ---------------- */
+  function renderMemberOnlyView(){
+    const member = members.find(m => m.memberId === targetMemberId);
+    if(!member){
+      notFoundNote.style.display = "block";
+      summarySection.style.display = "none";
+      filterRow.style.display = "none";
+      currentMonthCard.style.display = "none";
+      return;
+    }
+
+    // এই পেজে শুধু এই একজনের তথ্যই দেখাবে বলে সদস্য-বাছাই ড্রপডাউন দরকার নেই
+    filterRow.style.display = "none";
+
+    memberHeader.style.display = "block";
+    memberHeader.innerHTML = `
+      <div class="kh-member-header-name">${member.name}</div>
+      <div class="kh-member-header-id">Member ID: ${member.memberId}</div>`;
+
+    const myRecords = records.filter(r => r.member === member.name);
+
+    // চলতি মাসের সামারি আলাদাভাবে বড় করে দেখানো
+    const ym = currentYearMonth();
+    const thisMonth = myRecords.filter(r => r.date.startsWith(ym));
+    const days = thisMonth.filter(r => r.status === "duty").length;
+    const leaves = thisMonth.filter(r => r.status === "leave").length;
+    const hours = thisMonth.filter(r => r.status === "duty").reduce((sum, r) => sum + (r.hours || 0), 0);
+
+    currentMonthCard.style.display = "grid";
+    currentMonthCard.innerHTML = `
+      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(days)}</span><span class="kh-stat-label">ডিউটি দিন (${monthLabel(ym)})</span></div>
+      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(leaves)}</span><span class="kh-stat-label">ছুটি</span></div>
+      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(hours)}</span><span class="kh-stat-label">মোট কাজের ঘণ্টা</span></div>`;
+
+    renderSummary(myRecords);
+    renderRegister(myRecords);
+  }
 
   function renderFilterOptions(){
     const current = filterMember.value;
@@ -68,16 +125,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if(current === "সবাই" || members.some(m => m.name === current)) filterMember.value = current;
   }
 
-  function renderSummary(){
+  function renderSummary(sourceRecords){
     const tbody = document.querySelector("#summaryTable tbody");
-    if(!records.length){
+    if(!sourceRecords.length){
       tbody.innerHTML = "";
       noSummaryNote.style.display = "block";
       return;
     }
     noSummaryNote.style.display = "none";
     const byMember = {};
-    records.forEach(r => {
+    sourceRecords.forEach(r => {
       if(!byMember[r.member]) byMember[r.member] = { days:0, leaves:0, hours:0 };
       if(r.status === "duty"){ byMember[r.member].days++; byMember[r.member].hours += r.hours; }
       else{ byMember[r.member].leaves++; }
@@ -88,9 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }).join("");
   }
 
-  function renderRegister(){
-    const filter = filterMember.value;
-    const filtered = filter === "সবাই" ? records : records.filter(r => r.member === filter);
+  function renderRegister(sourceRecords){
+    const filter = targetMemberId ? "সবাই" : filterMember.value;
+    const filtered = filter === "সবাই" ? sourceRecords : sourceRecords.filter(r => r.member === filter);
 
     if(!filtered.length){
       registerGroups.innerHTML = "";
@@ -131,5 +188,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }).join("");
   }
 
-  filterMember.addEventListener("change", renderRegister);
+  filterMember.addEventListener("change", () => renderRegister(records));
 });

@@ -9,7 +9,7 @@
 
 import {
   db, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot,
-  query, where, serverTimestamp, writeBatch
+  query, where, serverTimestamp, writeBatch, runTransaction, getDoc
 } from "./firebase.js";
 
 const membersCol = collection(db, "kh_members");
@@ -53,13 +53,54 @@ export function initKhApp(uid){
     el.addEventListener("animationend", () => el.classList.remove("kh-bounce"), { once:true });
   }
 
+  /* ---------------- ইউনিক Member ID তৈরি (যেমন: JAKIR-0001) ----------------
+     প্রতিটা owner-এর নিজস্ব একটা কাউন্টার (kh_meta/{uid}) থাকে, Firestore
+     transaction দিয়ে atomically বাড়ানো হয় — তাই একসাথে অনেকে সদস্য যোগ
+     করলেও কখনো একই ID দুইজনকে বসবে না, ২৩৬+ ব্যবহারকারীর জন্যও নিরাপদ। */
+  async function generateMemberId(name){
+    const counterRef = doc(db, "kh_meta", uid);
+    const seq = await runTransaction(db, async (tx) => {
+      const snap = await tx.get(counterRef);
+      const next = (snap.exists() ? (snap.data().memberCount || 0) : 0) + 1;
+      tx.set(counterRef, { memberCount: next }, { merge: true });
+      return next;
+    });
+    const prefix = (name || "USER").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12) || "USER";
+    return `${prefix}-${String(seq).padStart(4, "0")}`;
+  }
+
+  /* এই মেম্বারের পাবলিক শেয়ার লিংক — যেখানেই সাইট হোস্ট হোক (masumcpex.com
+     বা অন্য কোথাও), সবসময় বর্তমান পেজের ঠিকানা থেকে নিজে থেকেই তৈরি হয়। */
+  function memberShareLink(memberId){
+    return window.location.origin + window.location.pathname.replace(/knowledge-hub\.html$/, "attendance-view.html") + "?id=" + encodeURIComponent(memberId);
+  }
+
+  async function copyMemberLink(memberId, btn){
+    const link = memberShareLink(memberId);
+    try{
+      await navigator.clipboard.writeText(link);
+    }catch(e){
+      // ক্লিপবোর্ড API ব্লক হলে fallback
+      const ta = document.createElement("textarea");
+      ta.value = link; document.body.appendChild(ta); ta.select();
+      document.execCommand("copy"); document.body.removeChild(ta);
+    }
+    const old = btn.textContent;
+    btn.textContent = "✅";
+    setTimeout(() => { btn.textContent = old; }, 1600);
+  }
+
   /* ---------------- সদস্য রেন্ডার ---------------- */
   const CHIP_COLORS = ["chip-mint","chip-sky","chip-coral","chip-violet","chip-amber","chip-indigo","chip-rose","chip-teal"];
+  const backfillingIds = new Set(); // একই মেম্বারের জন্য দুইবার backfill শুরু হওয়া ঠেকানো
   function renderMembers(){
     memberChips.innerHTML = members.map((m, i) => `
       <span class="member-chip ${CHIP_COLORS[i % CHIP_COLORS.length]}">
         ${m.name}
-        <button data-id="${m.id}" title="বাদ দিন">✕</button>
+        <span class="kh-member-id">${m.memberId || "…"}</span>
+        <button class="kh-view-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="পাবলিক পেজ দেখুন">👁</button>
+        <button class="kh-copy-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="লিংক কপি করুন">🔗</button>
+        <button class="kh-remove-member" data-id="${m.id}" title="বাদ দিন">✕</button>
       </span>`).join("");
     noMemberNote.style.display = members.length ? "none" : "block";
     noMemberWarn.style.display = members.length ? "none" : "block";
@@ -74,6 +115,20 @@ export function initKhApp(uid){
 
     if(members.some(m => m.name === currentEntryVal)) entryMember.value = currentEntryVal;
     if(currentFilterVal === "সবাই" || members.some(m => m.name === currentFilterVal)) filterMember.value = currentFilterVal;
+
+    // পুরনো সদস্য (এই ফিচার আসার আগে যোগ করা) যাদের memberId নেই, তাদের জন্য
+    // নিঃশব্দে একবার Member ID তৈরি করে দেওয়া হয় — কোনো ম্যানুয়াল কাজ লাগে না
+    members.forEach(async m => {
+      if(m.memberId || backfillingIds.has(m.id)) return;
+      backfillingIds.add(m.id);
+      try{
+        const newId = await generateMemberId(m.name);
+        await updateDoc(doc(db, "kh_members", m.id), { memberId: newId });
+      }catch(err){
+        console.error("memberId backfill failed for", m.name, err);
+        backfillingIds.delete(m.id);
+      }
+    });
   }
 
   addMemberBtn.addEventListener("click", async () => {
@@ -83,7 +138,8 @@ export function initKhApp(uid){
     if(members.some(m => m.name === name)){ memberInput.value = ""; return; }
     addMemberBtn.disabled = true;
     try{
-      await addDoc(membersCol, { name, ownerId: uid, createdAt: serverTimestamp() });
+      const memberId = await generateMemberId(name);
+      await addDoc(membersCol, { name, memberId, ownerId: uid, createdAt: serverTimestamp() });
       memberInput.value = "";
     }catch(err){
       console.error(err);
@@ -97,17 +153,32 @@ export function initKhApp(uid){
   });
 
   memberChips.addEventListener("click", async e => {
-    const btn = e.target.closest("button[data-id]");
-    if(!btn) return;
-    const m = members.find(x => x.id === btn.dataset.id);
-    if(!m) return;
-    if(!confirm(`"${m.name}" কে সদস্য তালিকা থেকে বাদ দিতে চান? (পুরনো রেকর্ড মুছে যাবে না)`)) return;
-    khBounce(btn);
-    try{
-      await deleteDoc(doc(db, "kh_members", m.id));
-    }catch(err){
-      console.error(err);
-      alert("সদস্য বাদ দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    const viewBtn = e.target.closest(".kh-view-link");
+    if(viewBtn){
+      if(!viewBtn.dataset.memberid){ alert("এই সদস্যের ID এখনো তৈরি হচ্ছে, একটু পর আবার চেষ্টা করুন।"); return; }
+      window.open(memberShareLink(viewBtn.dataset.memberid), "_blank");
+      return;
+    }
+
+    const copyBtn = e.target.closest(".kh-copy-link");
+    if(copyBtn){
+      if(!copyBtn.dataset.memberid){ alert("এই সদস্যের ID এখনো তৈরি হচ্ছে, একটু পর আবার চেষ্টা করুন।"); return; }
+      await copyMemberLink(copyBtn.dataset.memberid, copyBtn);
+      return;
+    }
+
+    const removeBtn = e.target.closest(".kh-remove-member");
+    if(removeBtn){
+      const m = members.find(x => x.id === removeBtn.dataset.id);
+      if(!m) return;
+      if(!confirm(`"${m.name}" কে সদস্য তালিকা থেকে বাদ দিতে চান? (পুরনো রেকর্ড মুছে যাবে না)`)) return;
+      khBounce(removeBtn);
+      try{
+        await deleteDoc(doc(db, "kh_members", m.id));
+      }catch(err){
+        console.error(err);
+        alert("সদস্য বাদ দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      }
     }
   });
 

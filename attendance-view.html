@@ -34,8 +34,14 @@
     <p class="section-sub">এখানে সবাই হাজিরা ও কাজের ঘণ্টার হিসাব দেখতে পারবেন। এখান থেকে কিছু যোগ, সম্পাদনা বা মোছা যাবে না — এন্ট্রি দিতে এডমিনকে <a href="knowledge-hub.html">মূল খাতায়</a> লগইন করতে হবে।</p>
   </div>
 
+  <p class="kh-empty-note" id="notFoundNote" style="display:none;">এই লিংকের সদস্য খুঁজে পাওয়া যায়নি। লিংকটা ঠিক আছে কিনা আবার চেক করুন।</p>
+
+  <div class="kh-card kh-card--mint" id="memberHeader" style="display:none;"></div>
+
+  <div class="kh-stat-grid" id="currentMonthCard" style="display:none;"></div>
+
   <!-- ---------------- সামারি ---------------- -->
-  <section class="kh-card kh-card--amber">
+  <section class="kh-card kh-card--amber" id="summarySection">
     <h2 class="kh-card-title">📊 ঘণ্টার সামারি হিসাব</h2>
     <div class="table-wrap">
       <table class="kh-table" id="summaryTable">
@@ -55,7 +61,7 @@
       ডেটা লোড হচ্ছে...
     </p>
 
-    <div class="filter-row">
+    <div class="filter-row" id="filterRow">
       <select id="filterMember"><option value="সবাই">সবাই</option></select>
     </div>
 
@@ -88,6 +94,19 @@
     padding: 4px 10px; border-radius: 20px;
   }
   .kh-month-group .table-wrap{ padding: 0 14px 14px; }
+
+  /* নতুন — ব্যক্তিগত মেম্বার হেডার ও চলতি মাসের স্ট্যাট কার্ড */
+  #memberHeader{ text-align:center; padding: 20px; }
+  .kh-member-header-name{ font-family:'Noto Serif Bengali',serif; font-size:1.4rem; font-weight:700; }
+  .kh-member-header-id{ font-size:.85rem; opacity:.75; font-family: monospace; margin-top:4px; }
+  .kh-stat-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
+  .kh-stat-box{
+    background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:14px;
+    padding:16px 10px; text-align:center;
+  }
+  .kh-stat-num{ display:block; font-size:1.6rem; font-weight:800; font-family:'Noto Serif Bengali',serif; }
+  .kh-stat-label{ font-size:.72rem; opacity:.75; }
+  @media (max-width:520px){ .kh-stat-grid{ grid-template-columns:1fr 1fr 1fr; gap:8px; } .kh-stat-num{ font-size:1.25rem; } }
 </style>
 
 <script type="module" src="firebase.js"></script>
