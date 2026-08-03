@@ -15,7 +15,7 @@ import {
 } from "./firebase.js";
 import { initKhApp } from "./khApp.js";
 
-const ADMIN_EMAIL = "masumcpex@gmail.com"; // শুধু এই ইমেইল "পুরনো ডেটা claim করুন" বাটন দেখবে
+const ADMIN_EMAIL = "admin@masumcpex.com"; // শুধু এই ইমেইল "পুরনো ডেটা claim করুন" বাটন দেখবে
 
 document.addEventListener("DOMContentLoaded", () => {
 
