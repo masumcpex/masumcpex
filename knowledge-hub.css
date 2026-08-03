@@ -2,57 +2,17 @@
    knowledge-hub.css — style.css এর color/font টোকেন ব্যবহার করে
    ========================================================================== */
 
-/* ---------------- প্রিমিয়াম হেডার রিডিজাইন (শুধু Knowledge Hub পেজের জন্য) ---------------- */
 .kh-header{
-  background: rgba(30,41,59,.82);
-  padding: 0 1.4rem;
-  height: 74px;
-  display:flex; align-items:center;
+  background: var(--ink);
+  padding: .9rem 1.4rem;
   position: sticky; top:0; z-index: 20;
-  box-shadow: 0 4px 20px rgba(0,0,0,.22);
-  backdrop-filter: blur(14px) saturate(140%);
-  -webkit-backdrop-filter: blur(14px) saturate(140%);
-  border-bottom: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 2px 14px rgba(0,0,0,.18);
 }
 .kh-header-inner{
-  max-width: 900px; margin: 0 auto; width:100%;
+  max-width: 900px; margin: 0 auto;
   display:flex; align-items:center; justify-content:space-between;
-  gap: .8rem;
 }
-.kh-brand{ display:flex; align-items:center; gap:.7rem; min-width:0; }
-
-.kh-profile-photo{
-  width: 44px; height:44px; border-radius:50%;
-  object-fit: cover; flex-shrink:0;
-  border: 2px solid rgba(255,255,255,.85);
-  box-shadow: 0 2px 8px rgba(0,0,0,.35);
-}
-
-.kh-logo-mark{
-  width: 40px; height:40px; border-radius: 11px;
-  background: linear-gradient(135deg, #F5D485 0%, #C79A3B 55%, #B9770E 100%);
-  color:#1B2A45; font-family: var(--font-display); font-weight:700; font-size:1.15rem;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  box-shadow: 0 3px 10px rgba(199,154,59,.4), inset 0 1px 0 rgba(255,255,255,.35);
-}
-
-.kh-brand-name{ display:flex; flex-direction:column; line-height:1.2; min-width:0; }
-.kh-brand-main{
-  color:#fff; font-family: var(--font-display); font-weight:700; font-size:1.05rem;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.kh-brand-sub{
-  color: rgba(255,255,255,.62); font-family: var(--font-util); font-size:.72rem;
-  letter-spacing:.04em; white-space:nowrap;
-}
-
-@media (max-width: 480px){
-  .kh-header{ height:68px; padding:0 1rem; }
-  .kh-profile-photo{ width:38px; height:38px; }
-  .kh-logo-mark{ width:36px; height:36px; font-size:1.05rem; border-radius:10px; }
-  .kh-brand-main{ font-size:.96rem; max-width: 34vw; }
-  .kh-back.btn3d{ padding:.5rem .9rem; font-size:.78rem; }
-}
+.kh-header .brand-name{ color:#fff; }
 
 .kh-main{ max-width: 900px; margin: 0 auto; padding: 2.5rem 1.4rem 4rem; }
 .kh-intro{ margin-bottom: 2.2rem; }
@@ -98,82 +58,6 @@
 .btn-teal{   background:#12B5A6; --btn-shadow:#0B8479; }
 
 .kh-back.btn3d{ padding: .6rem 1.2rem; font-size: .85rem; }
-
-/* ---------------- রেজিস্টার খাতার নিচের অ্যাকশন বাটন (CSV / মুছে ফেলুন) ---------------- */
-.kh-register-actions{
-  display:flex; flex-wrap:wrap; gap:1rem; margin: 0 0 1.3rem;
-}
-.kh-register-actions .btn3d{
-  flex: 1 1 240px; text-align:center;
-  padding: .9rem 1.4rem; font-size: .95rem; border-radius: 14px;
-  letter-spacing:.2px;
-}
-.btn-download{
-  background: linear-gradient(180deg, #34D399, #1FA971);
-  --btn-shadow:#0E7A50;
-  box-shadow: 0 5px 0 var(--btn-shadow), 0 10px 20px rgba(16,150,100,.28);
-}
-.btn-danger{
-  background: linear-gradient(180deg, #FF6B6B, #E5372F);
-  --btn-shadow:#A81F1A;
-  box-shadow: 0 5px 0 var(--btn-shadow), 0 10px 20px rgba(200,40,30,.28);
-}
-.btn-download:hover, .btn-danger:hover{
-  filter: brightness(1.08);
-  transform: translateY(-1px);
-}
-.btn-download:active, .btn-danger:active{
-  transform: translateY(5px);
-  box-shadow: 0 0 0 var(--btn-shadow), 0 3px 8px rgba(0,0,0,.2);
-}
-@media (max-width:520px){
-  .kh-register-actions{ flex-direction:column; }
-  .kh-register-actions .btn3d{ flex-basis:auto; }
-}
-
-/* ---------------- ডুপ্লিকেট হাজিরা সতর্কতা মোডাল ---------------- */
-.kh-modal-overlay{
-  display:none; position:fixed; inset:0; z-index:10000;
-  background: rgba(27,42,69,.55); align-items:center; justify-content:center;
-  padding: 1.2rem;
-}
-.kh-modal-card{
-  background: var(--card-bg, #FFF8EC); border-radius:18px;
-  padding: 1.9rem 1.6rem; max-width: 380px; width:100%; text-align:center;
-  border-top: 5px solid #F5A623;
-  box-shadow: 0 20px 45px rgba(0,0,0,.3);
-}
-.kh-modal-icon{ font-size:2rem; margin:0 0 .6rem; }
-.kh-modal-text{
-  font-family: var(--font-body); color: var(--ink); font-size:1rem;
-  line-height:1.55; margin: 0 0 1.5rem;
-}
-.kh-modal-actions{ display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
-.kh-modal-actions .btn3d{ flex:1 1 140px; padding:.75rem 1rem; font-size:.88rem; }
-.kh-advance-wrap{
-  display:inline-flex; align-items:center; gap:.4rem;
-  background:#fff; border:1.5px solid var(--line, #D8CBB0); border-radius: 12px;
-  padding:.3rem .6rem;
-  box-shadow: 0 2px 0 rgba(0,0,0,.06), 0 4px 10px rgba(0,0,0,.08);
-  transition: border-color .15s ease, box-shadow .15s ease;
-}
-.kh-advance-wrap:focus-within{
-  border-color:#F5A623; box-shadow: 0 2px 0 rgba(0,0,0,.06), 0 0 0 3px rgba(245,166,35,.22);
-}
-.kh-advance-prefix{
-  font-family: var(--font-display); font-weight:700; font-size:.82rem;
-  color:#B9770E; letter-spacing:.3px;
-}
-.kh-advance-input{
-  width: 5.2rem; border:none; background:transparent; padding:.15rem 0;
-  font-family: var(--font-body); font-weight:600; font-size:.92rem; color: var(--ink);
-}
-.kh-advance-input:focus{ outline:none; }
-.kh-advance-input:disabled{ opacity:.6; }
-@media (max-width:520px){
-  .kh-advance-wrap{ padding:.25rem .5rem; }
-  .kh-advance-input{ width:4.2rem; }
-}
 
 /* ছোট আইকন-বাটন (রেজিস্টার রো ডিলিট, চিপ রিমুভ) এর জন্য হালকা সংস্করণ */
 .btn3d.btn-small{
@@ -255,49 +139,80 @@
 .kh-card--sky .kh-field select{ border: 2px solid #3B82F6; }
 .kh-card--mint .kh-add-row input{ border: 2px solid #2ECC71; }
 
-
-  
-
-/* ---------------- লগইন গেট ---------------- */
+/* ==========================================================================
+   নতুন — লগইন/সাইনআপ গেট (Welcome Back / Create Account)
+   পুরনো kh-provider-btn, kh-phone-form ইত্যাদির আগের কোনো স্টাইল ছিল না,
+   তাই এখানে প্রথমবার সংজ্ঞায়িত করা হলো। বিদ্যমান কোনো ক্লাস মোছা/বদলানো হয়নি।
+   ========================================================================== */
 .kh-auth-gate{
-  min-height: 70vh; display:flex; align-items:center; justify-content:center;
-  padding: 2rem 1.4rem;
+  min-height: 70vh; display:flex; align-items:center; justify-content:center; padding: 2.2rem 1.2rem;
 }
 .kh-auth-box{
-  max-width: 420px; text-align:center; background: var(--card-bg);
-  border: 1px solid var(--line); border-radius: 18px; padding: 2.4rem 2rem;
-  box-shadow: var(--shadow);
+  width:100%; max-width: 420px; background: var(--card-bg); border: 1px solid var(--line);
+  border-radius: 20px; padding: 2rem 1.6rem 1.6rem; box-shadow: var(--shadow);
+  display:flex; flex-direction:column; gap: .9rem;
 }
-.kh-auth-icon{ font-size: 2.2rem; margin-bottom: .8rem; }
-.kh-auth-box h2{ font-family: var(--font-display); color: var(--ink); font-size: 1.25rem; margin: 0 0 .7rem; }
-.kh-auth-box p{ color: var(--muted); font-size: .92rem; margin: 0 0 1.4rem; line-height:1.7; }
-.kh-google-btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
-  border:none; cursor:pointer; width:100%;
-}
-.kh-google-icon{ width:20px; height:20px; background:#fff; border-radius:50%; padding:2px; }
-.kh-auth-error{ color:#c0392b; font-size:.85rem; margin-top:1rem; }
+.kh-auth-icon{ font-size: 1.8rem; text-align:center; }
+.kh-auth-box h2{ font-family: var(--font-display); color: var(--ink); font-size: 1.25rem; margin:0; text-align:center; }
+.kh-auth-box > p{ color: var(--muted); font-size:.9rem; text-align:center; margin: 0 0 .3rem; }
 
-/* ---------------- ইউজার বার ---------------- */
-.kh-user-bar{
-  max-width: 900px; margin: 0 auto; padding: .8rem 1.4rem 0;
-  display:flex; align-items:center; justify-content:flex-end; gap:.7rem; flex-wrap:wrap;
+.kh-auth-tabs{
+  display:flex; background: var(--paper-2); border-radius: 999px; padding: 4px; gap: 4px;
 }
-.kh-user-email{ color: var(--muted); font-size:.85rem; font-family: var(--font-util); margin-right:auto; }
+.kh-auth-tab{
+  flex:1; border:none; background: transparent; padding: .6rem .8rem; border-radius: 999px;
+  font-family: var(--font-body); font-weight:700; font-size: .92rem; color: var(--muted); cursor:pointer;
+  transition: all .18s ease;
+}
+.kh-auth-tab-active{ background: var(--ink); color:#fff; }
 
-/* ---------------- একাধিক সাইন-ইন প্রোভাইডার বাটন ---------------- */
+.kh-auth-input{
+  width:100%; padding: .8rem 1rem; border-radius: 12px; border: 1px solid var(--line);
+  font-family: var(--font-body); font-size: .95rem; background:#fff; color: var(--charcoal);
+}
+.kh-auth-input:focus{ outline:none; border-color: var(--teal); }
+.kh-pass-wrap{ position:relative; display:flex; align-items:center; }
+.kh-pass-wrap .kh-auth-input{ padding-right: 2.6rem; }
+.kh-pass-toggle{
+  position:absolute; right: .6rem; border:none; background:transparent; cursor:pointer;
+  font-size: 1rem; line-height:1; padding: .3rem;
+}
+.kh-forgot-link{
+  align-self:flex-end; border:none; background:transparent; color: var(--teal); font-weight:600;
+  font-size: .85rem; cursor:pointer; padding:0; margin-top:-.4rem;
+}
+.kh-auth-divider{
+  display:flex; align-items:center; gap: .8rem; color: var(--muted); font-size:.8rem; margin: .2rem 0;
+}
+.kh-auth-divider::before, .kh-auth-divider::after{ content:""; flex:1; height:1px; background: var(--line); }
+
 .kh-provider-btn{
-  display:flex; align-items:center; justify-content:center; gap:.6rem;
-  border:none; cursor:pointer; width:100%; margin-bottom:.7rem;
+  display:flex; align-items:center; justify-content:center; gap:.6rem; width:100%;
+  border:none; cursor:pointer; font-family: var(--font-body); font-weight:700; font-size:.92rem;
 }
-.kh-provider-icon{ width:20px; height:20px; display:inline-flex; align-items:center; justify-content:center; }
-.kh-fb-icon{
-  background:#fff; color:#1877F2; border-radius:50%; font-weight:900; font-family:serif; font-size:.95rem;
-}
+.kh-provider-icon{ width:18px; height:18px; display:inline-flex; align-items:center; justify-content:center; }
+.kh-fb-icon{ font-family: serif; font-weight:900; }
 
-.kh-phone-form{ margin-top:.4rem; text-align:left; }
-.kh-phone-input{
-  width:100%; padding:.7rem .9rem; border-radius:10px; border:1px solid var(--line);
-  font-family: var(--font-body); font-size:.95rem; margin-bottom:.6rem; box-sizing:border-box;
+.kh-phone-form{ display:flex; flex-direction:column; gap:.6rem; }
+.kh-phone-input, .kh-code-row input{
+  width:100%; padding: .75rem 1rem; border-radius: 12px; border: 1px solid var(--line);
+  font-family: var(--font-body); font-size: .95rem;
 }
-.kh-code-row{ display:flex; flex-direction:column; gap:.5rem; margin-top:.5rem; }
+.kh-code-row{ display:flex; gap:.6rem; }
+.kh-code-row input{ flex:1; }
+
+.kh-auth-error{
+  background: rgba(255,107,107,.12); color:#C0392B; border-radius: 10px; padding:.7rem .9rem;
+  font-size:.85rem; text-align:center;
+}
+.kh-auth-switch{ text-align:center; font-size:.88rem; color: var(--muted); margin: 0; }
+.kh-link-btn{ border:none; background:transparent; color: var(--teal); font-weight:700; cursor:pointer; padding:0; font-size: inherit; }
+
+.kh-user-bar{
+  display:flex; align-items:center; justify-content:flex-end; gap: .8rem;
+  max-width: 900px; margin: 0 auto; padding: 1rem 1.4rem 0;
+}
+.kh-user-email{ color: var(--muted); font-size:.85rem; margin-right:auto; }
+
+
+  

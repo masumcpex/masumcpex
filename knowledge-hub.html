@@ -31,8 +31,40 @@
 <div id="khAuthGate" class="kh-auth-gate">
   <div class="kh-auth-box">
     <div class="kh-auth-icon">🔒</div>
-    <h2>এটি একটি ব্যক্তিগত হাজিরা খাতা</h2>
-    <p>নিজের হাজিরা দেখতে ও লিখতে সাইন-ইন করুন। প্রতিটি অ্যাকাউন্ট শুধু নিজের ডেটাই দেখতে পাবে।</p>
+
+    <!-- নতুন — Welcome Back / Create Account টগল -->
+    <div class="kh-auth-tabs">
+      <button type="button" id="khTabLogin" class="kh-auth-tab kh-auth-tab-active">Welcome Back</button>
+      <button type="button" id="khTabSignup" class="kh-auth-tab">Create Account</button>
+    </div>
+    <p id="khAuthSubtitle">নিজের হাজিরা দেখতে ও লিখতে সাইন-ইন করুন। প্রতিটি অ্যাকাউন্ট শুধু নিজের ডেটাই দেখতে পাবে।</p>
+
+    <!-- নতুন — ইমেইল/পাসওয়ার্ড ফর্ম -->
+    <div class="kh-field">
+      <label for="khEmailInput">ইমেইল</label>
+      <input type="email" id="khEmailInput" class="kh-auth-input" placeholder="আপনার ইমেইল লিখুন" autocomplete="email">
+    </div>
+    <div class="kh-field">
+      <label for="khPasswordInput">পাসওয়ার্ড</label>
+      <div class="kh-pass-wrap">
+        <input type="password" id="khPasswordInput" class="kh-auth-input" placeholder="আপনার পাসওয়ার্ড লিখুন" autocomplete="current-password">
+        <button type="button" class="kh-pass-toggle" data-target="khPasswordInput" aria-label="পাসওয়ার্ড দেখান">👁️</button>
+      </div>
+    </div>
+    <div class="kh-field" id="khConfirmPasswordRow" style="display:none;">
+      <label for="khConfirmPasswordInput">পাসওয়ার্ড নিশ্চিত করুন</label>
+      <div class="kh-pass-wrap">
+        <input type="password" id="khConfirmPasswordInput" class="kh-auth-input" placeholder="আবার পাসওয়ার্ড লিখুন" autocomplete="new-password">
+        <button type="button" class="kh-pass-toggle" data-target="khConfirmPasswordInput" aria-label="পাসওয়ার্ড দেখান">👁️</button>
+      </div>
+    </div>
+
+    <button type="button" id="khForgotPasswordBtn" class="kh-forgot-link">পাসওয়ার্ড ভুলে গেছেন?</button>
+
+    <button type="button" id="khEmailSubmitBtn" class="btn3d btn-teal kh-provider-btn">লগ ইন</button>
+
+    <div class="kh-auth-divider"><span>অথবা</span></div>
+    <!-- নতুন অংশ শেষ -->
 
     <button id="googleSignInBtn" class="btn3d btn-sky kh-provider-btn">
       <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="" class="kh-provider-icon">
@@ -63,6 +95,12 @@
     <div id="khRecaptchaContainer"></div>
 
     <p class="kh-auth-error" id="khAuthError" style="display:none;"></p>
+
+    <!-- নতুন — নিচে সুইচ লিংক -->
+    <p class="kh-auth-switch">
+      <span id="khSwitchToSignupWrap">অ্যাকাউন্ট নেই? <button type="button" id="khSwitchToSignup" class="kh-link-btn">সাইন আপ করুন</button></span>
+      <span id="khSwitchToLoginWrap" style="display:none;">আগে থেকেই অ্যাকাউন্ট আছে? <button type="button" id="khSwitchToLogin" class="kh-link-btn">লগ ইন করুন</button></span>
+    </p>
   </div>
 </div>
 

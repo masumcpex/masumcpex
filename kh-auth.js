@@ -10,7 +10,8 @@ import {
   auth, db, GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
   signInWithPopup, signInWithRedirect, getRedirectResult,
   signInWithPhoneNumber, signOut, onAuthStateChanged,
-  collection, getDocs, writeBatch
+  collection, getDocs, writeBatch,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
 } from "./firebase.js";
 import { initKhApp } from "./khApp.js";
 
@@ -178,5 +179,135 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.textContent = "🗂️ পুরনো ডেটা নিজের করে নিন";
     }
   }
+
+});
+
+/* ==========================================================================
+   নতুন — Welcome Back / Create Account টগল + ইমেইল-পাসওয়ার্ড লগইন
+   এটা সম্পূর্ণ আলাদা DOMContentLoaded ব্লক, উপরের Google/Facebook/Phone
+   কোড এক লাইনও ছোঁয়া হয়নি — সেগুলো আগের মতোই কাজ করবে।
+   ========================================================================== */
+document.addEventListener("DOMContentLoaded", () => {
+
+  const authError = document.getElementById("khAuthError");
+
+  const tabLogin  = document.getElementById("khTabLogin");
+  const tabSignup = document.getElementById("khTabSignup");
+  const subtitle  = document.getElementById("khAuthSubtitle");
+  const confirmRow = document.getElementById("khConfirmPasswordRow");
+  const forgotBtn = document.getElementById("khForgotPasswordBtn");
+  const submitBtn = document.getElementById("khEmailSubmitBtn");
+
+  const emailInput    = document.getElementById("khEmailInput");
+  const passwordInput = document.getElementById("khPasswordInput");
+  const confirmInput  = document.getElementById("khConfirmPasswordInput");
+
+  const switchToSignupWrap = document.getElementById("khSwitchToSignupWrap");
+  const switchToLoginWrap  = document.getElementById("khSwitchToLoginWrap");
+  const switchToSignupBtn  = document.getElementById("khSwitchToSignup");
+  const switchToLoginBtn   = document.getElementById("khSwitchToLogin");
+
+  if(!tabLogin || !tabSignup || !submitBtn) return; // এই এলিমেন্টগুলো না থাকলে কিছু করার নেই
+
+  let mode = "login"; // "login" | "signup"
+
+  function showAuthError(msg){
+    if(!authError) return;
+    authError.textContent = msg;
+    authError.style.display = "block";
+  }
+  function clearAuthError(){
+    if(!authError) return;
+    authError.style.display = "none";
+  }
+
+  function setMode(newMode){
+    mode = newMode;
+    const isLogin = mode === "login";
+
+    tabLogin.classList.toggle("kh-auth-tab-active", isLogin);
+    tabSignup.classList.toggle("kh-auth-tab-active", !isLogin);
+
+    confirmRow.style.display = isLogin ? "none" : "flex";
+    forgotBtn.style.display  = isLogin ? "inline-block" : "none";
+    submitBtn.textContent    = isLogin ? "লগ ইন" : "অ্যাকাউন্ট তৈরি করুন";
+    subtitle.textContent     = isLogin
+      ? "নিজের হাজিরা দেখতে ও লিখতে সাইন-ইন করুন। প্রতিটি অ্যাকাউন্ট শুধু নিজের ডেটাই দেখতে পাবে।"
+      : "নতুন অ্যাকাউন্ট তৈরি করে নিজের হাজিরা খাতা শুরু করুন।";
+
+    switchToSignupWrap.style.display = isLogin ? "inline" : "none";
+    switchToLoginWrap.style.display  = isLogin ? "none" : "inline";
+
+    clearAuthError();
+  }
+
+  tabLogin.addEventListener("click", () => setMode("login"));
+  tabSignup.addEventListener("click", () => setMode("signup"));
+  switchToSignupBtn?.addEventListener("click", () => setMode("signup"));
+  switchToLoginBtn?.addEventListener("click", () => setMode("login"));
+
+  /* পাসওয়ার্ড চোখ আইকন — দেখান/লুকান */
+  document.querySelectorAll(".kh-pass-toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      const input = document.getElementById(targetId);
+      if(!input) return;
+      const isHidden = input.type === "password";
+      input.type = isHidden ? "text" : "password";
+      btn.textContent = isHidden ? "🙈" : "👁️";
+    });
+  });
+
+  /* লগ ইন / অ্যাকাউন্ট তৈরি */
+  submitBtn.addEventListener("click", async () => {
+    clearAuthError();
+    const email = (emailInput.value || "").trim();
+    const password = passwordInput.value || "";
+
+    if(!email || !password){
+      showAuthError("ইমেইল ও পাসওয়ার্ড দুটোই দিন।");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    try{
+      if(mode === "login"){
+        await signInWithEmailAndPassword(auth, email, password);
+      }else{
+        const confirmPass = confirmInput.value || "";
+        if(password.length < 6){
+          showAuthError("পাসওয়ার্ড কমপক্ষে ৬ ক্যারেক্টার হতে হবে।");
+          return;
+        }
+        if(password !== confirmPass){
+          showAuthError("দুটো পাসওয়ার্ড মিলছে না।");
+          return;
+        }
+        await createUserWithEmailAndPassword(auth, email, password);
+      }
+    }catch(err){
+      console.error(err);
+      showAuthError("লগইন করা যায়নি: " + (err.code || err.message || "অজানা সমস্যা"));
+    }finally{
+      submitBtn.disabled = false;
+    }
+  });
+
+  /* পাসওয়ার্ড ভুলে গেছেন */
+  forgotBtn.addEventListener("click", async () => {
+    clearAuthError();
+    const email = (emailInput.value || "").trim();
+    if(!email){
+      showAuthError("আগে উপরে আপনার ইমেইলটা লিখুন, তারপর 'পাসওয়ার্ড ভুলে গেছেন?' চাপুন।");
+      return;
+    }
+    try{
+      await sendPasswordResetEmail(auth, email);
+      showAuthError("পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে। ইনবক্স (ও স্প্যাম ফোল্ডার) চেক করুন।");
+    }catch(err){
+      console.error(err);
+      showAuthError("রিসেট লিংক পাঠানো যায়নি: " + (err.code || err.message || "অজানা সমস্যা"));
+    }
+  });
 
 });

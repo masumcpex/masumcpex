@@ -30,7 +30,10 @@ import {
   getRedirectResult,
   signInWithPhoneNumber,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
@@ -55,5 +58,6 @@ export {
   serverTimestamp, writeBatch,
   GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
   signInWithPopup, signInWithRedirect, getRedirectResult,
-  signInWithPhoneNumber, signOut, onAuthStateChanged
+  signInWithPhoneNumber, signOut, onAuthStateChanged,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail
 };
