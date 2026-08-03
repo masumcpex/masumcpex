@@ -39,7 +39,7 @@ import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10
 
 const firebaseConfig = {
   apiKey: "AIzaSyDp8J-8XI-wGtn3MYNjauEyDHolt7WhnCY",
-  authDomain: "masumcpex.com",
+  authDomain: "masumcpex-f65cf.firebaseapp.com",
   projectId: "masumcpex-f65cf",
   storageBucket: "masumcpex-f65cf.firebasestorage.app",
   messagingSenderId: "535080144365",
