@@ -264,7 +264,7 @@ const SITE_DATA = {
       content: ""
     }
   ],
-  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা", "Leadership"],
+  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা", "Leadership", "ব্যবসা ও জীবন"],
 
   articles: [
     {
@@ -392,6 +392,17 @@ const SITE_DATA = {
       image: "",
       excerpt: "বিশ্বজুড়ে মুসলিম সমাজের শিক্ষা, পেশা ও মানসিকতার একটি বিশ্লেষণাত্মক পর্যালোচনা — প্রবাসজীবন, জ্ঞানচর্চা এবং বাংলাদেশের অর্থনৈতিক বাস্তবতার আলোকে।",
       url: "muslim-somaj-atmoupolobdhi.html",
+      content: ""
+    },
+    {
+      id: "a12",
+      title: "বিশ্বাস, মূল্য ও ব্যক্তিগত উন্নয়নের ১৬টি বাস্তব শিক্ষা",
+      category: "ব্যবসা ও জীবন",
+      date: "২০২৬-০৭-৩১",
+      readingTime: "১১ মিনিট",
+      image: "",
+      excerpt: "শান্তি নিজের থেকে শুরু হয়, বিক্রির আগে বিক্রি হয় বিশ্বাস — ব্যবসা, ব্র্যান্ডিং আর জীবনের কিছু বাস্তব উপলব্ধি।",
+      url: "business-life-lessons.html",
       content: ""
     }
   ],
