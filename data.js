@@ -264,7 +264,7 @@ const SITE_DATA = {
       content: ""
     }
   ],
-  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা", "Leadership", "ব্যবসা ও জীবন"],
+  articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা", "Leadership", "ব্যবসা ও জীবন", "ইসলামিক শিক্ষা"],
 
   articles: [
     {
@@ -403,6 +403,17 @@ const SITE_DATA = {
       image: "",
       excerpt: "শান্তি নিজের থেকে শুরু হয়, বিক্রির আগে বিক্রি হয় বিশ্বাস — ব্যবসা, ব্র্যান্ডিং আর জীবনের কিছু বাস্তব উপলব্ধি।",
       url: "business-life-lessons.html",
+      content: ""
+    },
+    {
+      id: "a13",
+      title: "পবিত্রতা রক্ষা ও বিবাহ: চরিত্র সংরক্ষণে ইসলামের নির্দেশনা",
+      category: "ইসলামিক শিক্ষা",
+      date: "২০২৬-০৮-০২",
+      readingTime: "১০ মিনিট",
+      image: "",
+      excerpt: "আত্মসংযম, বিবাহের গুরুত্ব ও শালীনতা নিয়ে কুরআন ও সহিহ হাদিসের আলোকে একটি প্রামাণ্য আলোচনা।",
+      url: "purity-marriage-islam.html",
       content: ""
     }
   ],
