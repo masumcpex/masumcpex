@@ -17,9 +17,8 @@
   <div class="kh-header-inner">
     <a href="index.html" class="brand kh-brand">
       <img class="kh-profile-photo" src="https://masumcpex.github.io/masumcpex/1000004949.jpg" alt="Masum Billah">
-      <span class="brand-mark kh-logo-mark">ম</span>
+      <img class="kh-logo-img" src="masum-logo.webp" alt="Masum">
       <span class="brand-name kh-brand-name">
-        <span class="kh-brand-main">মাসুম</span>
         <span class="kh-brand-sub">Knowledge Hub</span>
       </span>
     </a>
@@ -31,41 +30,39 @@
 <div id="khAuthGate" class="kh-auth-gate">
   <div class="kh-auth-box">
     <div class="kh-auth-icon">🔒</div>
+    <h2 id="khAuthTitle">Welcome Back</h2>
+    <p id="khAuthSubtitle">Sign in to continue to Knowledge Hub</p>
 
-    <!-- নতুন — Welcome Back / Create Account টগল -->
-    <div class="kh-auth-tabs">
-      <button type="button" id="khTabLogin" class="kh-auth-tab kh-auth-tab-active">Welcome Back</button>
-      <button type="button" id="khTabSignup" class="kh-auth-tab">Create Account</button>
-    </div>
-    <p id="khAuthSubtitle">নিজের হাজিরা দেখতে ও লিখতে সাইন-ইন করুন। প্রতিটি অ্যাকাউন্ট শুধু নিজের ডেটাই দেখতে পাবে।</p>
+    <!-- ---------------- Email/Password ফর্ম (নতুন) ---------------- -->
+    <form id="khEmailForm" class="kh-email-form">
+      <label class="kh-email-label">Email</label>
+      <input type="email" id="khEmailInput" class="kh-email-input" placeholder="Enter your email" required autocomplete="email">
 
-    <!-- নতুন — ইমেইল/পাসওয়ার্ড ফর্ম -->
-    <div class="kh-field">
-      <label for="khEmailInput">ইমেইল</label>
-      <input type="email" id="khEmailInput" class="kh-auth-input" placeholder="আপনার ইমেইল লিখুন" autocomplete="email">
-    </div>
-    <div class="kh-field">
-      <label for="khPasswordInput">পাসওয়ার্ড</label>
-      <div class="kh-pass-wrap">
-        <input type="password" id="khPasswordInput" class="kh-auth-input" placeholder="আপনার পাসওয়ার্ড লিখুন" autocomplete="current-password">
-        <button type="button" class="kh-pass-toggle" data-target="khPasswordInput" aria-label="পাসওয়ার্ড দেখান">👁️</button>
+      <label class="kh-email-label">Password</label>
+      <div class="kh-password-wrap">
+        <input type="password" id="khPasswordInput" class="kh-email-input" placeholder="Enter your password" required autocomplete="current-password" minlength="6">
+        <button type="button" id="khTogglePassword" class="kh-eye-btn" title="দেখুন/লুকান">👁</button>
       </div>
-    </div>
-    <div class="kh-field" id="khConfirmPasswordRow" style="display:none;">
-      <label for="khConfirmPasswordInput">পাসওয়ার্ড নিশ্চিত করুন</label>
-      <div class="kh-pass-wrap">
-        <input type="password" id="khConfirmPasswordInput" class="kh-auth-input" placeholder="আবার পাসওয়ার্ড লিখুন" autocomplete="new-password">
-        <button type="button" class="kh-pass-toggle" data-target="khConfirmPasswordInput" aria-label="পাসওয়ার্ড দেখান">👁️</button>
+
+      <!-- শুধু "Create Account" মোডে দেখা যাবে -->
+      <div id="khConfirmPasswordWrap" style="display:none;">
+        <label class="kh-email-label">Confirm Password</label>
+        <input type="password" id="khConfirmPasswordInput" class="kh-email-input" placeholder="Enter your password" autocomplete="new-password" minlength="6">
       </div>
-    </div>
 
-    <button type="button" id="khForgotPasswordBtn" class="kh-forgot-link">পাসওয়ার্ড ভুলে গেছেন?</button>
+      <button type="button" id="khForgotPasswordBtn" class="kh-forgot-link">Forgot Password?</button>
 
-    <button type="button" id="khEmailSubmitBtn" class="btn3d btn-teal kh-provider-btn">লগ ইন</button>
+      <button type="submit" id="khEmailSubmitBtn" class="btn3d btn-sky kh-provider-btn">Log In</button>
+    </form>
 
-    <div class="kh-auth-divider"><span>অথবা</span></div>
-    <!-- নতুন অংশ শেষ -->
+    <p class="kh-auth-toggle">
+      <span id="khToggleText">Don't have an account?</span>
+      <button type="button" id="khToggleModeBtn" class="kh-toggle-link">Sign up</button>
+    </p>
 
+    <div class="kh-or-divider"><span>Or</span></div>
+
+    <!-- ---------------- আগের প্রোভাইডার বাটন (অপরিবর্তিত) ---------------- -->
     <button id="googleSignInBtn" class="btn3d btn-sky kh-provider-btn">
       <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="" class="kh-provider-icon">
       Google দিয়ে সাইন-ইন করুন
@@ -95,12 +92,6 @@
     <div id="khRecaptchaContainer"></div>
 
     <p class="kh-auth-error" id="khAuthError" style="display:none;"></p>
-
-    <!-- নতুন — নিচে সুইচ লিংক -->
-    <p class="kh-auth-switch">
-      <span id="khSwitchToSignupWrap">অ্যাকাউন্ট নেই? <button type="button" id="khSwitchToSignup" class="kh-link-btn">সাইন আপ করুন</button></span>
-      <span id="khSwitchToLoginWrap" style="display:none;">আগে থেকেই অ্যাকাউন্ট আছে? <button type="button" id="khSwitchToLogin" class="kh-link-btn">লগ ইন করুন</button></span>
-    </p>
   </div>
 </div>
 
@@ -227,10 +218,40 @@
   }
   .kh-view-link:hover, .kh-copy-link:hover{ background: rgba(255,255,255,0.45); }
   .kh-remove-member:hover{ background: rgba(179,58,58,0.4); }
+
+  /* নতুন — Email/Password লগইন ফর্ম (Welcome Back / Create Account) */
+  .kh-email-form{ text-align:left; margin-top:14px; }
+  .kh-email-label{ display:block; font-size:.82rem; font-weight:700; margin:12px 0 6px; }
+  .kh-email-input{
+    width:100%; padding:13px 16px; border-radius:24px; border:1.5px solid rgba(0,0,0,0.12);
+    font-size:.95rem; font-family:'Hind Siliguri',sans-serif; background:#fff;
+  }
+  .kh-email-input:focus{ outline:none; border-color:#4F8CFF; }
+  .kh-password-wrap{ position:relative; }
+  .kh-eye-btn{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    background:none; border:none; font-size:1rem; cursor:pointer; opacity:.6;
+  }
+  .kh-forgot-link{
+    display:block; margin:10px 0 4px; background:none; border:none; color:#4F8CFF;
+    font-size:.82rem; font-weight:700; cursor:pointer; text-align:right; width:100%;
+  }
+  #khEmailSubmitBtn{ width:100%; margin-top:14px; border-radius:24px; }
+  .kh-auth-toggle{ text-align:center; font-size:.85rem; margin-top:14px; }
+  .kh-toggle-link{
+    background:none; border:none; color:#4F8CFF; font-weight:800; font-size:.85rem; cursor:pointer;
+  }
+  .kh-or-divider{
+    display:flex; align-items:center; gap:12px; margin:18px 0; color:rgba(0,0,0,0.4); font-size:.82rem;
+  }
+  .kh-or-divider::before, .kh-or-divider::after{ content:""; flex:1; height:1px; background:rgba(0,0,0,0.12); }
+
+  /* নতুন — Masum লোগো ছবি (আগের "ম" স্কয়ার + বাংলা "মাসুম" টেক্সটের বদলে) */
+  .kh-logo-img{ height:34px; width:auto; display:block; }
 </style>
 
 <footer class="site-footer">
-  <p>© 2026 <b>Masum Cpex</b>. All Rights Reserved.</p>
+  <p>Knowledge Hub — (Firebase) নিরাপদে সংরক্ষিত। | ডিজাইন ও ডেভেলপমেন্ট: <strong>Masum</strong></p>
 </footer>
 
 <script type="module" src="firebase.js"></script>
