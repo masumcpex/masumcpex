@@ -34,7 +34,7 @@ const SITE_DATA = {
   books: [
     {
       id: "book1",
-      cover: "https://masumcpex.github.io/masumcpex/book1.png",
+      cover: "https://masumcpex.github.io/masumcpex/book1.webp",
       title: "যার জন্যে কাঁদি সে কাঁদার যোগ্য নয়",
       category: "অনুপ্রেরণা ও জীবন",
       description: "হৃদয়ের গল্প ও আত্মোপলব্ধির সাবলীল সমন্বয়।",
@@ -58,7 +58,7 @@ const SITE_DATA = {
     },
     {
       id: "book3",
-      cover: "https://masumcpex.github.io/masumcpex/book3.png",
+      cover: "https://masumcpex.github.io/masumcpex/book3.webp",
       title: "ইংলিশ শেখার সহজ রোডম্যাপ",
       category: "শিক্ষা ও ক্যারিয়ার",
       description: "সহজ গাইডলাইনে ইংরেজি শেখার সম্পূর্ণ পথ রেখা।",
@@ -70,7 +70,7 @@ const SITE_DATA = {
     },
     {
       id: "book4",
-      cover: "https://masumcpex.github.io/masumcpex/enhlishsmart.png",
+      cover: "https://masumcpex.github.io/masumcpex/enhlishsmart.webp",
       title: "Smart Spoken English",
       category: "ভাষা ও স্কিল",
       description: "স্মার্টলি ও অনর্গল ইংরেজি বলার প্র্যাক্টিক্যাল বই।",
@@ -94,7 +94,7 @@ const SITE_DATA = {
     },
     {
       id: "book6",
-      cover: "https://masumcpex.github.io/masumcpex/cpex.png",
+      cover: "https://masumcpex.github.io/masumcpex/cpex.webp",
       title: "চলার পথে আমার গল্প",
       category: "সিক্রেট / পার্সোনাল",
       description: "এই বইটি সবার জন্য উন্মুক্ত নয়। এটি একটি বিশেষ ব্যক্তিগত সংস্করণ।",
@@ -273,7 +273,7 @@ const SITE_DATA = {
       category: "বাংলাদেশের শিক্ষাব্যবস্থা",
       date: "২০২৬-০৭-১২",
       readingTime: "১৮ মিনিট",
-      image: "education-banner.jpg.png",
+      image: "education-banner.webp",
       excerpt: "শিক্ষা একটি দেশের উন্নয়নের ভিত্তি। ভালো ফলাফল ও জিপিএর প্রতিযোগিতার বাইরে বাস্তব জীবনের জন্য কতটা প্রস্তুত হচ্ছে শিক্ষার্থীরা—সেটিই এখন সবচেয়ে বড় আলোচনার বিষয়।",
       url: "education-system-bangladesh.html",
       content: `
@@ -482,7 +482,7 @@ const SITE_DATA = {
   /* ---------------- Contact সেকশন ---------------- */
   contact: {
     phone: "01133192963",
-    emails: ["masumcpex@gmail.com", "masumcpex@yahoo.com"],
+    emails: ["admin@masumcpex.com", "masumcpex@yahoo.com"],
     socials: [
       { name: "Facebook", url: "https://www.facebook.com/share/1HM1rZJg3a/" },
       { name: "Instagram", url: "https://www.instagram.com/masum.171" },
