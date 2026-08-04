@@ -7,7 +7,7 @@ const SITE_DATA = {
 
   /* ---------------- হিরো সেকশন ---------------- */
   hero: {
-    photo: "https://masumcpex.github.io/masumcpex/1000004949.jpg",
+    photo: "https://masumcpex.github.io/masumcpex/masum.webp",
     name: "Masum Billah",
     role: "Writer • Learner • Builder",
     tagline: "Learning never stops. Build something meaningful every day.",
