@@ -223,5 +223,69 @@
   width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
 }
 
+/* ==========================================================================
+   ফিক্স — "রিপোর্ট ডাউনলোড (CSV)" ও "এই মাস মুছুন" বাটন দুটো আগে অস্পষ্ট/সাদা
+   দেখাচ্ছিল (কোনো রঙ সেট করা ছিল না)। এখন স্পষ্ট রঙ দেওয়া হলো, এবং
+   -webkit-print-color-adjust দিয়ে নিশ্চিত করা হলো যাতে প্রিন্ট করলেও
+   এই রঙগুলো উবে না যায়, স্থায়ীভাবে থাকে।
+   ========================================================================== */
+.kh-register-actions{
+  display:flex; align-items:center; justify-content:space-between; gap:.8rem; flex-wrap:wrap;
+  margin-bottom: 1rem;
+}
+#downloadCsvBtn,
+.btn-download{
+  background:#12B5A6 !important; color:#fff !important;
+  border:2px solid #0B8479 !important;
+  box-shadow: 0 5px 0 #0B8479, 0 8px 16px rgba(0,0,0,.18) !important;
+}
+.kh-month-delete{
+  background:#FF6B6B !important; color:#fff !important;
+  border:2px solid #C0392B !important;
+  box-shadow: 0 3px 0 #C0392B, 0 5px 10px rgba(0,0,0,.15) !important;
+}
+
+html, body, .kh-register-actions, #downloadCsvBtn, .kh-month-delete, .kh-month-group{
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+}
+
+/* ==========================================================================
+   ফিক্স — "এই এন্ট্রিটি মুছে ফেলতে চান?" / ডুপ্লিকেট মোডাল (khApp.js এ
+   .kh-modal-overlay ও .kh-modal-card ক্লাস ব্যবহার হচ্ছিল, কিন্তু এতদিন
+   কোনো CSS সংজ্ঞায়িত ছিল না — তাই বক্সটা মাঝখানে ভেসে না উঠে পেজের নিচে
+   সাধারণ কনটেন্টের মতো বসে যাচ্ছিল। এখন এটাকে স্ক্রিনের ঠিক মাঝখানে
+   একটা fixed, full-screen ওভারলে হিসেবে দেখানো হবে। ========================================================================== */
+.kh-modal-overlay{
+  display: none; /* JS দিয়ে flex করে দেখানো হয় */
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(20, 15, 10, 0.55);
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  backdrop-filter: blur(2px);
+}
+.kh-modal-card{
+  width: 100%;
+  max-width: 380px;
+  background: #fffdf7;
+  border-radius: 18px;
+  padding: 1.8rem 1.5rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0,0,0,.35);
+  animation: khModalPop .16s ease-out;
+}
+@keyframes khModalPop{
+  from{ transform: scale(.92); opacity: 0; }
+  to{ transform: scale(1); opacity: 1; }
+}
+.kh-modal-icon{ font-size: 2rem; margin: 0 0 .6rem; }
+.kh-modal-text{ font-size: 1rem; font-weight: 600; color: var(--charcoal, #333); margin: 0 0 1.4rem; line-height: 1.5; }
+.kh-modal-actions{ display:flex; gap: .8rem; justify-content:center; flex-wrap: wrap; }
+.kh-modal-actions .btn3d{ flex: 1; min-width: 120px; }
+
 
   
