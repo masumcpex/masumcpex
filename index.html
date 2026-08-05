@@ -138,13 +138,103 @@
 
   <!-- ================= CONTACT ================= -->
   <section class="page" id="contact">
-    <div class="page-inner narrow center">
+    <div class="page-inner center contact-intro">
       <div class="eyebrow">যোগাযোগ</div>
       <h2 class="section-title">কানেক্ট করুন</h2>
-      <p class="section-sub">যেকোনো বিষয়ে সরাসরি ইমেইল, ফোন অথবা সোশ্যাল লিংকের মাধ্যমে যুক্ত হোন।</p>
-      <p class="contact-line" id="contactPhone"></p>
-      <p class="contact-line" id="contactEmails"></p>
-      <div class="social-row" id="socialRow"></div>
+      <p class="section-sub center-sub">কোনো প্রশ্ন, পরামর্শ বা মতামত থাকলে নিচের ফর্ম অথবা ডিরেক্ট চ্যানেলে জানাতে পারেন।</p>
+    </div>
+
+    <div class="contact-wrap">
+      <div class="contact-card" id="contactCard">
+
+        <!-- Left: contact info -->
+        <div class="contact-info">
+          <div class="contact-info-head">
+            <span class="ci-badge" aria-hidden="true">📬</span>
+            <h3>Contact Me</h3>
+            <p>Have a question, suggestion, or feedback? Feel free to reach out anytime.</p>
+          </div>
+
+          <ul class="contact-list" id="contactList">
+            <li class="contact-item" data-copy="admin@masumcpex.com">
+              <span class="ci-icon" aria-hidden="true">📧</span>
+              <span class="ci-text">
+                <span class="ci-label">Primary Email</span>
+                <a href="mailto:admin@masumcpex.com">admin@masumcpex.com</a>
+              </span>
+            </li>
+            <li class="contact-item" data-copy="contact@masumcpex.com">
+              <span class="ci-icon" aria-hidden="true">📨</span>
+              <span class="ci-text">
+                <span class="ci-label">Alternative Email</span>
+                <a href="mailto:contact@masumcpex.com">contact@masumcpex.com</a>
+              </span>
+            </li>
+            <li class="contact-item" data-copy="https://masumcpex.com">
+              <span class="ci-icon" aria-hidden="true">🌐</span>
+              <span class="ci-text">
+                <span class="ci-label">Website</span>
+                <a href="https://masumcpex.com" target="_blank" rel="noopener">masumcpex.com</a>
+              </span>
+            </li>
+            <li class="contact-item" data-copy="Malaysia">
+              <span class="ci-icon" aria-hidden="true">📍</span>
+              <span class="ci-text">
+                <span class="ci-label">Location</span>
+                <span class="ci-value">Malaysia</span>
+              </span>
+            </li>
+            <li class="contact-item" data-copy="@masum171">
+              <span class="ci-icon" aria-hidden="true">💬</span>
+              <span class="ci-text">
+                <span class="ci-label">Telegram</span>
+                <a href="https://t.me/masum171" target="_blank" rel="noopener">@masum171</a>
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Right: contact form -->
+        <div class="contact-form-side">
+          <h3 class="cf-title">Send a Message</h3>
+          <p class="cf-sub">I'll try to reply as soon as possible.</p>
+
+          <form id="contactForm" class="contact-form" novalidate>
+            <div class="form-grid">
+              <div class="field">
+                <label for="cf-name">Name</label>
+                <input type="text" id="cf-name" name="name" autocomplete="name" required>
+                <span class="field-error" id="err-name" role="alert"></span>
+              </div>
+              <div class="field">
+                <label for="cf-email">Email</label>
+                <input type="email" id="cf-email" name="email" autocomplete="email" required>
+                <span class="field-error" id="err-email" role="alert"></span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="cf-subject">Subject</label>
+              <input type="text" id="cf-subject" name="subject" required>
+              <span class="field-error" id="err-subject" role="alert"></span>
+            </div>
+
+            <div class="field">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" rows="5" required></textarea>
+              <span class="field-error" id="err-message" role="alert"></span>
+            </div>
+
+            <button type="submit" class="btn btn-send" id="cfSubmit">
+              <span class="btn-label">Send Message</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -167,5 +257,6 @@
 
 <script src="data.js"></script>
 <script src="script.js"></script>
+<script src="contact.js"></script>
 </body>
 </html>
