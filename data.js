@@ -262,6 +262,17 @@ const SITE_DATA = {
       excerpt: "একটি নীরব ভালোবাসা, কিছু অপূর্ণ অপেক্ষা, আর নিজের ভেতরে লুকিয়ে রাখা অনুভূতির গল্প।",
       url: "journal-first-love-story.html",
       content: ""
+    },
+    {
+      id: "j8",
+      title: "যদি কোনোদিন মনে পড়ে...",
+      category: "অনুভূতি",
+      date: "২০২৬-০৮-০৩",
+      readingTime: "৩ মিনিট",
+      image: "",
+      excerpt: "ভাগ করে নেওয়া কিছু মুহূর্ত, কিছু নীরব স্মৃতি — যা মাঝে মাঝে এখনো দরজায় কড়া নাড়ে।",
+      url: "memory.html",
+      content: ""
     }
   ],
   articleCategories: ["সব", "বাংলাদেশের শিক্ষাব্যবস্থা", "ইংরেজি শেখা", "AI", "Programming", "Construction", "Productivity", "স্কিল ডেভেলপমেন্ট", "জীবন ও মানসিকতা", "সাইবার নিরাপত্তা", "Leadership", "ব্যবসা ও জীবন", "ইসলামিক শিক্ষা"],

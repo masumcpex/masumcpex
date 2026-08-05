@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>যদি কোনোদিন মনে পড়ে... | মাসুম</title>
+<meta name="description" content="ভাগ করে নেওয়া কিছু মুহূর্ত, কিছু নীরব স্মৃতি নিয়ে একটি ব্যক্তিগত জার্নাল।">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@500;600;700&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="article.css">
+<style>
+  /* ---------------- এই পেজের নিজস্ব ইমেজ-হিরো (ব্যানার ছবি + ওভারলে) ---------------- */
+  .mem-hero{
+    position: relative;
+    min-height: 46vh;
+    display: flex; align-items: flex-end;
+    background-image: url("jodimonepore.webp");
+    background-size: cover;
+    background-position: center;
+  }
+  .mem-hero::before{
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(27,42,69,.35) 0%, rgba(27,42,69,.75) 100%);
+  }
+  .mem-hero-inner{
+    position: relative; z-index: 2;
+    max-width: 780px; margin: 0 auto;
+    padding: 3rem 1.4rem 2.2rem;
+    text-align: center; width: 100%;
+  }
+  .mem-tag{
+    display:inline-block; font-family: var(--font-util); font-size:.75rem;
+    letter-spacing:.1em; font-weight:700; color: var(--ink);
+    background: var(--gold); padding:.35rem .9rem; border-radius:999px;
+    margin-bottom: 1.1rem;
+  }
+  .mem-title{
+    color:#fff; font-family: var(--font-display); font-weight:700;
+    font-size: clamp(1.6rem, 4.5vw, 2.4rem); line-height:1.35; margin:0;
+    text-shadow: 0 2px 10px rgba(0,0,0,.35);
+  }
+  .mem-meta{
+    margin-top: 1rem; color: rgba(255,255,255,.85);
+    font-family: var(--font-util); font-size:.85rem;
+    display:flex; justify-content:center; gap:.5rem; flex-wrap:wrap;
+  }
+
+  /* প্রথম প্যারাগ্রাফ একটু বড় */
+  .mem-lead{ font-size: 1.18rem; color: var(--ink); line-height: 1.95; }
+
+  /* পাতলা ডিভাইডার */
+  .mem-divider{
+    max-width: 200px; margin: 2.6rem auto; border: none;
+    border-top: 1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html#home" class="brand">
+      <span class="brand-mark">
+        <img src="logo.png" alt="Logo" style="width:100%;height:100%;object-fit:contain;display:block;">
+      </span>
+      <span class="brand-name">মাসুম</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html#home"><span class="ic">🏠</span>Home</a>
+      <a href="knowledge-hub.html"><span class="ic">🗂️</span>Knowledge Hub</a>
+      <a href="index.html#about"><span class="ic">👤</span>About</a>
+      <a href="index.html#library"><span class="ic">📚</span>Library</a>
+      <a href="index.html#journal" class="active"><span class="ic">📖</span>Journal</a>
+      <a href="index.html#projects"><span class="ic">💻</span>Projects</a>
+      <a href="index.html#articles"><span class="ic">📝</span>Articles</a>
+      <a href="index.html#mystery"><span class="ic">🎮</span>Mystery</a>
+      <a href="index.html#contact"><span class="ic">📩</span>Contact</a>
+    </nav>
+    <div class="header-tools">
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="মেনু">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= হিরো (কভার ছবি + ওভারলে) ================= -->
+<section class="mem-hero">
+  <div class="mem-hero-inner">
+    <span class="mem-tag">📖 Journal • অনুভূতি</span>
+    <h1 class="mem-title">যদি কোনোদিন মনে পড়ে...</h1>
+    <div class="mem-meta">
+      <span>✍️ মাসুম</span>
+      <span>•</span>
+      <span>৩ আগস্ট, ২০২৬</span>
+      <span>•</span>
+      <span>⏱ ৩ মিনিট পঠন</span>
+    </div>
+  </div>
+</section>
+
+<main class="article-body">
+
+  <div class="author-card">
+    <img class="author-avatar" src="masum.webp" alt="Masum">
+    <div>
+      <div class="author-name">মাসুম</div>
+      <div class="author-role">Learning Something New Every Day</div>
+    </div>
+  </div>
+
+  <p class="mem-lead">আমি চাই, কোনো একদিন হঠাৎ করেই তোমার মনে পড়ুক আমাকে।</p>
+
+  <p>মনে পড়ুক আমাদের ভাগ করে নেওয়া কিছু মুহূর্ত, কিছু পথ, কিছু নীরব স্মৃতি। যে জায়গাগুলো একসময় আমাদের ছিল।</p>
+
+  <div class="callout callout-quote">
+    <p>না, আমি তোমাকে ফিরে আসতে বলছি না। আমি জানি, তুমি আর ফিরবে না।</p>
+  </div>
+
+  <p>না, আমি তোমাকে অভিশাপও দিচ্ছি না। শুধু চাই, কোনো এক মুহূর্তে তোমার মনে পড়ুক — কীভাবে তুমি একটি মানুষকে ভেঙে দিয়েছিলে, ধীরে ধীরে অন্ধকারের দিকে ঠেলে দিয়েছিলে।</p>
+
+  <p>তবুও আমি তোমাকে দোষ দিচ্ছি না।</p>
+
+  <div class="callout callout-quote">
+    <p>শুধু চাই, তোমার মনে পড়ুক সেই মানুষটার কথা — যে অন্ধের মতো তোমাকে ভালোবেসেছিল। আর বিনিময়ে পেয়েছিল দীর্ঘ, নিকষ কালো রাতের নিঃসঙ্গতা।</p>
+  </div>
+
+  <p>এত কিছুর পরেও... হয়তো আজও তোমার জন্য আমার কোনো অভিযোগ নেই। আছে শুধু কিছু নীরব স্মৃতি, যা মাঝে মাঝে এখনো দরজায় কড়া নাড়ে।</p>
+
+  <hr class="mem-divider">
+
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 Masum Cpex. All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
