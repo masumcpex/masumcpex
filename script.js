@@ -140,12 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
   mBtn.textContent = mystery.buttonText;
   mBtn.href = mystery.buttonUrl;
 
-  /* ---------------- CONTACT ---------------- */
-  const contact = SITE_DATA.contact;
-  document.getElementById("contactPhone").textContent = "📞 মোবাইল নম্বর: " + contact.phone;
-  document.getElementById("contactEmails").textContent = "📧 " + contact.emails.join(" | ");
-  document.getElementById("socialRow").innerHTML = contact.socials.map(s =>
-    `<a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>`).join("");
+  /* ---------------- CONTACT ----------------
+     নতুন কনট্যাক্ট পেজ এখন static markup (index.html-এ সরাসরি লেখা) —
+     ফর্ম-ভ্যালিডেশন ও কপি-টু-ক্লিপবোর্ড আলাদা contact.js ফাইলে হ্যান্ডেল হয়।
+     তাই এখানে আর SITE_DATA.contact থেকে DOM বসানোর দরকার নেই। */
 
   /* ---------------- HOME HIGHLIGHTS ---------------- */
   function highlightCard(tag, title, desc, linkText, onClickHash){
