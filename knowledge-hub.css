@@ -286,24 +286,3 @@ html, body, .kh-register-actions, #downloadCsvBtn, .kh-month-delete, .kh-month-g
 .kh-modal-text{ font-size: 1rem; font-weight: 600; color: var(--charcoal, #333); margin: 0 0 1.4rem; line-height: 1.5; }
 .kh-modal-actions{ display:flex; gap: .8rem; justify-content:center; flex-wrap: wrap; }
 .kh-modal-actions .btn3d{ flex: 1; min-width: 120px; }
-/* লোগো ও প্রোফাইল ফটো পারফেক্ট সাইজ */
-.kh-logo-img {
-  height: 38px !important;
-  width: auto;
-  margin: 0 6px;
-}
-
-.kh-profile-photo {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.kh-brand-sub {
-  font-size: 1.05rem !important;
-  font-weight: 600;
-}
-
-
-  
