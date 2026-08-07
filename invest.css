@@ -109,9 +109,14 @@ a:hover{text-decoration:underline;}
 }
 .tb-btn:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px);}
 .tb-back{
-  display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:var(--muted);
+  display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:var(--muted);
 }
 .tb-back:hover{color:var(--accent);text-decoration:none;}
+.tb-back .tb-arrow{font-size:14px;}
+.tb-logo{
+  width:26px;height:26px;border-radius:50%;object-fit:cover;
+  border:1px solid var(--border);flex-shrink:0;
+}
 
 /* ---------------- Layout shell ---------------- */
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px;}
