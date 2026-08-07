@@ -1,4 +1,4 @@
-# 🌟 Hi there, I'm Masum! 🚀
+#  Hi there, I'm Masum! 
 
 Welcome to my GitHub space! I am a passionate **Frontend Web Developer** and tech enthusiast who loves bringing creative ideas to life through clean, responsive, and user-friendly code. 
 
@@ -27,4 +27,4 @@ Welcome to my GitHub space! I am a passionate **Frontend Web Developer** and tec
 
 ---
 
-⚡ *Fun fact: I believe good code should not only work perfectly but also look like a piece of art.*
+ *Fun fact: I believe good code should not only work perfectly but also look like a piece of art.*
