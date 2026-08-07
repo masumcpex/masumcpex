@@ -5,8 +5,8 @@
    ========================================================================== */
 
 :root{
-  --paper:      #F3ECDA;
-  --paper-2:    #ECE2C9;
+  --paper:      #FAFAFA;
+  --paper-2:    #F5F5F5;
   --ink:        #1B2A45;
   --ink-2:      #23375B;
   --charcoal:   #26221D;
@@ -14,9 +14,9 @@
   --teal:       #0E6E5C;
   --teal-dark:  #0A5347;
   --gold:       #C79A3B;
-  --line:       rgba(27,42,69,0.16);
-  --card-bg:    #FBF7EC;
-  --shadow:     0 10px 30px rgba(27,42,69,0.10);
+  --line:       #E5E7EB;
+  --card-bg:    #FFFFFF;
+  --shadow:     0 4px 20px rgba(16,24,40,0.06);
 
   --font-display: 'Noto Serif Bengali', serif;
   --font-body:    'Hind Siliguri', sans-serif;
@@ -422,7 +422,7 @@ img{ max-width:100%; display:block; }
 .modal-overlay.open{ display:flex; }
 .modal-box{
   background: var(--paper); max-width: 640px; width:100%; max-height: 84vh; overflow:auto;
-  border-radius: 18px; padding: 2.2rem; position:relative; box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  border-radius: 18px; padding: 2.2rem; position:relative; box-shadow: 0 20px 60px rgba(16,24,40,.16);
 }
 .modal-close{ position:absolute; top: 1rem; right:1rem; color: var(--ink); font-size:1.2rem; }
 .modal-eyebrow{ font-family: var(--font-util); font-size:.7rem; letter-spacing:.12em; color: var(--gold); font-weight:700; text-transform:uppercase; }
