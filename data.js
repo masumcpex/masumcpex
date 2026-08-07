@@ -279,6 +279,17 @@ const SITE_DATA = {
 
   articles: [
     {
+      id: "a14",
+      title: "BlackRock ও Vanguard: আধুনিক বিশ্ব অর্থনীতির অদৃশ্য শক্তি",
+      category: "ব্যবসা ও জীবন",
+      date: "২০২৬-০৮-০৭",
+      readingTime: "১২ মিনিট",
+      image: "https://masumcpex.github.io/masumcpex/masum.webp",
+      excerpt: "২২ ট্রিলিয়ন ডলারের সম্পদ পরিচালনা করা দুটি প্রতিষ্ঠান আসলে কী — আর কী নয়। AUM, ETF, Aladdin ও কর্পোরেট ভোটিং পাওয়ার নিয়ে তথ্যভিত্তিক বিশ্লেষণ।",
+      url: "invest.html",
+      content: ""
+    },
+    {
       id: "a1",
       title: "বাংলাদেশের শিক্ষাব্যবস্থা: মূল সমস্যা কোথায়? সমাধান কী হতে পারে?",
       category: "বাংলাদেশের শিক্ষাব্যবস্থা",
