@@ -5,8 +5,8 @@
    ========================================================================== */
 
 :root{
-  --paper:      #FAFAFA;
-  --paper-2:    #F5F5F5;
+  --paper:      #F8FAFC;
+  --paper-2:    #F1F5F9;
   --ink:        #1B2A45;
   --ink-2:      #23375B;
   --charcoal:   #26221D;
@@ -42,7 +42,7 @@ body::before{
   top:0; left: 14px; bottom:0;
   width: 1px;
   background-image: repeating-linear-gradient(to bottom, var(--muted) 0 6px, transparent 6px 14px);
-  opacity: .35;
+  opacity: .18;
   z-index: 1;
   pointer-events: none;
 }
