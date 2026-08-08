@@ -28,26 +28,48 @@
 
 <!-- ================= লগইন গেট (লগইন ছাড়া কিছুই দেখা যাবে না) ================= -->
 <div id="khAuthGate" class="kh-auth-gate">
-  <div class="kh-auth-box">
+  <div class="kh-auth-box" id="khLoginSignupBox">
     <div class="kh-auth-icon">🔒</div>
     <h2 id="khAuthTitle">Welcome Back</h2>
     <p id="khAuthSubtitle">Sign in to continue to Knowledge Hub</p>
 
-    <!-- ---------------- Email/Password ফর্ম (নতুন) ---------------- -->
-    <form id="khEmailForm" class="kh-email-form">
-      <label class="kh-email-label">Email</label>
-      <input type="email" id="khEmailInput" class="kh-email-input" placeholder="Enter your email" required autocomplete="email">
-
-      <label class="kh-email-label">Password</label>
-      <div class="kh-password-wrap">
-        <input type="password" id="khPasswordInput" class="kh-email-input" placeholder="Enter your password" required autocomplete="current-password" minlength="6">
-        <button type="button" id="khTogglePassword" class="kh-eye-btn" title="দেখুন/লুকান">👁</button>
+    <!-- ---------------- Email/Password ফর্ম ---------------- -->
+    <form id="khEmailForm" class="kh-email-form" novalidate>
+      <!-- শুধু "Create Account" মোডে দেখা যাবে -->
+      <div id="khFullNameWrap" style="display:none;">
+        <label class="kh-email-label" for="khFullNameInput">Full Name</label>
+        <input type="text" id="khFullNameInput" class="kh-email-input" placeholder="Enter your full name" autocomplete="name" aria-describedby="khFullNameError">
+        <span class="kh-field-error" id="khFullNameError" aria-live="polite"></span>
       </div>
+
+      <label class="kh-email-label" for="khEmailInput">Email</label>
+      <input type="email" id="khEmailInput" class="kh-email-input" placeholder="Enter your email" required autocomplete="email" aria-describedby="khEmailError">
+      <span class="kh-field-error" id="khEmailError" aria-live="polite"></span>
+
+      <label class="kh-email-label" for="khPasswordInput">Password</label>
+      <div class="kh-password-wrap">
+        <input type="password" id="khPasswordInput" class="kh-email-input" placeholder="Enter your password" required autocomplete="current-password" minlength="6" aria-describedby="khPasswordError">
+        <button type="button" id="khTogglePassword" class="kh-eye-btn" aria-label="Show password" aria-pressed="false">👁</button>
+      </div>
+      <span class="kh-field-error" id="khPasswordError" aria-live="polite"></span>
 
       <!-- শুধু "Create Account" মোডে দেখা যাবে -->
       <div id="khConfirmPasswordWrap" style="display:none;">
-        <label class="kh-email-label">Confirm Password</label>
-        <input type="password" id="khConfirmPasswordInput" class="kh-email-input" placeholder="Enter your password" autocomplete="new-password" minlength="6">
+        <label class="kh-email-label" for="khConfirmPasswordInput">Confirm Password</label>
+        <div class="kh-password-wrap">
+          <input type="password" id="khConfirmPasswordInput" class="kh-email-input" placeholder="Confirm your password" autocomplete="new-password" minlength="6" aria-describedby="khConfirmPasswordError">
+          <button type="button" id="khToggleConfirmPassword" class="kh-eye-btn" aria-label="Show password" aria-pressed="false">👁</button>
+        </div>
+        <span class="kh-field-error" id="khConfirmPasswordError" aria-live="polite"></span>
+      </div>
+
+      <!-- শুধু "Create Account" মোডে দেখা যাবে -->
+      <div id="khTermsWrap" class="kh-terms-row" style="display:none;">
+        <label class="kh-terms-label">
+          <input type="checkbox" id="khTermsCheckbox">
+          I agree to the Terms &amp; Conditions and Privacy Policy
+        </label>
+        <span class="kh-field-error" id="khTermsError" aria-live="polite"></span>
       </div>
 
       <button type="button" id="khForgotPasswordBtn" class="kh-forgot-link">Forgot Password?</button>
@@ -87,11 +109,22 @@
         <input type="text" id="khCodeInput" placeholder="৬-সংখ্যার কোড" class="kh-phone-input">
         <button id="khVerifyCodeBtn" class="btn3d btn-sky kh-provider-btn">যাচাই করুন</button>
       </div>
+      <button type="button" id="khChangeNumberBtn" class="kh-forgot-link" style="display:none;">নম্বর পরিবর্তন করুন / আবার কোড পাঠান</button>
     </div>
 
     <div id="khRecaptchaContainer"></div>
 
-    <p class="kh-auth-error" id="khAuthError" style="display:none;"></p>
+    <p class="kh-auth-error" id="khAuthError" style="display:none;" aria-live="polite"></p>
+  </div>
+
+  <!-- ---------------- ইমেইল ভেরিফিকেশন স্ক্রিন (সাইন আপের পর, শুধু যদি backend/Firebase সাপোর্ট করে) ---------------- -->
+  <div class="kh-auth-box" id="khVerifyEmailBox" style="display:none;">
+    <div class="kh-auth-icon">📧</div>
+    <h2>Verify Your Email</h2>
+    <p>We've sent a verification link to your email address.</p>
+    <button type="button" id="khResendVerificationBtn" class="btn3d btn-sky kh-provider-btn">Resend Verification Email</button>
+    <button type="button" id="khBackToLoginBtn" class="btn3d btn-indigo kh-provider-btn">Back to Login</button>
+    <p class="kh-auth-error" id="khVerifyError" style="display:none;" aria-live="polite"></p>
   </div>
 </div>
 
@@ -248,6 +281,33 @@
 
   /* নতুন — Masum লোগো ছবি (আগের "ম" স্কয়ার + বাংলা "মাসুম" টেক্সটের বদলে) */
   .kh-logo-img{ height:34px; width:auto; display:block; }
+
+  /* নতুন — ফিল্ড-লেভেল ভ্যালিডেশন এরর (লাল বর্ডার + ছোট মেসেজ) */
+  .kh-email-input.kh-input-error{ border-color:#c0392b; background:#fff6f5; }
+  .kh-field-error{
+    display:block; min-height:0; color:#c0392b; font-size:.78rem; font-weight:600;
+    margin:4px 2px 0; font-family:'Hind Siliguri',sans-serif;
+  }
+  .kh-field-error:empty{ margin:0; }
+
+  /* নতুন — Sign Up: Terms checkbox */
+  .kh-terms-row{ margin-top:14px; }
+  .kh-terms-label{
+    display:flex; align-items:flex-start; gap:8px; font-size:.85rem; cursor:pointer; line-height:1.4;
+  }
+  .kh-terms-label input[type="checkbox"]{ margin-top:3px; width:16px; height:16px; flex-shrink:0; }
+
+  /* নতুন — সাবমিট বাটনের লোডিং স্টেট */
+  #khEmailSubmitBtn:disabled, .kh-provider-btn:disabled{ opacity:.65; cursor:not-allowed; }
+
+  /* নতুন — কীবোর্ড ফোকাস স্টেট (accessibility) */
+  .kh-eye-btn:focus-visible, .kh-toggle-link:focus-visible, .kh-forgot-link:focus-visible,
+  .kh-provider-btn:focus-visible, .kh-email-input:focus-visible{
+    outline:2px solid #4F8CFF; outline-offset:2px;
+  }
+
+  /* নতুন — ইমেইল ভেরিফিকেশন স্ক্রিনের বাটনগুলো একটার নিচে একটা */
+  #khVerifyEmailBox .kh-provider-btn{ width:100%; margin-top:10px; }
 </style>
 
 <footer class="site-footer">
