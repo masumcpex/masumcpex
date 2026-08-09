@@ -372,8 +372,8 @@ document.addEventListener("DOMContentLoaded", () => {
     submitBtn.textContent      = isLogin ? "Log In" : "Create Account";
     if(authTitle) authTitle.textContent = isLogin ? "Welcome Back" : "Create Account";
     if(subtitle) subtitle.textContent   = isLogin
-      ? "Sign in to continue to Knowledge Hub"
-      : "Join Knowledge Hub today";
+      ? "Sign in to continue to WorkTrack"
+      : "Join WorkTrack today";
     if(toggleText) toggleText.textContent = isLogin ? "Don't have an account?" : "Already have an account?";
     toggleModeBtn.textContent = isLogin ? "Sign up" : "Log In";
 

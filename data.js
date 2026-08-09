@@ -455,11 +455,11 @@ const SITE_DATA = {
   projects: [
     {
       id: "p0",
-      title: "Knowledge Hub",
+      title: "WorkTrack",
       icon: "🗂️",
       description: "টিমের দৈনিক হাজিরা ও কাজের ঘণ্টা লিখে রাখার ডিজিটাল খাতা — সদস্য যোগ/বাদ দেওয়া, সামারি ও রেজিস্টারসহ।",
       status: "লাইভ",
-      url: "knowledge-hub.html"
+      url: "worktrack.html"
     },
     {
       id: "p1",
@@ -468,14 +468,6 @@ const SITE_DATA = {
       description: "ব্যক্তিগত নোট রাখার এবং সাজিয়ে রাখার একটি ছোট্ট টুল।",
       status: "চলছে",
       url: "#"
-    },
-    {
-      id: "p2",
-      title: "Work Log",
-      icon: "⚡",
-      description: "কর্মীদের কাজের দৈনিক ঘণ্টা হিসাব, উপস্থিতি ট্র্যাকিং এবং ফাইল ও লিংক ম্যানেজমেন্টের জন্য তৈরি ডিজিটাল খাতা।",
-      status: "লাইভ",
-      url: "https://masumcpex.github.io/masumcpex/worklog.html"
     },
     {
       id: "p3",

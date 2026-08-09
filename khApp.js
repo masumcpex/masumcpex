@@ -72,7 +72,7 @@ export function initKhApp(uid){
   /* এই মেম্বারের পাবলিক শেয়ার লিংক — যেখানেই সাইট হোস্ট হোক (masumcpex.com
      বা অন্য কোথাও), সবসময় বর্তমান পেজের ঠিকানা থেকে নিজে থেকেই তৈরি হয়। */
   function memberShareLink(memberId){
-    return window.location.origin + window.location.pathname.replace(/knowledge-hub\.html$/, "attendance-view.html") + "?id=" + encodeURIComponent(memberId);
+    return window.location.origin + window.location.pathname.replace(/worktrack\.html$/, "attendance-view.html") + "?id=" + encodeURIComponent(memberId);
   }
 
   async function copyMemberLink(memberId, btn){
