@@ -456,7 +456,7 @@ const SITE_DATA = {
     {
       id: "p0",
       title: "WorkTrack",
-      icon: "🗂️",
+      icon: "🏗️",
       description: "টিমের দৈনিক হাজিরা ও কাজের ঘণ্টা লিখে রাখার ডিজিটাল খাতা — সদস্য যোগ/বাদ দেওয়া, সামারি ও রেজিস্টারসহ।",
       status: "লাইভ",
       url: "worktrack.html"
