@@ -562,11 +562,36 @@ document.addEventListener("DOMContentLoaded", () => {
   window.__khShowVerifyGate = function(){
     if(loginSignupBox) loginSignupBox.style.display = "none";
     if(verifyBox) verifyBox.style.display = "block";
+    clearInterval(resendCooldownTimer);
+    if(resendBtn){ resendBtn.disabled = false; resendBtn.textContent = "Resend Verification Email"; }
   };
   window.__khHideVerifyGate = function(){
     if(verifyBox) verifyBox.style.display = "none";
     if(loginSignupBox) loginSignupBox.style.display = "block";
   };
+
+  /* Resend বাটনে ৬০ সেকেন্ড cooldown — খুব দ্রুত বারবার চাপলে Firebase নিজেই
+     auth/too-many-requests দিয়ে ব্লক করে দেয় (স্প্যাম-বিরোধী সুরক্ষা)।
+     এই cooldown সেই সমস্যা এড়াতে সাহায্য করবে। */
+  let resendCooldownTimer = null;
+  function startResendCooldown(seconds){
+    if(!resendBtn) return;
+    let remaining = seconds;
+    const originalLabel = "Resend Verification Email";
+    resendBtn.disabled = true;
+    resendBtn.textContent = `Resend Verification Email (${remaining}s)`;
+    clearInterval(resendCooldownTimer);
+    resendCooldownTimer = setInterval(() => {
+      remaining -= 1;
+      if(remaining <= 0){
+        clearInterval(resendCooldownTimer);
+        resendBtn.disabled = false;
+        resendBtn.textContent = originalLabel;
+      }else{
+        resendBtn.textContent = `Resend Verification Email (${remaining}s)`;
+      }
+    }, 1000);
+  }
 
   resendBtn?.addEventListener("click", async () => {
     if(verifyError) verifyError.style.display = "none";
@@ -579,14 +604,20 @@ document.addEventListener("DOMContentLoaded", () => {
         verifyError.textContent = "Verification email sent again. Please check your inbox.";
         verifyError.style.display = "block";
       }
+      startResendCooldown(60);
     }catch(err){
       console.error(err);
       if(verifyError){
-        verifyError.textContent = "Couldn't resend email: " + (err.code || err.message || "Unknown error.");
+        if(err.code === "auth/too-many-requests"){
+          verifyError.textContent = "একটু আগেই ইমেইল পাঠানো হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন, এবং ইনবক্স/স্প্যাম ফোল্ডার চেক করুন।";
+        }else{
+          verifyError.textContent = "Couldn't resend email: " + (err.code || err.message || "Unknown error.");
+        }
         verifyError.style.display = "block";
       }
-    }finally{
-      resendBtn.disabled = false;
+      // too-many-requests এলে বাটন সাথে সাথে আবার সক্রিয় করলে একই সমস্যা হতে পারে,
+      // তাই এখানেও একটা ছোট cooldown দেওয়া হচ্ছে
+      startResendCooldown(err.code === "auth/too-many-requests" ? 60 : 5);
     }
   });
 
