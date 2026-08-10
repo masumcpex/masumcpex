@@ -3,7 +3,7 @@
   "short_name": "Masumcpex",
   "description": "মাসুম বিল্লাহর ব্যক্তিগত ডিজিটাল খাতা — বই, জার্নাল, আর্টিকেল, প্রজেক্ট ও Knowledge Hub।",
   "id": "/",
-  "start_url": "/index.html",
+  "start_url": "/worktrack.html",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone", "minimal-ui"],
