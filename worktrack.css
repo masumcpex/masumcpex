@@ -15,6 +15,14 @@
 .kh-header .brand-name{ color:#fff; }
 
 .kh-main{ max-width: 900px; margin: 0 auto; padding: 2.5rem 1.4rem 4rem; }
+
+/* ইনস্টল করা App (Masumcpex Hub) হিসেবে খোলা হলে উপরের হেডার (লোগো + "← মূল সাইট")
+   লুকিয়ে ফেলা হয় যাতে App খুললেই সরাসরি WorkTrack ফুল স্ক্রিনে দেখা যায়।
+   সাধারণ ব্রাউজারে (Chrome ট্যাব) ভিজিট করলে হেডার আগের মতোই দেখা যাবে। */
+@media (display-mode: standalone) {
+  .kh-header{ display:none; }
+  .kh-main{ padding-top: 1.4rem; }
+}
 .kh-intro{ margin-bottom: 2.2rem; }
 .kh-intro .section-sub{ max-width: none; }
 
