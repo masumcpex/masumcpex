@@ -615,7 +615,10 @@ export function initKhApp(uid){
     wrap.style.cssText = "position:fixed; left:-99999px; top:0; width:800px; background:#fff; padding:32px 30px; font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif; color:#1B2A45; display:flex; flex-direction:column;";
     wrap.innerHTML = `
       <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #0E6E5C; padding-bottom:16px; margin-bottom:24px;">
-        <img src="masum-logo.webp" style="height:50px; object-fit:contain;" crossorigin="anonymous">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <img src="masum-logo.webp" style="height:50px; object-fit:contain;" crossorigin="anonymous">
+          <div style="font-size:13px; font-weight:600; color:#1B2A45; white-space:nowrap;">WorkTrack — Attendance Management System</div>
+        </div>
         <div style="text-align:right;">
           <div style="font-size:19px; font-weight:700; color:#0E6E5C; letter-spacing:.2px;">হাজিরা রিপোর্ট</div>
           <div style="font-size:13px; color:#666; margin-top:2px;">${monthLabel(ym)}</div>
