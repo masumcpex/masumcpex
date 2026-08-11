@@ -155,6 +155,19 @@ document.addEventListener("DOMContentLoaded", () => {
       <a href="${onClickHash}">${linkText} →</a>
     </div>`;
   }
+  function privateChaptersCard(){
+    const chapters = ["📖 নাসির অধ্যায়","📖 নাজিম অধ্যায়","📖 বোরহান অধ্যায়","📖 আমার গল্প"];
+    return `
+    <div class="highlight-card">
+      <span class="tag">Private</span>
+      <h4>🔒 বাস্তবতার অন্ধকার পৃষ্ঠা</h4>
+      <p>আমার জীবনের কিছু বাস্তব ঘটনা, স্মৃতি, কষ্ট ও না-বলা কথা।</p>
+      <ul class="mini-chapter-list">
+        ${chapters.map(c => `<li>${c}</li>`).join("")}
+      </ul>
+      <a href="#private-chapters">বিস্তারিত দেখুন →</a>
+    </div>`;
+  }
   const latestBook = SITE_DATA.books.filter(b => !b.locked)[0];
   const latestJournal = SITE_DATA.journal[0];
   const latestArticle = SITE_DATA.articles[0];
@@ -164,7 +177,8 @@ document.addEventListener("DOMContentLoaded", () => {
     highlightCard("Latest Book", latestBook.title, latestBook.description, "লাইব্রেরিতে দেখুন", "#library"),
     highlightCard("Latest Journal", latestJournal.title, latestJournal.excerpt, "পড়ুন", "#journal"),
     highlightCard("Latest Article", latestArticle.title, latestArticle.excerpt, "পড়ুন", "#articles"),
-    highlightCard("Featured Project", featuredProject.title, featuredProject.description, "দেখুন", "#projects")
+    highlightCard("Featured Project", featuredProject.title, featuredProject.description, "দেখুন", "#projects"),
+    privateChaptersCard()
   ].join("");
 
   /* ---------------- ROUTING / NAV ---------------- */

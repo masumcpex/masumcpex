@@ -292,6 +292,13 @@ img{ max-width:100%; display:block; }
 .highlight-card p{ color: var(--muted); font-size:.92rem; margin:0 0 .9rem; line-height:1.65; }
 .highlight-card a{ color: var(--teal); font-weight:600; font-size:.9rem; transition: gap .18s var(--ease); }
 .highlight-card a:hover{ color: var(--teal-dark); }
+.highlight-card .mini-chapter-list{
+  list-style:none; margin:0 0 .9rem; padding:0; display:flex; flex-direction:column; gap:.35rem;
+}
+.highlight-card .mini-chapter-list li{
+  font-size:.82rem; color: var(--muted); padding:.35rem .6rem; background: var(--paper-2);
+  border-radius: 8px;
+}
 
 /* ---------------- ABOUT ---------------- */
 .about-grid{ display:flex; gap: 2.4rem; align-items:flex-start; flex-wrap:wrap; margin: 2rem 0 2.4rem; }
@@ -364,6 +371,16 @@ img{ max-width:100%; display:block; }
 /* ---------------- MYSTERY ---------------- */
 .mystery-title{ color: var(--ink); font-size: clamp(1.4rem,3vw,1.9rem); font-weight:700; }
 .mystery-notice{ color: var(--muted); margin-bottom: 2rem; line-height:1.75; }
+
+.chapter-placeholder-list{
+  list-style:none; margin: 1.6rem auto 0; padding:0; max-width: 360px;
+  display:flex; flex-direction:column; gap:.7rem;
+}
+.chapter-placeholder-list li{
+  background: var(--card-bg); border:1px solid var(--line-soft); border-radius: 14px;
+  padding: .85rem 1.1rem; color: var(--ink-2); font-weight:600; font-size:.95rem;
+  box-shadow: var(--shadow); opacity:.75;
+}
 
 /* ---------------- CONTACT ---------------- */
 .contact-intro{ padding-bottom: 1.4rem; }
