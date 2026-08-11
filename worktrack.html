@@ -215,7 +215,8 @@
     </div>
 
     <div class="kh-register-actions">
-      <button type="button" class="btn3d btn-download" id="downloadCsvBtn">📥 এই মাসের রিপোর্ট ডাউনলোড (CSV)</button>
+      <button type="button" class="btn3d btn-download" id="downloadPdfBtn">📄 এই মাসের রিপোর্ট ডাউনলোড (PDF)</button>
+      <button type="button" class="btn3d btn-download" id="downloadCsvBtn">📊 এই মাসের রিপোর্ট ডাউনলোড (CSV)</button>
     </div>
 
     <div id="registerGroups"><!-- JS প্রতিটা মাসকে আলাদা collapsible সেকশন হিসেবে বসায় --></div>
@@ -321,6 +322,8 @@
   <p>© 2026 <b>Masum Cpex</b>. Your data is securely protected.</p>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="khApp.js"></script>
 <script type="module" src="kh-auth.js"></script>

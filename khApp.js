@@ -40,6 +40,7 @@ export function initKhApp(uid){
   const addMemberBtn  = document.getElementById("addMemberBtn");
   const registerLoading = document.getElementById("registerLoading");
   const downloadCsvBtn  = document.getElementById("downloadCsvBtn");
+  const downloadPdfBtn  = document.getElementById("downloadPdfBtn");
   const registerGroups  = document.getElementById("registerGroups");
 
   entryDate.value = new Date().toISOString().slice(0,10);
@@ -528,6 +529,189 @@ export function initKhApp(uid){
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
+
+  /* ---------------- এই মাসের রিপোর্ট ডাউনলোড (PDF) ----------------
+     সম্পূর্ণ ক্লায়েন্ট-সাইড (ব্রাউজারেই) তৈরি হয় — Firebase Storage-এ
+     কোনো ফাইল আপলোড/সংরক্ষণ করা হয় না। CSV-এর মতোই একই local `records`
+     ভ্যারিয়েবল থেকে ডেটা নেওয়া হয়, শুধু আউটপুট ফরম্যাট আলাদা।
+     বাংলা টেক্সট সঠিকভাবে দেখানোর জন্য html2canvas দিয়ে একটা HTML
+     টেমপ্লেট ছবিতে রূপান্তর করে সেই ছবি jsPDF দিয়ে PDF-এ বসানো হয়
+     (এতে ব্রাউজারের নিজস্ব বাংলা ফন্ট রেন্ডারিং হুবহু বজায় থাকে)। */
+  downloadPdfBtn.addEventListener("click", async () => {
+    if(typeof window.html2canvas === "undefined" || typeof window.jspdf === "undefined"){
+      alert("PDF তৈরির লাইব্রেরি লোড হয়নি। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।");
+      return;
+    }
+
+    khBounce(downloadPdfBtn);
+    const ym = currentYearMonth();
+    const filter = filterMember.value;
+    const monthRecords = records
+      .filter(r => r.date.startsWith(ym))
+      .filter(r => filter === "সবাই" || r.member === filter)
+      .slice().sort((a,b) => a.date.localeCompare(b.date));
+
+    if(!monthRecords.length){
+      alert("এই মাসে এখনো কোনো রেকর্ড নেই।");
+      return;
+    }
+
+    downloadPdfBtn.disabled = true;
+    const originalLabel = downloadPdfBtn.textContent;
+    downloadPdfBtn.textContent = "⏳ PDF তৈরি হচ্ছে...";
+
+    try{
+      await generatePdfReport(ym, monthRecords);
+    }catch(err){
+      console.error(err);
+      alert("PDF তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    }finally{
+      downloadPdfBtn.disabled = false;
+      downloadPdfBtn.textContent = originalLabel;
+    }
+  });
+
+  async function generatePdfReport(ym, monthRecords){
+    // প্রতিটা সদস্যের জন্য এই মাসের উপস্থিতি/অনুপস্থিতি/ঘণ্টা/শতাংশ হিসাব
+    const byMember = {};
+    monthRecords.forEach(r => {
+      if(!byMember[r.member]) byMember[r.member] = { present:0, absent:0, hours:0 };
+      if(r.status === "duty"){ byMember[r.member].present++; byMember[r.member].hours += (r.hours || 0); }
+      else{ byMember[r.member].absent++; }
+    });
+    const memberNames = Object.keys(byMember).sort((a,b) => a.localeCompare(b, "bn"));
+
+    const summaryRowsHtml = memberNames.map(name => {
+      const d = byMember[name];
+      const total = d.present + d.absent;
+      const pct = total > 0 ? Math.round((d.present / total) * 100) : 0;
+      return `
+        <tr>
+          <td>${escapeHtml(name)}</td>
+          <td style="text-align:center;">${toBn(d.present)}</td>
+          <td style="text-align:center;">${toBn(d.absent)}</td>
+          <td style="text-align:center;">${toBn(d.hours)}</td>
+          <td style="text-align:center;">${toBn(pct)}%</td>
+        </tr>`;
+    }).join("");
+
+    const detailRowsHtml = monthRecords
+      .slice().sort((a,b) => a.date.localeCompare(b.date))
+      .map(r => `
+        <tr>
+          <td>${escapeHtml(r.date)}</td>
+          <td>${escapeHtml(r.member)}</td>
+          <td>${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
+          <td style="text-align:center;">${r.status === "duty" ? toBn(r.hours) : "—"}</td>
+        </tr>`).join("");
+
+    const totalPresent = memberNames.reduce((sum,n) => sum + byMember[n].present, 0);
+    const totalAbsent  = memberNames.reduce((sum,n) => sum + byMember[n].absent, 0);
+    const generatedAt = new Date().toLocaleString("bn-BD", { dateStyle:"medium", timeStyle:"short" });
+
+    // ---------------- অফ-স্ক্রিন প্রিন্ট টেমপ্লেট তৈরি ----------------
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "position:fixed; left:-99999px; top:0; width:800px; background:#fff; padding:28px; font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif; color:#1B2A45;";
+    wrap.innerHTML = `
+      <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:3px solid #0E6E5C; padding-bottom:14px; margin-bottom:18px;">
+        <img src="masum-logo.webp" style="height:56px; object-fit:contain;" crossorigin="anonymous">
+        <div style="text-align:right;">
+          <div style="font-size:20px; font-weight:700; color:#0E6E5C;">হাজিরা রিপোর্ট</div>
+          <div style="font-size:14px; color:#555;">${monthLabel(ym)}</div>
+        </div>
+      </div>
+
+      <table style="width:100%; border-collapse:collapse; margin-bottom:22px; font-size:13px;">
+        <thead>
+          <tr style="background:#0E6E5C; color:#fff;">
+            <th style="padding:8px; text-align:left;">নাম</th>
+            <th style="padding:8px;">উপস্থিত</th>
+            <th style="padding:8px;">অনুপস্থিত</th>
+            <th style="padding:8px;">মোট ঘণ্টা</th>
+            <th style="padding:8px;">উপস্থিতির হার</th>
+          </tr>
+        </thead>
+        <tbody style="border:1px solid #ddd;">${summaryRowsHtml}</tbody>
+        <tfoot>
+          <tr style="font-weight:700; background:#F1F5F9;">
+            <td style="padding:8px;">সর্বমোট</td>
+            <td style="padding:8px; text-align:center;">${toBn(totalPresent)}</td>
+            <td style="padding:8px; text-align:center;">${toBn(totalAbsent)}</td>
+            <td style="padding:8px;" colspan="2"></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div style="font-size:15px; font-weight:700; color:#0E6E5C; margin-bottom:8px;">দৈনিক বিবরণ</div>
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+        <thead>
+          <tr style="background:#F1F5F9;">
+            <th style="padding:6px; border:1px solid #ddd; text-align:left;">তারিখ</th>
+            <th style="padding:6px; border:1px solid #ddd; text-align:left;">নাম</th>
+            <th style="padding:6px; border:1px solid #ddd; text-align:left;">স্ট্যাটাস</th>
+            <th style="padding:6px; border:1px solid #ddd;">ঘণ্টা</th>
+          </tr>
+        </thead>
+        <tbody>${detailRowsHtml}</tbody>
+      </table>
+
+      <div style="margin-top:24px; padding-top:10px; border-top:1px solid #ddd; font-size:11px; color:#888; display:flex; justify-content:space-between;">
+        <span>Masumcpex Hub — WorkTrack</span>
+        <span>তৈরির সময়: ${escapeHtml(generatedAt)}</span>
+      </div>
+    `;
+
+    // টেবিলের বর্ডার সহজে বসানোর জন্য ছোট্ট স্টাইল
+    const style = document.createElement("style");
+    style.textContent = `
+      #pdfReportRoot table td, #pdfReportRoot table th{ border:1px solid #e2e2e2; }
+      #pdfReportRoot table thead th{ border-color: rgba(255,255,255,0.25); }
+    `;
+    wrap.id = "pdfReportRoot";
+    document.body.appendChild(style);
+    document.body.appendChild(wrap);
+
+    try{
+      const canvas = await window.html2canvas(wrap, { scale:2, useCORS:true, backgroundColor:"#ffffff" });
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation:"portrait", unit:"mm", format:"a4" });
+
+      const pageWidth  = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth   = pageWidth;
+      const imgHeight  = (canvas.height * imgWidth) / canvas.width;
+
+      const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
+      if(imgHeight <= pageHeight){
+        pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+      }else{
+        // একাধিক পেজে ভাগ করে বসানো (লম্বা রেজিস্টারের জন্য)
+        let heightLeft = imgHeight;
+        let position = 0;
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+        while(heightLeft > 0){
+          position = heightLeft - imgHeight;
+          pdf.addPage();
+          pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pageHeight;
+        }
+      }
+
+      pdf.save(`hajira-report-${ym}.pdf`); // সরাসরি ডিভাইসে ডাউনলোড — Firebase Storage-এ কিছু আপলোড হয় না
+    }finally{
+      document.body.removeChild(wrap);
+      document.body.removeChild(style);
+    }
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+  }
+
 
   /* ---------------- লোডিং ইন্ডিকেটর ---------------- */
   function updateLoadingState(){
