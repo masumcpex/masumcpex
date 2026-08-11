@@ -126,7 +126,7 @@ export function initPrivateGate(opts) {
 
     setStatus("✓ Google account verified — অনুমোদন যাচাই হচ্ছে...");
     try {
-      const snap = await getDoc(doc(db, "approvedPrivateUsers", user.uid));
+      const snap = await getDoc(doc(db, "approvedPrivateUsers", user.email));
       if (!snap.exists()) {
         showStep("google");
         setStatus("❌ এই Google account-এর জন্য access অনুমোদিত নয়।", true);

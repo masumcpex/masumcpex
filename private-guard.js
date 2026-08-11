@@ -42,7 +42,7 @@ export function guardPrivatePage({ contentId, signOutBtnId, onReady }) {
   onAuthStateChanged(auth, async (user) => {
     if (!user) { redirectHome(); return; }
     try {
-      const snap = await getDoc(doc(db, "approvedPrivateUsers", user.uid));
+      const snap = await getDoc(doc(db, "approvedPrivateUsers", user.email));
       if (!snap.exists()) {
         localStorage.removeItem(UNLOCK_KEY);
         redirectHome();
