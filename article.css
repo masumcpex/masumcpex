@@ -94,6 +94,34 @@ code{
 .callout-tip{ border-left-color: #3B82F6; }
 .callout-info{ border-left-color: var(--teal); }
 
+/* ---------------- একাধিক গল্প — অ্যাকর্ডিয়ন লিস্ট (nasir.html/nazim.html/...) ---------------- */
+.story-list{ display:flex; flex-direction:column; gap: .9rem; margin: 1.8rem 0; }
+.story-item{
+  background: var(--card-bg); border: 1px solid var(--line); border-radius: 14px;
+  overflow: hidden; box-shadow: var(--shadow);
+}
+.story-summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:.8rem;
+  padding: 1rem 1.3rem; font-family: var(--font-display); font-weight:700;
+  font-size: 1.05rem; color:#10182B; -webkit-text-fill-color:#10182B;
+}
+.story-summary::-webkit-details-marker{ display:none; }
+.story-summary::marker{ content:""; }
+.story-num{
+  flex:0 0 auto; color: var(--gold); font-weight:800; min-width: 1.6rem;
+}
+.story-title-text{ flex:1 1 auto; }
+.story-chevron{
+  flex:0 0 auto; color: var(--muted); transition: transform .2s var(--ease);
+}
+.story-item[open] .story-chevron{ transform: rotate(180deg); }
+.story-content{
+  padding: .2rem 1.3rem 1.5rem; border-top: 1px solid var(--line);
+  color: var(--charcoal); font-size: 1.02rem; line-height: 1.9;
+}
+.story-content p{ margin: 1.1rem 0 0; }
+.story-content .article-meta{ margin: 1rem 0 0; }
+
 /* ---------------- সামারি কার্ড গ্রিড ---------------- */
 .summary-grid{
   display:grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1rem;
