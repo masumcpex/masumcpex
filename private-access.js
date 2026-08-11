@@ -142,7 +142,7 @@ export function initPrivateGate(opts) {
     } catch (err) {
       console.error(err);
       showStep("google");
-      setStatus("❌ অনুমোদন যাচাই করা যায়নি। আবার চেষ্টা করুন।", true);
+      setStatus("❌ অনুমোদন যাচাই করা যায়নি: " + (err.code || err.message || "অজানা সমস্যা"), true);
     }
   });
 }
