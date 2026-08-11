@@ -143,29 +143,21 @@
     </div>
   </section>
 
-  <!-- ================= প্রাইভেট চ্যাপ্টার — একমাত্র লগইন এন্ট্রি পয়েন্ট (Google + approved + Private Password) ================= -->
+  <!-- ================= প্রাইভেট চ্যাপ্টার — একমাত্র এন্ট্রি পয়েন্ট (শুধু Private Password, কোনো Google/Firebase Login নেই) ================= -->
   <section class="page" id="private-chapters">
     <div class="page-inner narrow center">
 
-      <!-- ধাপ ১: Google -->
-      <div class="private-gate" id="homeGoogleStep">
+      <!-- ধাপ ১: Private Password -->
+      <div class="private-gate" id="homePasswordStep">
         <div class="eyebrow">Private</div>
         <h2 class="section-title">🔒 ব্যক্তিগত অধ্যায়</h2>
-        <p class="section-sub">এই অংশটি শুধুমাত্র অনুমোদিত ব্যবহারকারীদের জন্য।</p>
-        <button type="button" class="btn btn-primary" id="homeGoogleBtn">Continue with Google</button>
+        <p class="section-sub">এই অংশটি শুধুমাত্র অনুমোদিত password জানা ব্যক্তিদের জন্য।</p>
+        <input type="password" id="homePasswordInput" placeholder="Enter private password" class="private-password-input">
+        <button type="button" class="btn btn-primary" id="homePasswordBtn">🔓 প্রবেশ করুন</button>
         <p class="private-gate-status" id="homePrivateGateStatus" style="display:none;"></p>
       </div>
 
-      <!-- ধাপ ২: Private Password -->
-      <div class="private-gate" id="homePasswordStep" style="display:none;">
-        <div class="eyebrow">Private</div>
-        <h2 class="section-title">🔑 Private Password</h2>
-        <p class="section-sub">✓ Google account verified</p>
-        <input type="password" id="homePasswordInput" placeholder="Enter private password" class="private-password-input">
-        <button type="button" class="btn btn-primary" id="homePasswordBtn">🔓 Verify &amp; Continue</button>
-      </div>
-
-      <!-- ধাপ ৩: কনটেন্ট -->
+      <!-- ধাপ ২: কনটেন্ট -->
       <div id="homePrivateContent" style="display:none;">
         <div class="eyebrow">Private</div>
         <h2 class="section-title">🔒 বাস্তবতার অন্ধকার পৃষ্ঠা</h2>
@@ -306,14 +298,12 @@
 <script src="contact.js"></script>
 <script src="/pwa.js" defer></script>
 
-<!-- Private Chapter অ্যাক্সেস — একমাত্র লগইন এন্ট্রি পয়েন্ট (WorkTrack-এর লগইন থেকে সম্পূর্ণ আলাদা) -->
+<!-- Private Chapter অ্যাক্সেস — একমাত্র এন্ট্রি পয়েন্ট, শুধু password (WorkTrack-এর Google/Firebase লগইন থেকে সম্পূর্ণ আলাদা ও স্বতন্ত্র) -->
 <script type="module">
   import { initPrivateGate } from "./private-access.js";
   initPrivateGate({
-    googleStepId: "homeGoogleStep",
     passwordStepId: "homePasswordStep",
     contentId: "homePrivateContent",
-    signInBtnId: "homeGoogleBtn",
     passwordInputId: "homePasswordInput",
     passwordSubmitBtnId: "homePasswordBtn",
     signOutBtnId: "homePrivateSignOutBtn",
