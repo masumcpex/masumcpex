@@ -556,3 +556,37 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .about-grid{ gap: 1.6rem; }
   .stat-row{ gap: 1.4rem; }
 }
+
+/* ================= PRIVATE CHAPTER ACCESS GATE ================= */
+.private-gate{ max-width: 460px; margin: 0 auto; text-align:center; }
+.private-gate .btn{ margin-top: .6rem; }
+.private-gate-status{
+  margin-top: 1rem;
+  padding: .7rem 1rem;
+  border-radius: 10px;
+  font-size: .92rem;
+  line-height: 1.6;
+}
+.private-gate-status.private-gate-error{ background: rgba(192,57,43,.08); color:#B33A3A; border:1px solid rgba(192,57,43,.25); }
+.private-gate-status.private-gate-ok{ background: rgba(14,110,92,.08); color: var(--teal); border:1px solid rgba(14,110,92,.25); }
+.private-note{ font-size:.8rem; color: var(--muted); margin-top:1.2rem; }
+.private-chapter-list{ list-style:none; padding:0; margin: 1.6rem 0; text-align:left; }
+.private-chapter-list li{ margin-bottom: .8rem; }
+.private-chapter-card{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  padding: 1rem 1.3rem; border:1px solid var(--line); border-radius: 14px;
+  background: var(--card-bg); text-decoration:none; color: var(--ink);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.private-chapter-card:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+.private-chapter-num{ font-weight:700; color: var(--gold); margin-right:.6rem; }
+.private-chapter-soon{ font-size:.78rem; color: var(--muted); }
+.private-content-body{ text-align:left; }
+.private-signout-row{ text-align:center; margin-top:1.6rem; }
+
+.private-password-input{
+  display:block; width:100%; max-width:320px; margin: 1rem auto .4rem;
+  padding: .75rem 1rem; border-radius: 10px; border: 1px solid var(--line);
+  font-size: 1rem; font-family: inherit; text-align:center;
+}
+.private-password-input:focus{ outline: 2px solid var(--teal); outline-offset: 2px; }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📖 বোরহান অধ্যায় | মাসুম</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0E6E5C">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html#home" class="brand">
+      <span class="brand-mark"><img src="photo.png" alt="Logo" style="width:100%;height:100%;object-fit:cover;display:block;"></span>
+      <span class="brand-name">Masum</span>
+    </a>
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html#home"><span class="ic">🏠</span>Home</a>
+      <a href="index.html#private-chapters" class="active"><span class="ic">📖</span>Unrevealed Chapter</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="page" style="display:block;">
+    <div class="page-inner narrow center">
+
+      <p id="borhanLoading" style="color:var(--muted);">লোড হচ্ছে…</p>
+
+      <div id="borhanPrivateContent" style="display:none;">
+        <div class="eyebrow">Private</div>
+        <h2 class="section-title">📖 বোরহান অধ্যায়</h2>
+        <p class="section-sub">এই অধ্যায়ের লেখা শীঘ্রই যোগ করা হবে।</p>
+        <a class="btn btn-outline" href="unpublished.html">← ফিরে যান</a>
+        <div class="private-signout-row">
+          <button type="button" class="btn btn-outline" id="borhanPrivateSignOutBtn">🚪 Logout</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <p>© 2026 <b>Masum Cpex</b>. All Rights Reserved.</p>
+</footer>
+
+<script type="module">
+  import { guardPrivatePage } from "./private-guard.js";
+  guardPrivatePage({
+    contentId: "borhanPrivateContent",
+    signOutBtnId: "borhanPrivateSignOutBtn",
+    onReady: () => { document.getElementById("borhanLoading").style.display = "none"; }
+  });
+</script>
+<script src="/pwa.js" defer></script>
+</body>
+</html>

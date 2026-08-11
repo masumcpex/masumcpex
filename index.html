@@ -143,18 +143,42 @@
     </div>
   </section>
 
-  <!-- ================= অপ্রকাশিত অধ্যায় (কাঠামো/প্লেসহোল্ডার — এখনো আলাদা চ্যাপ্টার পেজ তৈরি হয়নি) ================= -->
+  <!-- ================= প্রাইভেট চ্যাপ্টার — একমাত্র লগইন এন্ট্রি পয়েন্ট (Google + approved + Private Password) ================= -->
   <section class="page" id="private-chapters">
     <div class="page-inner narrow center">
-      <div class="eyebrow">Private</div>
-      <h2 class="section-title">📖  অপ্রকাশিত অধ্যায়</h2>
-      <p class="section-sub">আমার জীবনের কিছু বাস্তব ঘটনা, স্মৃতি, কষ্ট ও না-বলা কথা — শীঘ্রই আসছে।</p>
-      <ul class="chapter-placeholder-list">
-        <li>📖 নাসির অধ্যায়</li>
-        <li>📖 নাজিম অধ্যায়</li>
-        <li>📖 বোরহান অধ্যায়</li>
-        <li>📖 আমার গল্প</li>
-      </ul>
+
+      <!-- ধাপ ১: Google -->
+      <div class="private-gate" id="homeGoogleStep">
+        <div class="eyebrow">Private</div>
+        <h2 class="section-title">🔒 ব্যক্তিগত অধ্যায়</h2>
+        <p class="section-sub">এই অংশটি শুধুমাত্র অনুমোদিত ব্যবহারকারীদের জন্য।</p>
+        <button type="button" class="btn btn-primary" id="homeGoogleBtn">Continue with Google</button>
+        <p class="private-gate-status" id="homePrivateGateStatus" style="display:none;"></p>
+      </div>
+
+      <!-- ধাপ ২: Private Password -->
+      <div class="private-gate" id="homePasswordStep" style="display:none;">
+        <div class="eyebrow">Private</div>
+        <h2 class="section-title">🔑 Private Password</h2>
+        <p class="section-sub">✓ Google account verified</p>
+        <input type="password" id="homePasswordInput" placeholder="Enter private password" class="private-password-input">
+        <button type="button" class="btn btn-primary" id="homePasswordBtn">🔓 Verify &amp; Continue</button>
+      </div>
+
+      <!-- ধাপ ৩: কনটেন্ট -->
+      <div id="homePrivateContent" style="display:none;">
+        <div class="eyebrow">Private</div>
+        <h2 class="section-title">🔒 বাস্তবতার অন্ধকার পৃষ্ঠা</h2>
+        <p class="section-sub">আমার জীবনের কিছু বাস্তব ঘটনা, স্মৃতি, কষ্ট ও না-বলা কথা।</p>
+        <ul class="chapter-placeholder-list">
+          <li>📖 নাসির অধ্যায়</li>
+        </ul>
+        <a href="unpublished.html" class="btn btn-outline">বিস্তারিত দেখুন →</a>
+        <div class="private-signout-row">
+          <button type="button" class="btn btn-outline" id="homePrivateSignOutBtn">🚪 Logout</button>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -281,5 +305,20 @@
 <script src="script.js"></script>
 <script src="contact.js"></script>
 <script src="/pwa.js" defer></script>
+
+<!-- Private Chapter অ্যাক্সেস — একমাত্র লগইন এন্ট্রি পয়েন্ট (WorkTrack-এর লগইন থেকে সম্পূর্ণ আলাদা) -->
+<script type="module">
+  import { initPrivateGate } from "./private-access.js";
+  initPrivateGate({
+    googleStepId: "homeGoogleStep",
+    passwordStepId: "homePasswordStep",
+    contentId: "homePrivateContent",
+    signInBtnId: "homeGoogleBtn",
+    passwordInputId: "homePasswordInput",
+    passwordSubmitBtnId: "homePasswordBtn",
+    signOutBtnId: "homePrivateSignOutBtn",
+    statusId: "homePrivateGateStatus"
+  });
+</script>
 </body>
 </html>
