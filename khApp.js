@@ -587,11 +587,11 @@ export function initKhApp(uid){
       const pct = total > 0 ? Math.round((d.present / total) * 100) : 0;
       return `
         <tr>
-          <td>${escapeHtml(name)}</td>
-          <td style="text-align:center;">${toBn(d.present)}</td>
-          <td style="text-align:center;">${toBn(d.absent)}</td>
-          <td style="text-align:center;">${toBn(d.hours)}</td>
-          <td style="text-align:center;">${toBn(pct)}%</td>
+          <td class="pdf-td pdf-td-left">${escapeHtml(name)}</td>
+          <td class="pdf-td pdf-td-center">${toBn(d.present)}</td>
+          <td class="pdf-td pdf-td-center">${toBn(d.absent)}</td>
+          <td class="pdf-td pdf-td-center">${toBn(d.hours)}</td>
+          <td class="pdf-td pdf-td-center">${toBn(pct)}%</td>
         </tr>`;
     }).join("");
 
@@ -599,107 +599,124 @@ export function initKhApp(uid){
       .slice().sort((a,b) => a.date.localeCompare(b.date))
       .map(r => `
         <tr>
-          <td>${escapeHtml(r.date)}</td>
-          <td>${escapeHtml(r.member)}</td>
-          <td>${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
-          <td style="text-align:center;">${r.status === "duty" ? toBn(r.hours) : "—"}</td>
+          <td class="pdf-td pdf-td-left">${escapeHtml(r.date)}</td>
+          <td class="pdf-td pdf-td-left">${escapeHtml(r.member)}</td>
+          <td class="pdf-td pdf-td-left">${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
+          <td class="pdf-td pdf-td-center">${r.status === "duty" ? toBn(r.hours) : "—"}</td>
         </tr>`).join("");
 
     const totalPresent = memberNames.reduce((sum,n) => sum + byMember[n].present, 0);
     const totalAbsent  = memberNames.reduce((sum,n) => sum + byMember[n].absent, 0);
     const generatedAt = new Date().toLocaleString("bn-BD", { dateStyle:"medium", timeStyle:"short" });
 
-    // ---------------- অফ-স্ক্রিন প্রিন্ট টেমপ্লেট তৈরি ----------------
+    // ---------------- অফ-স্ক্রিন অফিসিয়াল প্রিন্ট টেমপ্লেট তৈরি ----------------
     const wrap = document.createElement("div");
-    wrap.style.cssText = "position:fixed; left:-99999px; top:0; width:800px; background:#fff; padding:28px; font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif; color:#1B2A45;";
+    wrap.id = "pdfReportRoot";
+    wrap.style.cssText = "position:fixed; left:-99999px; top:0; width:800px; background:#fff; padding:32px 30px; font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif; color:#1B2A45; display:flex; flex-direction:column;";
     wrap.innerHTML = `
-      <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:3px solid #0E6E5C; padding-bottom:14px; margin-bottom:18px;">
-        <img src="masum-logo.webp" style="height:56px; object-fit:contain;" crossorigin="anonymous">
+      <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:2px solid #0E6E5C; padding-bottom:16px; margin-bottom:24px;">
+        <img src="masum-logo.webp" style="height:50px; object-fit:contain;" crossorigin="anonymous">
         <div style="text-align:right;">
-          <div style="font-size:20px; font-weight:700; color:#0E6E5C;">হাজিরা রিপোর্ট</div>
-          <div style="font-size:14px; color:#555;">${monthLabel(ym)}</div>
+          <div style="font-size:19px; font-weight:700; color:#0E6E5C; letter-spacing:.2px;">হাজিরা রিপোর্ট</div>
+          <div style="font-size:13px; color:#666; margin-top:2px;">${monthLabel(ym)}</div>
         </div>
       </div>
 
-      <table style="width:100%; border-collapse:collapse; margin-bottom:22px; font-size:13px;">
+      <table class="pdf-table" style="margin-bottom:26px;">
         <thead>
-          <tr style="background:#0E6E5C; color:#fff;">
-            <th style="padding:8px; text-align:left;">নাম</th>
-            <th style="padding:8px;">উপস্থিত</th>
-            <th style="padding:8px;">অনুপস্থিত</th>
-            <th style="padding:8px;">মোট ঘণ্টা</th>
-            <th style="padding:8px;">উপস্থিতির হার</th>
+          <tr>
+            <th class="pdf-th pdf-th-left">নাম</th>
+            <th class="pdf-th">উপস্থিত</th>
+            <th class="pdf-th">অনুপস্থিত</th>
+            <th class="pdf-th">মোট ঘণ্টা</th>
+            <th class="pdf-th">উপস্থিতির হার</th>
           </tr>
         </thead>
-        <tbody style="border:1px solid #ddd;">${summaryRowsHtml}</tbody>
+        <tbody>${summaryRowsHtml}</tbody>
         <tfoot>
-          <tr style="font-weight:700; background:#F1F5F9;">
-            <td style="padding:8px;">সর্বমোট</td>
-            <td style="padding:8px; text-align:center;">${toBn(totalPresent)}</td>
-            <td style="padding:8px; text-align:center;">${toBn(totalAbsent)}</td>
-            <td style="padding:8px;" colspan="2"></td>
+          <tr class="pdf-tfoot-row">
+            <td class="pdf-td pdf-td-left" style="font-weight:700;">সর্বমোট</td>
+            <td class="pdf-td pdf-td-center" style="font-weight:700;">${toBn(totalPresent)}</td>
+            <td class="pdf-td pdf-td-center" style="font-weight:700;">${toBn(totalAbsent)}</td>
+            <td class="pdf-td" colspan="2"></td>
           </tr>
         </tfoot>
       </table>
 
-      <div style="font-size:15px; font-weight:700; color:#0E6E5C; margin-bottom:8px;">দৈনিক বিবরণ</div>
-      <table style="width:100%; border-collapse:collapse; font-size:12px;">
+      <div style="font-size:14px; font-weight:700; color:#0E6E5C; margin-bottom:10px;">দৈনিক বিবরণ</div>
+      <table class="pdf-table" style="font-size:12px;">
         <thead>
-          <tr style="background:#F1F5F9;">
-            <th style="padding:6px; border:1px solid #ddd; text-align:left;">তারিখ</th>
-            <th style="padding:6px; border:1px solid #ddd; text-align:left;">নাম</th>
-            <th style="padding:6px; border:1px solid #ddd; text-align:left;">স্ট্যাটাস</th>
-            <th style="padding:6px; border:1px solid #ddd;">ঘণ্টা</th>
+          <tr>
+            <th class="pdf-th pdf-th-left">তারিখ</th>
+            <th class="pdf-th pdf-th-left">নাম</th>
+            <th class="pdf-th pdf-th-left">স্ট্যাটাস</th>
+            <th class="pdf-th">ঘণ্টা</th>
           </tr>
         </thead>
         <tbody>${detailRowsHtml}</tbody>
       </table>
 
-      <div style="margin-top:24px; padding-top:10px; border-top:1px solid #ddd; font-size:11px; color:#888; display:flex; justify-content:space-between;">
-        <span>Masumcpex Hub — WorkTrack</span>
-        <span>তৈরির সময়: ${escapeHtml(generatedAt)}</span>
+      <div style="flex:1;"></div>
+
+      <div style="margin-top:28px; padding-top:12px; border-top:1px solid #ccc; font-size:10.5px; color:#666; display:flex; justify-content:space-between; align-items:center;">
+        <span>masumcpex.com&nbsp;&nbsp;|&nbsp;&nbsp;contact@masumcpex.com&nbsp;&nbsp;|&nbsp;&nbsp;+601133192963</span>
+        <span>রিপোর্ট প্রস্তুত: ${escapeHtml(generatedAt)}</span>
       </div>
     `;
 
-    // টেবিলের বর্ডার সহজে বসানোর জন্য ছোট্ট স্টাইল
+    // অফিসিয়াল ডকুমেন্ট লুক — সব সেল vertically centered, ধারাবাহিক প্যাডিং/বর্ডার
     const style = document.createElement("style");
     style.textContent = `
-      #pdfReportRoot table td, #pdfReportRoot table th{ border:1px solid #e2e2e2; }
-      #pdfReportRoot table thead th{ border-color: rgba(255,255,255,0.25); }
+      #pdfReportRoot .pdf-table{ width:100%; border-collapse:collapse; font-size:13px; }
+      #pdfReportRoot .pdf-th{
+        background:#0E6E5C; color:#fff; padding:10px 8px; text-align:center;
+        vertical-align:middle; font-weight:600; border:1px solid #0A5347;
+      }
+      #pdfReportRoot .pdf-th-left{ text-align:left; }
+      #pdfReportRoot .pdf-td{
+        padding:9px 8px; text-align:center; vertical-align:middle;
+        border:1px solid #e2e2e2; line-height:1.4;
+      }
+      #pdfReportRoot .pdf-td-left{ text-align:left; }
+      #pdfReportRoot .pdf-td-center{ text-align:center; }
+      #pdfReportRoot .pdf-tfoot-row{ background:#F1F5F9; }
+      #pdfReportRoot tr{ height:38px; }
     `;
-    wrap.id = "pdfReportRoot";
     document.body.appendChild(style);
     document.body.appendChild(wrap);
 
     try{
       const canvas = await window.html2canvas(wrap, { scale:2, useCORS:true, backgroundColor:"#ffffff" });
       const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF({ orientation:"portrait", unit:"mm", format:"a4" });
 
-      const pageWidth  = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth   = pageWidth;
-      const imgHeight  = (canvas.height * imgWidth) / canvas.width;
-
+      const A4_WIDTH_MM  = 210;
+      const A4_HEIGHT_MM = 297;
+      const imgWidthMM  = A4_WIDTH_MM;
+      const imgHeightMM = (canvas.height * imgWidthMM) / canvas.width;
       const imgData = canvas.toDataURL("image/jpeg", 0.95);
 
-      if(imgHeight <= pageHeight){
-        pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+      if(imgHeightMM <= A4_HEIGHT_MM){
+        // কন্টেন্ট এক পেজেই ধরে যাচ্ছে — পেজের সাইজ কন্টেন্টের সমান করে বসানো হলো
+        // যাতে নিচে অকারণে বড় ফাঁকা সাদা জায়গা না থাকে, ফুটার পেজের আসল নিচেই থাকে
+        const pdf = new jsPDF({ orientation:"portrait", unit:"mm", format:[imgWidthMM, imgHeightMM] });
+        pdf.addImage(imgData, "JPEG", 0, 0, imgWidthMM, imgHeightMM);
+        pdf.save(`hajira-report-${ym}.pdf`);
       }else{
-        // একাধিক পেজে ভাগ করে বসানো (লম্বা রেজিস্টারের জন্য)
-        let heightLeft = imgHeight;
+        // কন্টেন্ট এক A4 পেজের চেয়ে বড় — স্ট্যান্ডার্ড A4-এ একাধিক পেজে ভাগ করে বসানো
+        const pdf = new jsPDF({ orientation:"portrait", unit:"mm", format:"a4" });
+        let heightLeft = imgHeightMM;
         let position = 0;
-        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidthMM, imgHeightMM);
+        heightLeft -= A4_HEIGHT_MM;
         while(heightLeft > 0){
-          position = heightLeft - imgHeight;
+          position = heightLeft - imgHeightMM;
           pdf.addPage();
-          pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-          heightLeft -= pageHeight;
+          pdf.addImage(imgData, "JPEG", 0, position, imgWidthMM, imgHeightMM);
+          heightLeft -= A4_HEIGHT_MM;
         }
+        pdf.save(`hajira-report-${ym}.pdf`);
       }
-
-      pdf.save(`hajira-report-${ym}.pdf`); // সরাসরি ডিভাইসে ডাউনলোড — Firebase Storage-এ কিছু আপলোড হয় না
+      // সরাসরি ডিভাইসে ডাউনলোড — Firebase Storage-এ কিছু আপলোড হয় না
     }finally{
       document.body.removeChild(wrap);
       document.body.removeChild(style);
