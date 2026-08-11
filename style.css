@@ -7,6 +7,7 @@
    ========================================================================== */
 
 :root{
+  color-scheme: light;
   --paper:      #F8FAFC;
   --paper-2:    #F1F5F9;
   --ink:        #1B2A45;
@@ -381,6 +382,10 @@ img{ max-width:100%; display:block; }
   padding: .85rem 1.1rem; color: var(--ink-2); font-weight:600; font-size:.95rem;
   box-shadow: var(--shadow); opacity:.75;
 }
+.chapter-count-line{
+  margin: 1.6rem 0 1.2rem; font-weight:700; font-size:1.05rem;
+  color: #10182B !important; -webkit-text-fill-color:#10182B;
+}
 
 /* ---------------- CONTACT ---------------- */
 .contact-intro{ padding-bottom: 1.4rem; }
@@ -575,10 +580,13 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .private-chapter-card{
   display:flex; align-items:center; justify-content:space-between; gap:1rem;
   padding: 1rem 1.3rem; border:1px solid var(--line); border-radius: 14px;
-  background: var(--card-bg); text-decoration:none; color: var(--ink);
+  background: var(--card-bg); text-decoration:none;
   transition: transform .2s var(--ease), box-shadow .2s var(--ease);
 }
 .private-chapter-card:hover{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+.private-chapter-card > span:first-child{
+  color:#10182B !important; -webkit-text-fill-color:#10182B; font-weight:700; font-size:1rem;
+}
 .private-chapter-num{ font-weight:700; color: var(--gold); margin-right:.6rem; }
 .private-chapter-soon{ font-size:.78rem; color: var(--muted); }
 .private-content-body{ text-align:left; }
