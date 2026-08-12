@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>`;
   }
   function privateChaptersCard(){
-    const chapters = ["📖 নাসির অধ্যায়","📖 নাজিম অধ্যায়","📖 বোরহান অধ্যায়","📖 আমার গল্প"];
+    const chapters = ["📖 নাসির অধ্যায়","📖 নাজিম অধ্যায়","📖 হাফসা অধ্যায়","📖 আমার কথা"];
     return `
     <div class="highlight-card">
       <span class="tag">Private</span>

@@ -1,6 +1,6 @@
 /* ==========================================================================
    private-guard.js
-   unpublished.html / nasir.html / nazim.html / borhan.html / amar-golpo.html
+   unpublished.html / nasir.html / nazim.html / hafsa.html / amar-golpo.html
    — এই পেজগুলোতে কোনো password ফর্ম নেই।
 
    এখানে শুধু চেক করা হয়: localStorage-এ আনলক ফ্ল্যাগ আছে কিনা (আগে

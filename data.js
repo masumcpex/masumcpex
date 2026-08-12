@@ -456,7 +456,7 @@ const SITE_DATA = {
     {
       id: "p0",
       title: "WorkTrack",
-      icon: "🏗️",
+      icon: "",
       description: "টিমের দৈনিক হাজিরা ও কাজের ঘণ্টা লিখে রাখার ডিজিটাল খাতা — সদস্য যোগ/বাদ দেওয়া, সামারি ও রেজিস্টারসহ।",
       status: "লাইভ",
       url: "worktrack.html"
@@ -464,7 +464,7 @@ const SITE_DATA = {
     {
       id: "p1",
       title: "Masum Notes",
-      icon: "📝",
+      icon: "",
       description: "ব্যক্তিগত নোট রাখার এবং সাজিয়ে রাখার একটি ছোট্ট টুল।",
       status: "চলছে",
       url: "#"
@@ -472,7 +472,7 @@ const SITE_DATA = {
     {
       id: "p3",
       title: "Mystery Game",
-      icon: "🎮",
+      icon: "",
       description: "CICADA 3301 ধাঁচের জটিল ধাঁধা ও বুদ্ধিমত্তার খেলা।",
       status: "লাইভ",
       url: "https://docs.google.com/forms/d/e/1FAIpQLSeUXTUT5i4McPtrl27yQj3L3BYl_wGWjVKEDpnMpLnD8Sn3YQ/viewform"
@@ -480,7 +480,7 @@ const SITE_DATA = {
     {
       id: "p4",
       title: "English Learning",
-      icon: "🗣️",
+      icon: "",
       description: "স্মার্ট স্পোকেন ইংলিশ শেখার একটি ইন্টারঅ্যাক্টিভ প্ল্যাটফর্ম।",
       status: "লাইভ",
       url: "english-learning.html"
@@ -488,7 +488,7 @@ const SITE_DATA = {
     {
       id: "p5",
       title: "ভবিষ্যতের অ্যাপ",
-      icon: "🚀",
+      icon: "",
       description: "নতুন আইডিয়া নিয়ে কাজ চলছে — শীঘ্রই আসছে।",
       status: "শীঘ্রই",
       url: "#"
