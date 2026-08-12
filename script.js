@@ -156,15 +156,13 @@ document.addEventListener("DOMContentLoaded", () => {
     </div>`;
   }
   function privateChaptersCard(){
-    const chapters = ["📖 নাসির অধ্যায়","📖 নাজিম অধ্যায়","📖 হাফসা অধ্যায়","📖 আমার কথা"];
+    const chapters = [];
     return `
     <div class="highlight-card">
       <span class="tag">Private</span>
       <h4>🔒 বাস্তবতার অন্ধকার পৃষ্ঠা</h4>
-      <p>আমার জীবনের কিছু বাস্তব ঘটনা, স্মৃতি, কষ্ট ও না-বলা কথা।</p>
-      <ul class="mini-chapter-list">
-        ${chapters.map(c => `<li>${c}</li>`).join("")}
-      </ul>
+      <p>কিছু গল্প লেখা হয় না কাউকে শোনানোর জন্য—শুধু মনে জমে থাকা কথাগুলো একদিন শব্দ হয়ে বেরিয়ে আসে। এখানে আছে আমার জীবনের কিছু বাস্তব স্মৃতি, অনুভূতি, কষ্ট ও না-বলা অধ্যায়।</p>
+      ${chapters.length ? `<ul class="mini-chapter-list">${chapters.map(c => `<li>${c}</li>`).join("")}</ul>` : ""}
       <a href="#private-chapters">বিস্তারিত দেখুন →</a>
     </div>`;
   }
