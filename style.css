@@ -163,6 +163,7 @@ img{ max-width:100%; display:block; }
 }
 .icon-btn:hover{ background: rgba(255,255,255,.1); }
 .icon-btn:active{ transform: scale(.94); }
+.icon-btn svg{ width:20px; height:20px; }
 .menu-toggle{ display:none; }
 
 /* mobile nav */
@@ -184,7 +185,7 @@ img{ max-width:100%; display:block; }
   .menu-toggle{ display:inline-flex; }
 
   .header-tools{ gap:.15rem; }
-  #searchToggle, #menuToggle{ font-size: 1.4rem; }
+  #searchToggle svg, #menuToggle svg{ width:22px; height:22px; }
 }
 @keyframes navDrop{ from{ opacity:0; transform: translateY(-6px); } to{ opacity:1; transform:none; } }
 
