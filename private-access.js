@@ -1,31 +1,3 @@
-/* ==========================================================================
-   private-access.js
-   "🔒 বাস্তবতার অন্ধকার পৃষ্ঠা" — একমাত্র এন্ট্রি পয়েন্ট (index.html-এর
-   #private-chapters সেকশনে ব্যবহৃত)।
-
-   এই ফাইলটা সম্পূর্ণ স্বতন্ত্র — WorkTrack-এর Google/Firebase Login,
-   Firestore approvedPrivateUsers, বা Cloud Functions কিছুই ব্যবহার করে না।
-   এখানে শুধু একটাই ধাপ: password যাচাই।
-
-   ফ্লো:
-     Password ইনপুট → PBKDF2(SHA-256) দিয়ে verify → ঠিক হলে
-     localStorage-এ একটা আনলক ফ্ল্যাগ সেট হয় → private content দেখা যায়।
-
-   পাসওয়ার্ড সততার নোট (গুরুত্বপূর্ণ):
-     আসল পাসওয়ার্ড কোথাও plaintext হিসেবে রাখা হয়নি। এখানে শুধু
-     PBKDF2-SHA256 দিয়ে তৈরি একটা salted derived hash (এবং salt +
-     iteration count) রাখা আছে — যা থেকে মূল পাসওয়ার্ড ফিরিয়ে বের করা
-     সম্ভব না (one-way derivation)।
-
-     তবে এটা কোনো server-side security না — এটা static hosting-এর সীমাবদ্ধতা:
-       ১) salt/hash/iteration সবই browser-এ downloadable, তাই কেউ চাইলে
-          অফলাইনে brute-force/dictionary attack চালাতে পারে (যদিও উচ্চ
-          iteration count এটাকে ধীর ও ব্যয়বহুল করে তোলে)।
-       ২) এটা একটা "family/private gate" — banking-level protection নয়।
-     সত্যিকারের গোপনীয়তা দরকার হলে ভবিষ্যতে server-side (backend)
-     verification প্রয়োজন হবে।
-   ========================================================================== */
-
 export const UNLOCK_KEY = "privateChapterUnlocked";
 
 // PBKDF2-SHA256 parameters — শুধু salt + derived hash + iteration count রাখা
@@ -101,7 +73,7 @@ export function initPrivateGate(opts) {
   async function tryUnlock() {
     setStatus("");
     const val = (pwInput?.value || "").trim();
-    if (!val) { setStatus("❌ Password লিখুন।", true); return; }
+    if (!val) { setStatus(" Password লিখুন।", true); return; }
     if (pwSubmitBtn) pwSubmitBtn.disabled = true;
     try {
       const ok = await verifyPassword(val);
@@ -112,7 +84,7 @@ export function initPrivateGate(opts) {
         showStep("content");
         if (typeof onApproved === "function") onApproved();
       } else {
-        setStatus("❌ Password সঠিক নয়। আবার চেষ্টা করুন।", true);
+        setStatus(" Password সঠিক নয়। আবার চেষ্টা করুন।", true);
       }
     } finally {
       if (pwSubmitBtn) pwSubmitBtn.disabled = false;
