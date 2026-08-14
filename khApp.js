@@ -75,27 +75,6 @@ export function initKhApp(uid){
     return `${prefix}-${String(seq).padStart(4, "0")}`;
   }
 
-  /* এই মেম্বারের পাবলিক শেয়ার লিংক — যেখানেই সাইট হোস্ট হোক (masumcpex.com
-     বা অন্য কোথাও), সবসময় বর্তমান পেজের ঠিকানা থেকে নিজে থেকেই তৈরি হয়। */
-  function memberShareLink(memberId){
-    return window.location.origin + window.location.pathname.replace(/worktrack\.html$/, "attendance-view.html") + "?id=" + encodeURIComponent(memberId);
-  }
-
-  async function copyMemberLink(memberId, btn){
-    const link = memberShareLink(memberId);
-    try{
-      await navigator.clipboard.writeText(link);
-    }catch(e){
-      // ক্লিপবোর্ড API ব্লক হলে fallback
-      const ta = document.createElement("textarea");
-      ta.value = link; document.body.appendChild(ta); ta.select();
-      document.execCommand("copy"); document.body.removeChild(ta);
-    }
-    const old = btn.textContent;
-    btn.textContent = "✅";
-    setTimeout(() => { btn.textContent = old; }, 1600);
-  }
-
   /* ---------------- সদস্য রেন্ডার ---------------- */
   const CHIP_COLORS = ["chip-mint","chip-sky","chip-coral","chip-violet","chip-amber","chip-indigo","chip-rose","chip-teal"];
   const backfillingIds = new Set(); // একই মেম্বারের জন্য দুইবার backfill শুরু হওয়া ঠেকানো
@@ -104,8 +83,6 @@ export function initKhApp(uid){
       <span class="member-chip ${CHIP_COLORS[i % CHIP_COLORS.length]}">
         ${m.name}
         <span class="kh-member-id">${m.memberId || "…"}</span>
-        <button class="kh-view-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="View public page">👁</button>
-        <button class="kh-copy-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="Copy link">🔗</button>
         <button class="kh-remove-member" data-id="${m.id}" title="Remove">✕</button>
       </span>`).join("");
     noMemberNote.style.display = members.length ? "none" : "block";
@@ -159,20 +136,6 @@ export function initKhApp(uid){
   });
 
   memberChips.addEventListener("click", async e => {
-    const viewBtn = e.target.closest(".kh-view-link");
-    if(viewBtn){
-      if(!viewBtn.dataset.memberid){ alert("This member's ID is still being generated. Please try again shortly."); return; }
-      window.open(memberShareLink(viewBtn.dataset.memberid), "_blank");
-      return;
-    }
-
-    const copyBtn = e.target.closest(".kh-copy-link");
-    if(copyBtn){
-      if(!copyBtn.dataset.memberid){ alert("This member's ID is still being generated. Please try again shortly."); return; }
-      await copyMemberLink(copyBtn.dataset.memberid, copyBtn);
-      return;
-    }
-
     const removeBtn = e.target.closest(".kh-remove-member");
     if(removeBtn){
       const m = members.find(x => x.id === removeBtn.dataset.id);
