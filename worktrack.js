@@ -1,12 +1,3 @@
-/* ==========================================================================
-   worktrack.js (Firestore ভার্সন)
-   এখন সব ডেটা Firebase Firestore-এ থাকে — তাই যেকোনো ডিভাইস থেকে হাজিরা
-   দিলে সবাই সেটা দেখতে পাবে। কোনো লগইন/পাসওয়ার্ড লাগে না — যে কেউ
-   সরাসরি নাম যোগ করতে ও হাজিরা লিখতে পারবে (আগের মতোই খোলা)।
-
-   HTML/CSS-এর কোনো id/class বদলানো হয়নি, তাই ডিজাইনের কিছুই ভাঙবে না।
-   ========================================================================== */
-
 import { db, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query } from "./firebase.js";
 
 const membersCol = collection(db, "kh_members");
@@ -32,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   entryDate.value = new Date().toISOString().slice(0, 10);
 
   /* ---------------- লোডিং অবস্থা দেখানো (কানেকশন স্লো হলে ইউজার বুঝবে) ---------------- */
-  memberChips.innerHTML = `<span style="color:#7A6F5D; font-size:.9rem;">⏳ লোড হচ্ছে...</span>`;
+  memberChips.innerHTML = `<span style="color:#7A6F5D; font-size:.9rem;">লোড হচ্ছে...</span>`;
 
   /* ---------------- সদস্য রেন্ডার ---------------- */
   const CHIP_COLORS = ["chip-mint","chip-sky","chip-coral","chip-violet","chip-amber","chip-indigo","chip-rose","chip-teal"];
