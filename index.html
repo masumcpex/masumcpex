@@ -19,7 +19,7 @@
 </head>
 <body>
 
-<!-- ================= HEADER / NAV ================= -->
+<!--HEADER / NAV -->
 <header class="site-header" id="siteHeader">
   <div class="header-inner">
     <a href="#home" class="brand" data-nav="home">
@@ -59,7 +59,7 @@
 
 <main>
 
-  <!-- ================= HOME ================= -->
+  <!-- HOME -->
   <section class="page active" id="home">
 
     <!-- Hero -->
@@ -82,7 +82,7 @@
 
   </section>
 
-  <!-- ================= ABOUT ================= -->
+  <!--ABOUT -->
   <section class="page" id="about">
     <div class="page-inner narrow">
       <div class="eyebrow">পরিচিতি</div>
@@ -95,7 +95,7 @@
     </div>
   </section>
 
-  <!-- ================= LIBRARY ================= -->
+  <!-- LIBRARY  -->
   <section class="page" id="library">
     <div class="page-inner">
       <div class="eyebrow">Library</div>
@@ -105,7 +105,7 @@
     </div>
   </section>
 
-  <!-- ================= JOURNAL ================= -->
+  <!-- JOURNAL -->
   <section class="page" id="journal">
     <div class="page-inner">
       <div class="eyebrow">Journal</div>
@@ -116,7 +116,7 @@
     </div>
   </section>
 
-  <!-- ================= PROJECTS ================= -->
+  <!--PROJECTS -->
   <section class="page" id="projects">
     <div class="page-inner">
       <div class="eyebrow">Projects</div>
@@ -125,7 +125,7 @@
     </div>
   </section>
 
-  <!-- ================= ARTICLES ================= -->
+  <!--  ARTICLES-->
   <section class="page" id="articles">
     <div class="page-inner">
       <div class="eyebrow">Articles</div>
@@ -135,7 +135,7 @@
     </div>
   </section>
 
-  <!-- ================= MYSTERY (নেভিগেশন থেকে সরানো হয়েছে, ফিচার/ফাইল অক্ষত আছে) ================= -->
+  <!--MYSTERY -->
   <section class="page" id="mystery">
     <div class="page-inner narrow center">
       <h2 class="mystery-title" id="mysteryTitle"></h2>
@@ -144,26 +144,26 @@
     </div>
   </section>
 
-  <!-- ================= প্রাইভেট চ্যাপ্টার — একমাত্র এন্ট্রি পয়েন্ট (শুধু Private Password, কোনো Google/Firebase Login নেই) ================= -->
+  <!-- Private Password, -->
   <section class="page" id="private-chapters">
     <div class="page-inner narrow center">
 
-      <!-- ধাপ ১: Private Password -->
+      <!-- Stap1 Private Password-->
       <div class="private-gate" id="homePasswordStep">
         <div class="eyebrow">Private</div>
-        <h2 class="section-title">🔒 ব্যক্তিগত অধ্যায়</h2>
+        <h2 class="section-title"> ব্যক্তিগত অধ্যায়</h2>
         <p class="section-sub">এই অংশটি শুধুমাত্র অনুমোদিত password জানা ব্যক্তিদের জন্য।</p>
         <input type="password" id="homePasswordInput" placeholder="Enter private password" class="private-password-input">
-        <button type="button" class="btn btn-primary" id="homePasswordBtn">🔓 প্রবেশ করুন</button>
+        <button type="button" class="btn btn-primary" id="homePasswordBtn"> প্রবেশ করুন</button>
         <p class="private-gate-status" id="homePrivateGateStatus" style="display:none;"></p>
       </div>
 
       <!-- ধাপ ২: কনটেন্ট -->
       <div id="homePrivateContent" style="display:none;">
         <div class="eyebrow">Private</div>
-        <h2 class="section-title">🔒 বাস্তবতার অন্ধকার পৃষ্ঠা</h2>
+        <h2 class="section-title"> বাস্তবতার অন্ধকার পৃষ্ঠা</h2>
         <p class="section-sub">আমার জীবনের কিছু বাস্তব ঘটনা, স্মৃতি, কষ্ট ও না-বলা কথা।</p>
-        <p class="chapter-count-line"> ৪টি অপ্রকাশিত অধ্যায়</p>
+        <p class="chapter-count-line"> 4টি অপ্রকাশিত অধ্যায়</p>
         <a href="unpublished.html" class="btn btn-outline">বিস্তারিত দেখুন →</a>
         <div class="private-signout-row">
           <button type="button" class="btn btn-outline" id="homePrivateSignOutBtn"> Logout</button>
@@ -173,7 +173,7 @@
     </div>
   </section>
 
-  <!-- ================= CONTACT ================= -->
+  <!-- CONTACT -->
   <section class="page" id="contact">
     <div class="page-inner center contact-intro">
       <div class="eyebrow">যোগাযোগ</div>
@@ -221,11 +221,11 @@
                 <span class="ci-value">Malaysia</span>
               </span>
             </li>
-            <li class="contact-item" data-copy="@masum171">
+            <li class="contact-item" data-copy="@masumcpex">
               <span class="ci-icon" aria-hidden="true">💬</span>
               <span class="ci-text">
                 <span class="ci-label">Telegram</span>
-                <a href="https://t.me/masumcpex" target="_blank" rel="noopener">@masum171</a>
+                <a href="https://t.me/masumcpex" target="_blank" rel="noopener">@masumcpex</a>
               </span>
             </li>
           </ul>
@@ -277,7 +277,7 @@
 
 </main>
 
-<!-- ================= READ MODAL (জার্নাল/আর্টিকেল বিস্তারিত পড়ার জন্য) ================= -->
+<!-- READ MODAL -->
 <div class="modal-overlay" id="readModal">
   <div class="modal-box">
     <button class="icon-btn modal-close" id="modalClose">✕</button>
@@ -297,7 +297,7 @@
 <script src="contact.js"></script>
 <script src="/pwa.js" defer></script>
 
-<!-- Private Chapter অ্যাক্সেস — একমাত্র এন্ট্রি পয়েন্ট, শুধু password (WorkTrack-এর Google/Firebase লগইন থেকে সম্পূর্ণ আলাদা ও স্বতন্ত্র) -->
+<!-- Private Chapter-->
 <script type="module">
   import { initPrivateGate } from "./private-access.js";
   initPrivateGate({
