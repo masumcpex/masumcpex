@@ -30,12 +30,11 @@ let records = [];
 const urlParams = new URLSearchParams(window.location.search);
 const targetMemberId = urlParams.get("id"); // যেমন "JAKIR-0001", না থাকলে null
 
-const BN_MONTHS = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
-const BN_DIGITS = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
-function toBn(n){ return String(n).split("").map(ch => /[0-9]/.test(ch) ? BN_DIGITS[ch] : ch).join(""); }
+const EN_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+function toBn(n){ return String(n); } // ইন্টারফেস এখন ইংরেজি, তাই প্লেইন সংখ্যা
 function monthLabel(ym){
   const [y, m] = ym.split("-").map(Number);
-  return `${BN_MONTHS[m-1]} ${toBn(y)}`;
+  return `${EN_MONTHS[m-1]} ${y}`;
 }
 function currentYearMonth(){ return new Date().toISOString().slice(0,7); }
 
@@ -67,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     checkLoaded();
   }, err => {
     console.error(err);
-    registerLoading.textContent = "ডেটা লোড করতে সমস্যা হয়েছে — এই পেজ দেখতে Firestore-এ পাবলিক read অনুমতি প্রয়োজন।";
+    registerLoading.textContent = "Failed to load data — public read access is required in Firestore to view this page.";
   });
 
   onSnapshot(recordsCol, snapshot => {
@@ -77,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
     checkLoaded();
   }, err => {
     console.error(err);
-    registerLoading.textContent = "ডেটা লোড করতে সমস্যা হয়েছে — এই পেজ দেখতে Firestore-এ পাবলিক read অনুমতি প্রয়োজন।";
+    registerLoading.textContent = "Failed to load data — public read access is required in Firestore to view this page.";
   });
 
   /* ---------------- ?id= দেওয়া থাকলে: শুধু সেই একজনের ভিউ ---------------- */
@@ -110,9 +109,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     currentMonthCard.style.display = "grid";
     currentMonthCard.innerHTML = `
-      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(days)}</span><span class="kh-stat-label">ডিউটি দিন (${monthLabel(ym)})</span></div>
-      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(leaves)}</span><span class="kh-stat-label">ছুটি</span></div>
-      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(hours)}</span><span class="kh-stat-label">মোট কাজের ঘণ্টা</span></div>`;
+      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(days)}</span><span class="kh-stat-label">Work Days (${monthLabel(ym)})</span></div>
+      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(leaves)}</span><span class="kh-stat-label">Leave</span></div>
+      <div class="kh-stat-box"><span class="kh-stat-num">${toBn(hours)}</span><span class="kh-stat-label">Total Work Hours</span></div>`;
 
     renderSummary(myRecords);
     renderRegister(myRecords);
@@ -121,8 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderFilterOptions(){
     const current = filterMember.value;
     const opts = members.map(m => `<option value="${m.name}">${m.name}</option>`).join("");
-    filterMember.innerHTML = `<option value="সবাই">সবাই</option>` + opts;
-    if(current === "সবাই" || members.some(m => m.name === current)) filterMember.value = current;
+    filterMember.innerHTML = `<option value="All">All</option>` + opts;
+    if(current === "All" || members.some(m => m.name === current)) filterMember.value = current;
   }
 
   function renderSummary(sourceRecords){
@@ -146,8 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderRegister(sourceRecords){
-    const filter = targetMemberId ? "সবাই" : filterMember.value;
-    const filtered = filter === "সবাই" ? sourceRecords : sourceRecords.filter(r => r.member === filter);
+    const filter = targetMemberId ? "All" : filterMember.value;
+    const filtered = filter === "All" ? sourceRecords : sourceRecords.filter(r => r.member === filter);
 
     if(!filtered.length){
       registerGroups.innerHTML = "";
@@ -169,18 +168,18 @@ document.addEventListener("DOMContentLoaded", () => {
         <tr>
           <td>${r.date}</td>
           <td>${r.member}</td>
-          <td class="status-${r.status}">${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
+          <td class="status-${r.status}">${r.status === "duty" ? "Present" : "Leave"}</td>
           <td>${r.status === "duty" ? r.hours : "—"}</td>
         </tr>`).join("");
       return `
         <details class="kh-month-group"${idx === 0 ? " open" : ""}>
           <summary class="kh-month-summary">
             <span class="kh-month-label">${monthLabel(ym)}</span>
-            <span class="kh-month-count">${toBn(list.length)}টি এন্ট্রি</span>
+            <span class="kh-month-count">${list.length} entries</span>
           </summary>
           <div class="table-wrap">
             <table class="kh-table">
-              <thead><tr><th>তারিখ</th><th>নাম</th><th>স্ট্যাটাস</th><th>ঘণ্টা</th></tr></thead>
+              <thead><tr><th>Date</th><th>Name</th><th>Status</th><th>Hours</th></tr></thead>
               <tbody>${rows}</tbody>
             </table>
           </div>
