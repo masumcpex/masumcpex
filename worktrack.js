@@ -22,10 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   entryDate.value = new Date().toISOString().slice(0, 10);
 
-  /* ---------------- লোডিং অবস্থা দেখানো (কানেকশন স্লো হলে ইউজার বুঝবে) ---------------- */
   memberChips.innerHTML = `<span style="color:#7A6F5D; font-size:.9rem;">লোড হচ্ছে...</span>`;
 
-  /* ---------------- সদস্য রেন্ডার ---------------- */
   const CHIP_COLORS = ["chip-mint","chip-sky","chip-coral","chip-violet","chip-amber","chip-indigo","chip-rose","chip-teal"];
   function renderMembers(){
     memberChips.innerHTML = members.map((m, i) => `
@@ -46,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if([...filterMember.options].some(o => o.value === prevFilter)) filterMember.value = prevFilter;
   }
 
-  /* ---------------- সদস্য যোগ করা ---------------- */
+       // Add Member
   addMemberBtn.addEventListener("click", async () => {
     const name = memberInput.value.trim();
     if(!name) return;
@@ -66,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if(e.key === "Enter"){ e.preventDefault(); addMemberBtn.click(); }
   });
 
-  /* ---------------- সদস্য বাদ দেওয়া ---------------- */
+         // Remove Member
   memberChips.addEventListener("click", async e => {
     const btn = e.target.closest("button[data-id]");
     if(!btn) return;
@@ -80,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- স্ট্যাটাস টগল (ছুটি হলে ঘণ্টা ইনপুট বন্ধ) ---------------- */
+        //absent 
   entryForm.querySelectorAll('input[name="status"]').forEach(radio => {
     radio.addEventListener("change", () => {
       const isLeave = entryForm.querySelector('input[name="status"]:checked').value === "leave";
@@ -90,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  /* ---------------- এন্ট্রি সাবমিট (ডুপ্লিকেট-প্রোটেকশনসহ) ---------------- */
+       //Anti Submit
   entryForm.addEventListener("submit", async e => {
     e.preventDefault();
     if(!members.length) return;
@@ -103,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
       hours: status === "duty" ? (parseFloat(entryHours.value) || 0) : 0
     };
 
-    /* একই সদস্যের একই তারিখে আগে থেকে এন্ট্রি আছে কিনা চেক করা */
+    //same name
     const existing = records.find(r => r.member === record.member && r.date === record.date);
     if(existing){
       const oldDesc = existing.status === "duty" ? `${existing.hours} ঘণ্টা ডিউটি` : "ছুটি";
@@ -135,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- সামারি টেবিল ---------------- */
+           //Summery work 
   function renderSummary(){
     const tbody = document.querySelector("#summaryTable tbody");
     const noSummaryNote = document.getElementById("noSummaryNote");
@@ -157,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }).join("");
   }
 
-  /* ---------------- রেজিস্টার টেবিল ---------------- */
+       /// Registrar box
   function renderRegister(){
     const tbody = document.querySelector("#registerTable tbody");
     const noRecordsNote = document.getElementById("noRecordsNote");
@@ -195,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   filterMember.addEventListener("change", renderRegister);
 
-  /* ---------------- Firestore থেকে লাইভ ডেটা শোনা (Real-time sync) ---------------- */
+        //Firestore (Real-time sync)
   onSnapshot(query(membersCol), snap => {
     members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     renderMembers();
