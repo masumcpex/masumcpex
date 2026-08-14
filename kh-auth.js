@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await signInWithPopup(auth, new GoogleAuthProvider());
     }catch(err){
       console.error(err);
-      showAuthError("Google দিয়ে লগইন করা যায়নি: " + (err.code || err.message || "অজানা সমস্যা"));
+      showAuthError("Couldn't sign in with Google: " + (err.code || err.message || "Unknown error"));
     }finally{
       signInBtn.disabled = false;
     }
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await signInWithRedirect(auth, new FacebookAuthProvider());
     }catch(err){
       console.error(err);
-      showAuthError("Facebook দিয়ে লগইন করা যায়নি: " + (err.code || err.message || "অজানা সমস্যা"));
+      showAuthError("Couldn't sign in with Facebook: " + (err.code || err.message || "Unknown error"));
       fbSignInBtn.disabled = false;
     }
   });
@@ -115,12 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
     authError.style.display = "none";
     const phone = normalizePhone(phoneInput.value);
     if(!PHONE_RE.test(phone)){
-      showAuthError("দেশের কোডসহ সঠিক নম্বর দিন, যেমন: +60123456789");
+      showAuthError("Enter a valid number with country code, e.g. +60123456789");
       return;
     }
     sendCodeBtn.disabled = true;
     const originalLabel = sendCodeBtn.textContent;
-    sendCodeBtn.textContent = "কোড পাঠানো হচ্ছে...";
+    sendCodeBtn.textContent = "Sending code...";
     try{
       const verifier = await ensureRecaptcha();
       confirmationResult = await signInWithPhoneNumber(auth, phone, verifier);
@@ -132,13 +132,13 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
       resetRecaptcha(); // পরের চেষ্টায় নতুন widget তৈরি হবে
       if(err.code === "auth/invalid-phone-number"){
-        showAuthError("ফোন নম্বরটি সঠিক নয়। দেশের কোডসহ আবার লিখুন, যেমন: +60123456789");
+        showAuthError("Invalid phone number. Please re-enter it with the country code, e.g. +60123456789");
       }else if(err.code === "auth/too-many-requests" || err.code === "auth/quota-exceeded"){
-        showAuthError("অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন।");
+        showAuthError("Too many attempts. Please try again in a little while.");
       }else if(err.code === "auth/captcha-check-failed" || err.code === "auth/argument-error"){
-        showAuthError("যাচাইকরণে সমস্যা হয়েছে। পেজ রিফ্রেশ করে আবার চেষ্টা করুন।");
+        showAuthError("Verification failed. Please refresh the page and try again.");
       }else{
-        showAuthError("কোড পাঠানো যায়নি। ইন্টারনেট সংযোগ চেক করুন, অথবা Firebase Console-এ Phone প্রোভাইডার চালু আছে কিনা দেখুন।");
+        showAuthError("Couldn't send the code. Check your internet connection, or verify that the Phone provider is enabled in Firebase Console.");
       }
     }finally{
       sendCodeBtn.disabled = false;
@@ -153,29 +153,29 @@ document.addEventListener("DOMContentLoaded", () => {
   verifyCodeBtn.addEventListener("click", async () => {
     authError.style.display = "none";
     if(!confirmationResult){
-      showAuthError("আগে ফোন নম্বরে কোড পাঠান।");
+      showAuthError("Please send a code to your phone number first.");
       return;
     }
     const code = codeInput.value.trim();
-    if(!code){ showAuthError("কোডটি লিখুন।"); return; }
+    if(!code){ showAuthError("Please enter the code."); return; }
     verifyCodeBtn.disabled = true;
     const originalLabel = verifyCodeBtn.textContent;
-    verifyCodeBtn.textContent = "যাচাই করা হচ্ছে...";
+    verifyCodeBtn.textContent = "Verifying...";
     try{
       await confirmationResult.confirm(code);
-      // সফল হলে onAuthStateChanged (নিচে) বাকিটা সামলাবে
+      // onAuthStateChanged (নিচে) সফল হলে বাকিটা সামলাবে
     }catch(err){
       console.error(err);
       if(err.code === "auth/invalid-verification-code"){
-        showAuthError("কোড ভুল হয়েছে, আবার চেষ্টা করুন।");
+        showAuthError("Incorrect code, please try again.");
       }else if(err.code === "auth/code-expired"){
-        showAuthError("কোডের মেয়াদ শেষ হয়ে গেছে। নিচে থেকে নতুন কোড চান।");
+        showAuthError("The code has expired. Please request a new one below.");
         confirmationResult = null;
         codeRow.style.display = "none";
         if(changeNumberBtn) changeNumberBtn.style.display = "none";
         resetRecaptcha();
       }else{
-        showAuthError("যাচাই করা যায়নি: " + (err.code || err.message || "অজানা সমস্যা"));
+        showAuthError("Verification failed: " + (err.code || err.message || "Unknown error"));
       }
     }finally{
       verifyCodeBtn.disabled = false;
@@ -242,9 +242,9 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ---------------- পুরনো (ownerId ছাড়া) ডেটা অ্যাডমিনের নামে করে দেওয়া ----------------
      এটা একবারই চালানো উচিত, টিমের অন্য কেউ লগইন করে নতুন ডেটা লেখার আগে। */
   async function claimOldData(uid, btn){
-    if(!confirm("লগইন সিস্টেম চালু হওয়ার আগের সব হাজিরা/সদস্য ডেটা (আগের ownerId যাই থাকুক) আপনার এই অ্যাকাউন্টের নামে করে দেওয়া হবে। এটা একবারই করা উচিত। এগিয়ে যেতে চান?")) return;
+    if(!confirm("All attendance/member data from before the login system was enabled (regardless of previous ownerId) will be assigned to this account. This should only be done once. Do you want to proceed?")) return;
     btn.disabled = true;
-    btn.textContent = "কাজ চলছে...";
+    btn.textContent = "Processing...";
     try{
       const batch = writeBatch(db);
       let count = 0;
@@ -260,13 +260,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if(count > 0) await batch.commit();
-      alert(`সম্পন্ন! ${count} টা পুরনো এন্ট্রি আপনার অ্যাকাউন্টে যোগ হয়ে গেছে।`);
+      alert(`Done! ${count} old entries have been added to your account.`);
       btn.style.display = "none";
     }catch(err){
       console.error(err);
-      alert("পুরনো ডেটা claim করা যায়নি। কনসোলে এরর দেখুন / Firestore Rules চেক করুন।");
+      alert("Couldn't claim old data. Check the console for errors / verify Firestore Rules.");
       btn.disabled = false;
-      btn.textContent = "🗂️ পুরনো ডেটা নিজের করে নিন";
+      btn.textContent = "🗂️ Claim Old Data";
     }
   }
 
@@ -447,7 +447,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const code = err && err.code ? err.code : "";
     if(mode === "login"){
       if(code === "auth/wrong-password" || code === "auth/invalid-credential" || code === "auth/invalid-login-credentials"){
-        setFieldError(passwordInput, passwordError, "ভুল পাসওয়ার্ড। আবার চেষ্টা করুন।");
+        setFieldError(passwordInput, passwordError, "Incorrect password. Please try again.");
         return;
       }
       if(code === "auth/user-not-found"){
@@ -609,7 +609,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
       if(verifyError){
         if(err.code === "auth/too-many-requests"){
-          verifyError.textContent = "একটু আগেই ইমেইল পাঠানো হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করুন, এবং ইনবক্স/স্প্যাম ফোল্ডার চেক করুন।";
+          verifyError.textContent = "An email was just sent. Please wait a moment and try again, and check your inbox/spam folder.";
         }else{
           verifyError.textContent = "Couldn't resend email: " + (err.code || err.message || "Unknown error.");
         }

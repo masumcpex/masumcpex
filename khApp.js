@@ -42,6 +42,11 @@ export function initKhApp(uid){
   const downloadCsvBtn  = document.getElementById("downloadCsvBtn");
   const downloadPdfBtn  = document.getElementById("downloadPdfBtn");
   const registerGroups  = document.getElementById("registerGroups");
+  const summaryMonthSelect = document.getElementById("summaryMonthSelect");
+  const currentMonthNameEl  = document.getElementById("currentMonthName");
+  const currentMonthHoursEl = document.getElementById("currentMonthHours");
+  const previousMonthNameEl  = document.getElementById("previousMonthName");
+  const previousMonthHoursEl = document.getElementById("previousMonthHours");
 
   entryDate.value = new Date().toISOString().slice(0,10);
 
@@ -99,9 +104,9 @@ export function initKhApp(uid){
       <span class="member-chip ${CHIP_COLORS[i % CHIP_COLORS.length]}">
         ${m.name}
         <span class="kh-member-id">${m.memberId || "…"}</span>
-        <button class="kh-view-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="পাবলিক পেজ দেখুন">👁</button>
-        <button class="kh-copy-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="লিংক কপি করুন">🔗</button>
-        <button class="kh-remove-member" data-id="${m.id}" title="বাদ দিন">✕</button>
+        <button class="kh-view-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="View public page">👁</button>
+        <button class="kh-copy-link" data-id="${m.id}" data-memberid="${m.memberId || ''}" title="Copy link">🔗</button>
+        <button class="kh-remove-member" data-id="${m.id}" title="Remove">✕</button>
       </span>`).join("");
     noMemberNote.style.display = members.length ? "none" : "block";
     noMemberWarn.style.display = members.length ? "none" : "block";
@@ -111,11 +116,11 @@ export function initKhApp(uid){
     const currentFilterVal = filterMember.value;
 
     const opts = members.map(m => `<option value="${m.name}">${m.name}</option>`).join("");
-    entryMember.innerHTML = opts || `<option value="">— সদস্য নেই —</option>`;
-    filterMember.innerHTML = `<option value="সবাই">সবাই</option>` + opts;
+    entryMember.innerHTML = opts || `<option value="">— No members —</option>`;
+    filterMember.innerHTML = `<option value="All">All</option>` + opts;
 
     if(members.some(m => m.name === currentEntryVal)) entryMember.value = currentEntryVal;
-    if(currentFilterVal === "সবাই" || members.some(m => m.name === currentFilterVal)) filterMember.value = currentFilterVal;
+    if(currentFilterVal === "All" || members.some(m => m.name === currentFilterVal)) filterMember.value = currentFilterVal;
 
     // পুরনো সদস্য (এই ফিচার আসার আগে যোগ করা) যাদের memberId নেই, তাদের জন্য
     // নিঃশব্দে একবার Member ID তৈরি করে দেওয়া হয় — কোনো ম্যানুয়াল কাজ লাগে না
@@ -144,7 +149,7 @@ export function initKhApp(uid){
       memberInput.value = "";
     }catch(err){
       console.error(err);
-      alert("সদস্য যোগ করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।");
+      alert("Failed to add member. Please check your internet connection and try again.");
     }finally{
       addMemberBtn.disabled = false;
     }
@@ -156,14 +161,14 @@ export function initKhApp(uid){
   memberChips.addEventListener("click", async e => {
     const viewBtn = e.target.closest(".kh-view-link");
     if(viewBtn){
-      if(!viewBtn.dataset.memberid){ alert("এই সদস্যের ID এখনো তৈরি হচ্ছে, একটু পর আবার চেষ্টা করুন।"); return; }
+      if(!viewBtn.dataset.memberid){ alert("This member's ID is still being generated. Please try again shortly."); return; }
       window.open(memberShareLink(viewBtn.dataset.memberid), "_blank");
       return;
     }
 
     const copyBtn = e.target.closest(".kh-copy-link");
     if(copyBtn){
-      if(!copyBtn.dataset.memberid){ alert("এই সদস্যের ID এখনো তৈরি হচ্ছে, একটু পর আবার চেষ্টা করুন।"); return; }
+      if(!copyBtn.dataset.memberid){ alert("This member's ID is still being generated. Please try again shortly."); return; }
       await copyMemberLink(copyBtn.dataset.memberid, copyBtn);
       return;
     }
@@ -172,13 +177,13 @@ export function initKhApp(uid){
     if(removeBtn){
       const m = members.find(x => x.id === removeBtn.dataset.id);
       if(!m) return;
-      if(!confirm(`"${m.name}" কে সদস্য তালিকা থেকে বাদ দিতে চান? (পুরনো রেকর্ড মুছে যাবে না)`)) return;
+      if(!confirm(`Remove "${m.name}" from the member list? (Existing records will not be deleted)`)) return;
       khBounce(removeBtn);
       try{
         await deleteDoc(doc(db, "kh_members", m.id));
       }catch(err){
         console.error(err);
-        alert("সদস্য বাদ দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+        alert("Failed to remove member. Please try again.");
       }
     }
   });
@@ -224,8 +229,8 @@ export function initKhApp(uid){
         <p class="kh-modal-icon" id="khConfirmIcon">⚠️</p>
         <p class="kh-modal-text" id="khConfirmText"></p>
         <div class="kh-modal-actions">
-          <button type="button" class="btn3d btn-coral" id="khConfirmYesBtn">হ্যাঁ, নিশ্চিত</button>
-          <button type="button" class="btn3d btn-mint" id="khConfirmNoBtn">বাতিল</button>
+          <button type="button" class="btn3d btn-coral" id="khConfirmYesBtn">Yes, Confirm</button>
+          <button type="button" class="btn3d btn-mint" id="khConfirmNoBtn">Cancel</button>
         </div>
       </div>`;
     document.body.appendChild(overlay);
@@ -262,7 +267,7 @@ export function initKhApp(uid){
     overlay.innerHTML = `
       <div class="kh-modal-card">
         <p class="kh-modal-icon">⚠️</p>
-        <p class="kh-modal-text">এই সদস্যের জন্য এই তারিখের হাজিরা ইতিমধ্যেই সংরক্ষিত আছে।</p>
+        <p class="kh-modal-text">An attendance record for this member on this date already exists.</p>
         <div class="kh-modal-actions">
           <button type="button" class="btn3d btn-mint" id="khDupUpdateBtn">✏️ Update Record</button>
           <button type="button" class="btn3d btn-coral" id="khDupCancelBtn">❌ Cancel</button>
@@ -323,24 +328,83 @@ export function initKhApp(uid){
       entryHours.value = "";
     }catch(err){
       console.error(err);
-      alert("রেকর্ড সংরক্ষণ করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।");
+      alert("Failed to save record. Please check your internet connection and try again.");
     }finally{
       saveBtn.disabled = !members.length;
     }
   });
 
-  /* ---------------- সামারি টেবিল ---------------- */
+  /* ---------------- মাস নির্ণয়ের সাহায্যকারী ফাংশন ----------------
+     MAIN FIX: প্রতিটা মাসের হিসাব একদম আলাদাভাবে রাখা হয় — currentYearMonth()
+     এবং previousYearMonth() সবসময় সঠিক YYYY-MM রিটার্ন করে, এবং সামারি সবসময়
+     শুধুমাত্র নির্বাচিত একটি মাসের রেকর্ড থেকে হিসাব করে, সব মাস একসাথে যোগ করে না। */
+  function currentYearMonth(){
+    return new Date().toISOString().slice(0,7); // "YYYY-MM"
+  }
+  function previousYearMonth(){
+    const d = new Date();
+    d.setDate(1); // মাসের ১ তারিখে সেট করা হলো, যাতে মাস কমানোর সময় দিনের সংখ্যার কারণে ভুল মাসে না যায়
+    d.setMonth(d.getMonth() - 1);
+    return d.toISOString().slice(0,7);
+  }
+
+  /* সামারি সেকশনের উপরে "Current Month" / "Previous Month" মোট ঘণ্টার ব্যাজ —
+     ড্রপডাউনে যে মাসই নির্বাচিত থাকুক না কেন, এই দুইটা সবসময় প্রকৃত চলতি ও
+     আগের মাসের সংখ্যা দেখায়, যাতে দুই মাস কখনো একসাথে যোগ না হয়ে যায়। */
+  function updateMonthBadges(){
+    const cur  = currentYearMonth();
+    const prev = previousYearMonth();
+    const hoursForMonth = ym => records
+      .filter(r => r.date.startsWith(ym) && r.status === "duty")
+      .reduce((sum, r) => sum + (r.hours || 0), 0);
+
+    if(currentMonthNameEl)  currentMonthNameEl.textContent  = monthLabel(cur);
+    if(currentMonthHoursEl) currentMonthHoursEl.textContent = `${hoursForMonth(cur)} hours`;
+    if(previousMonthNameEl)  previousMonthNameEl.textContent  = monthLabel(prev);
+    if(previousMonthHoursEl) previousMonthHoursEl.textContent = `${hoursForMonth(prev)} hours`;
+  }
+
+  /* সামারি ড্রপডাউনে সিলেক্ট করার জন্য মাসের তালিকা তৈরি — রেকর্ডে থাকা প্রতিটা
+     মাস + চলতি মাস (রেকর্ড না থাকলেও, যাতে নতুন মাস শুরু হলে সাথে সাথেই
+     "Current Month" হিসেবে বেছে নেওয়া যায় এবং ০ থেকে শুরু হয়)। */
+  function populateSummaryMonthOptions(){
+    if(!summaryMonthSelect) return;
+    const cur  = currentYearMonth();
+    const prev = previousYearMonth();
+    const monthSet = new Set(records.map(r => r.date.slice(0,7)));
+    monthSet.add(cur);
+    const months = Array.from(monthSet).sort((a,b) => b.localeCompare(a));
+
+    const previouslySelected = summaryMonthSelect.value;
+    summaryMonthSelect.innerHTML = months.map(ym => {
+      let label = monthLabel(ym);
+      if(ym === cur) label = `Current Month — ${label}`;
+      else if(ym === prev) label = `Previous Month — ${label}`;
+      return `<option value="${ym}">${label}</option>`;
+    }).join("");
+
+    if(months.includes(previouslySelected)) summaryMonthSelect.value = previouslySelected;
+    else summaryMonthSelect.value = cur; // ডিফল্ট হিসেবে সবসময় চলতি মাস দেখানো হয়
+  }
+
+  /* ---------------- সামারি টেবিল ----------------
+     এখন সবসময় শুধুমাত্র ড্রপডাউনে নির্বাচিত একটি মাসের রেকর্ড থেকে হিসাব করে —
+     জুলাই আর আগস্টের ঘণ্টা কখনোই একসাথে যোগ হবে না। */
   function renderSummary(){
     const tbody = document.querySelector("#summaryTable tbody");
     const noSummaryNote = document.getElementById("noSummaryNote");
-    if(!records.length){
+    const selectedYm = (summaryMonthSelect && summaryMonthSelect.value) || currentYearMonth();
+    const monthRecords = records.filter(r => r.date.startsWith(selectedYm));
+
+    if(!monthRecords.length){
       tbody.innerHTML = "";
+      noSummaryNote.textContent = "No records for this month yet.";
       noSummaryNote.style.display = "block";
       return;
     }
     noSummaryNote.style.display = "none";
     const byMember = {};
-    records.forEach(r => {
+    monthRecords.forEach(r => {
       if(!byMember[r.member]) byMember[r.member] = { days:0, leaves:0, hours:0 };
       if(r.status === "duty"){ byMember[r.member].days++; byMember[r.member].hours += r.hours; }
       else{ byMember[r.member].leaves++; }
@@ -359,6 +423,15 @@ export function initKhApp(uid){
     }).join("");
   }
 
+  /* সামারি সেকশনের ৩টা অংশ (ব্যাজ, ড্রপডাউন অপশন, টেবিল) একসাথে রিফ্রেশ করার শর্টকাট */
+  function refreshSummarySection(){
+    updateMonthBadges();
+    populateSummaryMonthOptions();
+    renderSummary();
+  }
+
+  summaryMonthSelect?.addEventListener("change", renderSummary);
+
   /* সামারি টেবিলে অগ্রিম (advance) ইনপুট বদলালে kh_members ডকুমেন্টে সংরক্ষণ */
   document.querySelector("#summaryTable tbody").addEventListener("change", async e => {
     const input = e.target.closest(".kh-advance-input");
@@ -370,26 +443,25 @@ export function initKhApp(uid){
       await updateDoc(doc(db, "kh_members", input.dataset.id), { advance: safeVal });
     }catch(err){
       console.error(err);
-      alert("অগ্রিম সংরক্ষণ করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      alert("Failed to save advance. Please try again.");
     }finally{
       input.disabled = false;
     }
   });
 
-  /* ---------------- বাংলা মাস/সংখ্যা হেল্পার ---------------- */
-  const BN_MONTHS = ["জানুয়ারি","ফেব্রুয়ারি","মার্চ","এপ্রিল","মে","জুন","জুলাই","আগস্ট","সেপ্টেম্বর","অক্টোবর","নভেম্বর","ডিসেম্বর"];
-  const BN_DIGITS = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
-  function toBn(n){ return String(n).split("").map(ch => /[0-9]/.test(ch) ? BN_DIGITS[ch] : ch).join(""); }
-  function monthLabel(ym){ // "2026-08" -> "আগস্ট ২০২৬"
+  /* ---------------- মাস/সংখ্যা হেল্পার (ইন্টারফেস এখন ইংরেজি) ---------------- */
+  const EN_MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  function toBn(n){ return String(n); } // আগে বাংলা সংখ্যায় রূপান্তর করত, এখন ইন্টারফেস ইংরেজি হওয়ায় প্লেইন সংখ্যা
+  function monthLabel(ym){ // "2026-08" -> "August 2026"
     const [y, m] = ym.split("-").map(Number);
-    return `${BN_MONTHS[m-1]} ${toBn(y)}`;
+    return `${EN_MONTHS[m-1]} ${y}`;
   }
 
   /* ---------------- রেজিস্টার: মাস অনুযায়ী গ্রুপ করে collapsible সেকশনে দেখানো ---------------- */
   function renderRegister(){
     const noRecordsNote = document.getElementById("noRecordsNote");
     const filter = filterMember.value;
-    const filtered = filter === "সবাই" ? records : records.filter(r => r.member === filter);
+    const filtered = filter === "All" ? records : records.filter(r => r.member === filter);
 
     if(!filtered.length){
       registerGroups.innerHTML = "";
@@ -411,20 +483,20 @@ export function initKhApp(uid){
         <tr>
           <td>${r.date}</td>
           <td>${r.member}</td>
-          <td class="status-${r.status}">${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
+          <td class="status-${r.status}">${r.status === "duty" ? "Present" : "Leave"}</td>
           <td>${r.status === "duty" ? r.hours : "—"}</td>
-          <td><button class="row-delete" data-id="${r.id}" title="মুছুন">🗑️</button></td>
+          <td><button class="row-delete" data-id="${r.id}" title="Delete">🗑️</button></td>
         </tr>`).join("");
       return `
         <details class="kh-month-group"${idx === 0 ? " open" : ""}>
           <summary class="kh-month-summary">
             <span class="kh-month-label">${monthLabel(ym)}</span>
-            <span class="kh-month-count">${toBn(list.length)}টি এন্ট্রি</span>
-            <button type="button" class="btn3d btn-danger kh-month-delete" data-ym="${ym}">🗑️ এই মাস মুছুন</button>
+            <span class="kh-month-count">${list.length} entries</span>
+            <button type="button" class="btn3d btn-danger kh-month-delete" data-ym="${ym}">🗑️ Delete This Month</button>
           </summary>
           <div class="table-wrap">
             <table class="kh-table">
-              <thead><tr><th>তারিখ</th><th>নাম</th><th>স্ট্যাটাস</th><th>ঘণ্টা</th><th></th></tr></thead>
+              <thead><tr><th>Date</th><th>Name</th><th>Status</th><th>Hours</th><th></th></tr></thead>
               <tbody>${rows}</tbody>
             </table>
           </div>
@@ -438,7 +510,7 @@ export function initKhApp(uid){
     if(!monthRecords.length) return;
 
     const ok = await askConfirm(
-      `"${monthLabel(ym)}" মাসের মোট ${toBn(monthRecords.length)}টি এন্ট্রি স্থায়ীভাবে মুছে ফেলা হবে। এই কাজটি আর ফেরানো যাবে না।`,
+      `All ${monthRecords.length} entries for "${monthLabel(ym)}" will be permanently deleted. This action cannot be undone.`,
       "🗑️"
     );
     if(!ok) return;
@@ -454,7 +526,7 @@ export function initKhApp(uid){
       }
     }catch(err){
       console.error(err);
-      alert("এই মাসের হিসাব মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      alert("Failed to delete this month's records. Please try again.");
     }finally{
       if(btn) btn.disabled = false;
     }
@@ -464,14 +536,14 @@ export function initKhApp(uid){
   registerGroups.addEventListener("click", async e => {
     const rowDeleteBtn = e.target.closest(".row-delete");
     if(rowDeleteBtn){
-      const ok = await askConfirm("এই এন্ট্রিটি মুছে ফেলতে চান?", "🗑️");
+      const ok = await askConfirm("Delete this entry?", "🗑️");
       if(!ok) return;
       khBounce(rowDeleteBtn);
       try{
         await deleteDoc(doc(db, "kh_records", rowDeleteBtn.dataset.id));
       }catch(err){
         console.error(err);
-        alert("এন্ট্রি মুছতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+        alert("Failed to delete entry. Please try again.");
       }
       return;
     }
@@ -488,42 +560,38 @@ export function initKhApp(uid){
 
   filterMember.addEventListener("change", renderRegister);
 
-  /* ---------------- এই মাসের রিপোর্ট ডাউনলোড (CSV) ---------------- */
-  function currentYearMonth(){
-    return new Date().toISOString().slice(0,7); // "YYYY-MM"
-  }
-
+  /* ---------------- Download This Month's Report (CSV) ---------------- */
   downloadCsvBtn.addEventListener("click", () => {
     khBounce(downloadCsvBtn);
     const ym = currentYearMonth();
     const filter = filterMember.value;
     const monthRecords = records
       .filter(r => r.date.startsWith(ym))
-      .filter(r => filter === "সবাই" || r.member === filter)
+      .filter(r => filter === "All" || r.member === filter)
       .slice().sort((a,b) => a.date.localeCompare(b.date));
 
     if(!monthRecords.length){
-      alert("এই মাসে এখনো কোনো রেকর্ড নেই।");
+      alert("No records for this month yet.");
       return;
     }
 
-    const header = ["তারিখ","নাম","স্ট্যাটাস","ঘণ্টা"];
+    const header = ["Date","Name","Status","Hours"];
     const rows = monthRecords.map(r => [
       r.date,
       r.member,
-      r.status === "duty" ? "ডিউটি" : "ছুটি",
+      r.status === "duty" ? "Present" : "Leave",
       r.status === "duty" ? r.hours : ""
     ]);
     const csvContent = [header, ...rows]
       .map(row => row.map(cell => `"${String(cell).replace(/"/g,'""')}"`).join(","))
       .join("\r\n");
 
-    // এক্সেল/বাংলা টেক্সট ঠিকভাবে দেখানোর জন্য BOM যোগ করা হলো
+    // Excel-এ ঠিকভাবে পড়ার জন্য BOM যোগ করা হলো
     const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `hajira-report-${ym}.csv`;
+    a.download = `attendance-report-${ym}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -539,7 +607,7 @@ export function initKhApp(uid){
      (এতে ব্রাউজারের নিজস্ব বাংলা ফন্ট রেন্ডারিং হুবহু বজায় থাকে)। */
   downloadPdfBtn.addEventListener("click", async () => {
     if(typeof window.html2canvas === "undefined" || typeof window.jspdf === "undefined"){
-      alert("PDF তৈরির লাইব্রেরি লোড হয়নি। ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।");
+      alert("PDF generation library failed to load. Please check your internet connection and try again.");
       return;
     }
 
@@ -548,23 +616,23 @@ export function initKhApp(uid){
     const filter = filterMember.value;
     const monthRecords = records
       .filter(r => r.date.startsWith(ym))
-      .filter(r => filter === "সবাই" || r.member === filter)
+      .filter(r => filter === "All" || r.member === filter)
       .slice().sort((a,b) => a.date.localeCompare(b.date));
 
     if(!monthRecords.length){
-      alert("এই মাসে এখনো কোনো রেকর্ড নেই।");
+      alert("No records for this month yet.");
       return;
     }
 
     downloadPdfBtn.disabled = true;
     const originalLabel = downloadPdfBtn.textContent;
-    downloadPdfBtn.textContent = "⏳ PDF তৈরি হচ্ছে...";
+    downloadPdfBtn.textContent = "⏳ Generating PDF...";
 
     try{
       await generatePdfReport(ym, monthRecords);
     }catch(err){
       console.error(err);
-      alert("PDF তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      alert("Failed to generate PDF. Please try again.");
     }finally{
       downloadPdfBtn.disabled = false;
       downloadPdfBtn.textContent = originalLabel;
@@ -579,7 +647,7 @@ export function initKhApp(uid){
       if(r.status === "duty"){ byMember[r.member].present++; byMember[r.member].hours += (r.hours || 0); }
       else{ byMember[r.member].absent++; }
     });
-    const memberNames = Object.keys(byMember).sort((a,b) => a.localeCompare(b, "bn"));
+    const memberNames = Object.keys(byMember).sort((a,b) => a.localeCompare(b));
 
     const summaryRowsHtml = memberNames.map(name => {
       const d = byMember[name];
@@ -601,13 +669,13 @@ export function initKhApp(uid){
         <tr>
           <td class="pdf-td pdf-td-left">${escapeHtml(r.date)}</td>
           <td class="pdf-td pdf-td-left">${escapeHtml(r.member)}</td>
-          <td class="pdf-td pdf-td-left">${r.status === "duty" ? "ডিউটি" : "ছুটি"}</td>
+          <td class="pdf-td pdf-td-left">${r.status === "duty" ? "Present" : "Leave"}</td>
           <td class="pdf-td pdf-td-center">${r.status === "duty" ? toBn(r.hours) : "—"}</td>
         </tr>`).join("");
 
     const totalPresent = memberNames.reduce((sum,n) => sum + byMember[n].present, 0);
     const totalAbsent  = memberNames.reduce((sum,n) => sum + byMember[n].absent, 0);
-    const generatedAt = new Date().toLocaleString("bn-BD", { dateStyle:"medium", timeStyle:"short" });
+    const generatedAt = new Date().toLocaleString("en-US", { dateStyle:"medium", timeStyle:"short" });
 
     // ---------------- অফ-স্ক্রিন অফিসিয়াল প্রিন্ট টেমপ্লেট তৈরি ----------------
     const wrap = document.createElement("div");
@@ -620,7 +688,7 @@ export function initKhApp(uid){
           <div style="font-size:13px; font-weight:600; color:#1B2A45; white-space:nowrap;">WorkTrack — Attendance Management System</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:19px; font-weight:700; color:#0E6E5C; letter-spacing:.2px;">হাজিরা রিপোর্ট</div>
+          <div style="font-size:19px; font-weight:700; color:#0E6E5C; letter-spacing:.2px;">Attendance Report</div>
           <div style="font-size:13px; color:#666; margin-top:2px;">${monthLabel(ym)}</div>
         </div>
       </div>
@@ -628,17 +696,17 @@ export function initKhApp(uid){
       <table class="pdf-table" style="margin-bottom:26px;">
         <thead>
           <tr>
-            <th class="pdf-th pdf-th-left">নাম</th>
-            <th class="pdf-th">উপস্থিত</th>
-            <th class="pdf-th">অনুপস্থিত</th>
-            <th class="pdf-th">মোট ঘণ্টা</th>
-            <th class="pdf-th">উপস্থিতির হার</th>
+            <th class="pdf-th pdf-th-left">Name</th>
+            <th class="pdf-th">Present</th>
+            <th class="pdf-th">Absent</th>
+            <th class="pdf-th">Total Hours</th>
+            <th class="pdf-th">Attendance Rate</th>
           </tr>
         </thead>
         <tbody>${summaryRowsHtml}</tbody>
         <tfoot>
           <tr class="pdf-tfoot-row">
-            <td class="pdf-td pdf-td-left" style="font-weight:700;">সর্বমোট</td>
+            <td class="pdf-td pdf-td-left" style="font-weight:700;">Total</td>
             <td class="pdf-td pdf-td-center" style="font-weight:700;">${toBn(totalPresent)}</td>
             <td class="pdf-td pdf-td-center" style="font-weight:700;">${toBn(totalAbsent)}</td>
             <td class="pdf-td" colspan="2"></td>
@@ -646,14 +714,14 @@ export function initKhApp(uid){
         </tfoot>
       </table>
 
-      <div style="font-size:14px; font-weight:700; color:#0E6E5C; margin-bottom:10px;">দৈনিক বিবরণ</div>
+      <div style="font-size:14px; font-weight:700; color:#0E6E5C; margin-bottom:10px;">Daily Details</div>
       <table class="pdf-table" style="font-size:12px;">
         <thead>
           <tr>
-            <th class="pdf-th pdf-th-left">তারিখ</th>
-            <th class="pdf-th pdf-th-left">নাম</th>
-            <th class="pdf-th pdf-th-left">স্ট্যাটাস</th>
-            <th class="pdf-th">ঘণ্টা</th>
+            <th class="pdf-th pdf-th-left">Date</th>
+            <th class="pdf-th pdf-th-left">Name</th>
+            <th class="pdf-th pdf-th-left">Status</th>
+            <th class="pdf-th">Hours</th>
           </tr>
         </thead>
         <tbody>${detailRowsHtml}</tbody>
@@ -663,7 +731,7 @@ export function initKhApp(uid){
 
       <div style="margin-top:28px; padding-top:12px; border-top:1px solid #ccc; font-size:10.5px; color:#666; display:flex; justify-content:space-between; align-items:center;">
         <span>masumcpex.com&nbsp;&nbsp;|&nbsp;&nbsp;contact@masumcpex.com&nbsp;&nbsp;|&nbsp;&nbsp;+601133192963</span>
-        <span>রিপোর্ট প্রস্তুত: ${escapeHtml(generatedAt)}</span>
+        <span>Generated: ${escapeHtml(generatedAt)}</span>
       </div>
     `;
 
@@ -703,7 +771,7 @@ export function initKhApp(uid){
         // যাতে নিচে অকারণে বড় ফাঁকা সাদা জায়গা না থাকে, ফুটার পেজের আসল নিচেই থাকে
         const pdf = new jsPDF({ orientation:"portrait", unit:"mm", format:[imgWidthMM, imgHeightMM] });
         pdf.addImage(imgData, "JPEG", 0, 0, imgWidthMM, imgHeightMM);
-        pdf.save(`hajira-report-${ym}.pdf`);
+        pdf.save(`attendance-report-${ym}.pdf`);
       }else{
         // কন্টেন্ট এক A4 পেজের চেয়ে বড় — স্ট্যান্ডার্ড A4-এ একাধিক পেজে ভাগ করে বসানো
         const pdf = new jsPDF({ orientation:"portrait", unit:"mm", format:"a4" });
@@ -717,7 +785,7 @@ export function initKhApp(uid){
           pdf.addImage(imgData, "JPEG", 0, position, imgWidthMM, imgHeightMM);
           heightLeft -= A4_HEIGHT_MM;
         }
-        pdf.save(`hajira-report-${ym}.pdf`);
+        pdf.save(`attendance-report-${ym}.pdf`);
       }
       // সরাসরি ডিভাইসে ডাউনলোড — Firebase Storage-এ কিছু আপলোড হয় না
     }finally{
@@ -742,7 +810,7 @@ export function initKhApp(uid){
 
   /* ---------------- প্রাথমিক রেন্ডার ---------------- */
   renderMembers();
-  renderSummary();
+  refreshSummarySection();
   renderRegister();
 
   /* ---------------- এই uid-এর নিজের ডেটা শোনা শুরু ---------------- */
@@ -754,22 +822,22 @@ export function initKhApp(uid){
       .sort((a,b) => (a.name || "").localeCompare(b.name || "", "bn"));
     membersLoaded = true;
     renderMembers();
-    renderSummary();
+    refreshSummarySection();
     renderRegister();
     updateLoadingState();
   }, err => {
     console.error(err);
-    registerLoading.textContent = "ডেটা লোড করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করুন।";
+    registerLoading.textContent = "Failed to load data. Please check your internet connection.";
   });
 
   onSnapshot(myRecordsQuery, snapshot => {
     records = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
     recordsLoaded = true;
-    renderSummary();
+    refreshSummarySection();
     renderRegister();
     updateLoadingState();
   }, err => {
     console.error(err);
-    registerLoading.textContent = "ডেটা লোড করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করুন।";
+    registerLoading.textContent = "Failed to load data. Please check your internet connection.";
   });
 }
