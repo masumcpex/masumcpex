@@ -1,8 +1,3 @@
-/* ==========================================================================
-   firebase.js
-   Firebase অ্যাপ শুরু করে, Firestore, Auth (Google লগইন), আর Analytics চালু করে।
-   ========================================================================== */
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getFirestore,
