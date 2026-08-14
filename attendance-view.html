@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,7 +29,7 @@
         <span class="kh-brand-sub">Attendance — View-Only Page</span>
       </span>
     </a>
-    <a class="btn3d btn-indigo kh-back" href="index.html">← মূল সাইট</a>
+    <a class="btn3d btn-indigo kh-back" href="index.html">← Main Site</a>
   </div>
 </header>
 
@@ -37,11 +37,11 @@
 
   <div class="kh-intro">
     <div class="eyebrow">WorkTrack • Public View</div>
-    <h1 class="section-title">Temm Attendance — View-Only Page</h1>
-    <p class="section-sub">Everyone can view team attendance and working hours here. Entries cannot be added, edited, or deleted from this page — contact an admin to submit entries <a href="worktrack.html">মূল খাতায়</a> লগইন করতে হবে।</p>
+    <h1 class="section-title">Team Attendance — View-Only Page</h1>
+    <p class="section-sub">Everyone can view team attendance and working hours here. Entries cannot be added, edited, or deleted from this page — contact an admin to submit entries, or <a href="worktrack.html">log in to the main register</a>.</p>
   </div>
 
-  <p class="kh-empty-note" id="notFoundNote" style="display:none;">এই লিংকের সদস্য খুঁজে পাওয়া যায়নি। লিংকটা ঠিক আছে কিনা আবার চেক করুন।</p>
+  <p class="kh-empty-note" id="notFoundNote" style="display:none;">No member was found for this link. Please check that the link is correct.</p>
 
   <div class="kh-card kh-card--mint" id="memberHeader" style="display:none;"></div>
 
@@ -49,37 +49,37 @@
 
   <!-- ---------------- সামারি ---------------- -->
   <section class="kh-card kh-card--amber" id="summarySection">
-    <h2 class="kh-card-title">ঘণ্টার সামারি হিসাব</h2>
+    <h2 class="kh-card-title">Work Hours Summary</h2>
     <div class="table-wrap">
       <table class="kh-table" id="summaryTable">
-        <thead><tr><th>নাম</th><th>মোট কাজের দিন</th><th>মোট ছুটি</th><th>মোট কাজের সময় (ঘণ্টা)</th></tr></thead>
+        <thead><tr><th>Name</th><th>Total Work Days</th><th>Total Leave Days</th><th>Total Work Hours</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
-    <p class="kh-empty-note" id="noSummaryNote" style="display:none;">No records available yet।</p>
+    <p class="kh-empty-note" id="noSummaryNote" style="display:none;">No records available yet.</p>
   </section>
 
   <!-- ---------------- রেজিস্টার খাতা (শুধু দেখার জন্য) ---------------- -->
   <section class="kh-card kh-card--violet">
-    <h2 class="kh-card-title">হাজিরা রেজিস্টার খাতা</h2>
+    <h2 class="kh-card-title">Attendance Register</h2>
 
     <p class="kh-loading" id="registerLoading">
       <span class="kh-dot"></span><span class="kh-dot"></span><span class="kh-dot"></span>
-      ডেটা লোড হচ্ছে...
+      Loading data...
     </p>
 
     <div class="filter-row" id="filterRow">
-      <select id="filterMember"><option value="সবাই">সবাই</option></select>
+      <select id="filterMember"><option value="All">All</option></select>
     </div>
 
     <div id="registerGroups"></div>
-    <p class="kh-empty-note" id="noRecordsNote" style="display:none;">এখনো কোনো এন্ট্রি নেই।</p>
+    <p class="kh-empty-note" id="noRecordsNote" style="display:none;">No entries yet.</p>
   </section>
 
 </main>
 
 <footer class="site-footer">
-  <p>WorkTrack — পাবলিক ভিউ (শুধু দেখা যায়, এডিট করা যায় না) | ডিজাইন <strong>Masum</strong></p>
+  <p>WorkTrack — Public View (view-only, cannot be edited) | Designed by <strong>Masum</strong></p>
 </footer>
 
 <style>
