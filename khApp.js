@@ -419,7 +419,7 @@ export function initKhApp(uid){
              <input type="number" class="kh-advance-input" data-id="${m.id}" value="${advanceVal}" step="0.01" min="0" placeholder="0">
            </div>`
         : `<span class="kh-advance-prefix">RM 0</span>`;
-      return `<tr><td>${name}</td><td>${d.days}</td><td>${d.leaves}</td><td>${d.hours}</td><td>${advanceCell}</td></tr>`;
+      return `<tr><td>${name}</td><td>${d.days}</td><td>${d.leaves}</td><td><strong>${d.hours}</strong></td><td>${advanceCell}</td></tr>`;
     }).join("");
   }
 
