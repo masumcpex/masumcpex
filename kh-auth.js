@@ -8,7 +8,7 @@
 
 import {
   auth, db, GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
-  signInWithPopup, signInWithRedirect, getRedirectResult,
+  signInWithPopup,
   signInWithPhoneNumber, signOut, onAuthStateChanged,
   collection, getDocs, writeBatch,
   createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
@@ -58,25 +58,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ---------------- Facebook ----------------
-     মোবাইলে Facebook-এর "আগে লগইন করেছিলেন, Continue করবেন?" কনফার্মেশন
-     ধাপটা নতুন ট্যাবে খোলার প্রবণতা আছে, যেটা popup-এর sessionStorage
-     ভেঙে দেয় ("missing initial state" এরর)। তাই এখানে redirect ব্যবহার
-     করা হচ্ছে — পুরো পেজ একই ট্যাবে Facebook-এ যাবে, তারপর ফিরে আসবে। */
+     আগে signInWithRedirect ব্যবহার হতো, কিন্তু নতুন Android Chrome-এর
+     storage-partitioning ফিচারের কারণে redirect থেকে ফেরার পর
+     sessionStorage হারিয়ে যাচ্ছিল ("missing initial state" এরর) —
+     ফলে লগইনই সম্পূর্ণ ব্যর্থ হচ্ছিল। তাই Google-এর মতোই এখন popup
+     ব্যবহার করা হচ্ছে, যেটা আধুনিক মোবাইল ব্রাউজারে বেশি নির্ভরযোগ্য। */
   fbSignInBtn.addEventListener("click", async () => {
     authError.style.display = "none";
     fbSignInBtn.disabled = true;
     try{
-      await signInWithRedirect(auth, new FacebookAuthProvider());
+      await signInWithPopup(auth, new FacebookAuthProvider());
     }catch(err){
       console.error(err);
       showAuthError("Couldn't sign in with Facebook: " + (err.code || err.message || "Unknown error"));
+    }finally{
       fbSignInBtn.disabled = false;
     }
-  });
-
-  /* redirect ব্যবহার না করলেও, আগে redirect দিয়ে চেষ্টা করা থাকলে সেই ফলাফল/এরর ধরার জন্য রেখে দেওয়া হলো */
-  getRedirectResult(auth).catch((err) => {
-    console.error(err);
   });
 
   /* ---------------- ফোন নম্বর (OTP) ---------------- */
