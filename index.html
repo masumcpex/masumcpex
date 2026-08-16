@@ -6,8 +6,6 @@
 <title>মাসুম | Masum Cpex</title>
 <meta name="description" content="মাসুম বিল্লাহর ব্যক্তিগত ডিজিটাল প্ল্যাটফর্ম — লেখা, বই, গল্প, জার্নাল, প্রজেক্ট ও জীবনের নানা অভিজ্ঞতার একটি নিজস্ব সংগ্রহ।">
 
-<!-- নতুন — Google সার্চ/সোশ্যাল মিডিয়া প্রিভিউতে যেন সঠিক প্রোফাইল ছবি দেখায়,
-     অন্য কোনো পেজের ছবি না, তার জন্য স্পষ্টভাবে বলে দেওয়া হলো (og:image) -->
 <meta property="og:title" content="মাসুম | Masum Cpex">
 <meta property="og:description" content="মাসুম বিল্লাহর ব্যক্তিগত ডিজিটাল প্ল্যাটফর্ম — লেখা, বই, গল্প, জার্নাল, প্রজেক্ট ও জীবনের নানা অভিজ্ঞতার একটি নিজস্ব সংগ্রহ।">
 <meta property="og:image" content="https://masumcpex.github.io/masumcpex/masum.webp">
@@ -29,7 +27,6 @@
 </head>
 <body>
 
-<!--HEADER / NAV -->
 <header class="site-header" id="siteHeader">
   <div class="header-inner">
     <a href="#home" class="brand" data-nav="home">
@@ -57,7 +54,6 @@
     </div>
   </div>
 
-  <!-- সার্চ বার -->
   <div class="search-panel" id="searchPanel">
     <div class="search-panel-inner">
       <input type="text" id="searchInput" placeholder="বই, জার্নাল, আর্টিকেল বা প্রজেক্ট খুঁজুন...">
@@ -69,10 +65,8 @@
 
 <main>
 
-  <!-- HOME -->
   <section class="page active" id="home">
 
-    <!-- Hero -->
     <div class="hero">
       <div class="hero-photo-wrap">
         <img class="hero-photo" id="heroPhoto" src="" alt="Masum Billah">
@@ -83,16 +77,14 @@
       <a class="btn btn-primary" id="heroCta" href="#library"></a>
     </div>
 
-    <!-- Homepage highlight strips -->
     <div class="section-block">
       <div class="eyebrow">সর্বশেষ</div>
-      <h2 class="section-title">এই মুহূর্তে যা নতুন</h2>
+      <h2 class="section-title">সাম্প্রতিক সংযোজন</h2>
       <div class="highlight-grid" id="homeHighlights"><!-- JS injects: Latest Book / Journal / Article / Featured Project --></div>
     </div>
 
   </section>
 
-  <!--ABOUT -->
   <section class="page" id="about">
     <div class="page-inner narrow">
       <div class="eyebrow">পরিচিতি</div>
@@ -105,17 +97,15 @@
     </div>
   </section>
 
-  <!-- LIBRARY  -->
   <section class="page" id="library">
     <div class="page-inner">
       <div class="eyebrow">Library</div>
-      <h2 class="section-title">আমার প্রকাশিত ই-বুক সমূহ</h2>
+      <h2 class="section-title">বইয়ের জগতে প্রবেশ করুন</h2>
       <p class="section-sub">নিচের তালিকা থেকে আপনার পছন্দের বইটি নির্বাচন করুন এবং সরাসরি পড়ুন বা ডাউনলোড করুন।</p>
       <div class="card-grid" id="bookGrid"><!-- JS injects book cards --></div>
     </div>
   </section>
 
-  <!-- JOURNAL -->
   <section class="page" id="journal">
     <div class="page-inner">
       <div class="eyebrow">Journal</div>
@@ -126,7 +116,6 @@
     </div>
   </section>
 
-  <!--PROJECTS -->
   <section class="page" id="projects">
     <div class="page-inner">
       <div class="eyebrow">Projects</div>
@@ -135,7 +124,6 @@
     </div>
   </section>
 
-  <!--  ARTICLES-->
   <section class="page" id="articles">
     <div class="page-inner">
       <div class="eyebrow">Articles</div>
@@ -145,7 +133,6 @@
     </div>
   </section>
 
-  <!--MYSTERY -->
   <section class="page" id="mystery">
     <div class="page-inner narrow center">
       <h2 class="mystery-title" id="mysteryTitle"></h2>
@@ -154,27 +141,24 @@
     </div>
   </section>
 
-  <!-- Private Password, -->
   <section class="page" id="private-chapters">
     <div class="page-inner narrow center">
 
-      <!-- Stap1 Private Password-->
       <div class="private-gate" id="homePasswordStep">
         <div class="eyebrow">Private</div>
         <h2 class="section-title"> ব্যক্তিগত অধ্যায়</h2>
-        <p class="section-sub">এই অংশটি শুধুমাত্র অনুমোদিত password জানা ব্যক্তিদের জন্য।</p>
+        <p class="section-sub">এই অংশটি শুধুমাত্র নির্দিষ্ট পাসওয়ার্ডধারীদের জন্য উন্মুক্ত।</p>
         <input type="password" id="homePasswordInput" placeholder="Enter private password" class="private-password-input">
         <button type="button" class="btn btn-primary" id="homePasswordBtn"> প্রবেশ করুন</button>
         <p class="private-gate-status" id="homePrivateGateStatus" style="display:none;"></p>
       </div>
 
-      <!-- ধাপ ২: কনটেন্ট -->
       <div id="homePrivateContent" style="display:none;">
         <div class="eyebrow">Private</div>
         <h2 class="section-title"> বাস্তবতার অন্ধকার পৃষ্ঠা</h2>
         <p class="section-sub">আমার জীবনের কিছু বাস্তব ঘটনা, স্মৃতি, কষ্ট ও না-বলা কথা।</p>
         <p class="chapter-count-line"> 4টি অপ্রকাশিত অধ্যায়</p>
-        <a href="unpublished.html" class="btn btn-outline">বিস্তারিত দেখুন →</a>
+        <a href="unpublished.html" class="btn btn-outline">বিস্তারিত দেখুন</a>
         <div class="private-signout-row">
           <button type="button" class="btn btn-outline" id="homePrivateSignOutBtn"> Logout</button>
         </div>
@@ -183,7 +167,6 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
   <section class="page" id="contact">
     <div class="page-inner center contact-intro">
       <div class="eyebrow">Connect</div>
@@ -194,7 +177,6 @@
     <div class="contact-wrap">
       <div class="contact-card" id="contactCard">
 
-        <!-- Left: contact info -->
         <div class="contact-info">
           <div class="contact-info-head">
             <span class="ci-badge" aria-hidden="true">📬</span>
@@ -241,7 +223,6 @@
           </ul>
         </div>
 
-        <!-- Right: contact form -->
         <div class="contact-form-side">
           <h3 class="cf-title">Send a Message</h3>
           <p class="cf-sub">I'll try to reply as soon as possible.</p>
@@ -286,8 +267,7 @@
   </section>
 
 </main>
-
-<!-- READ MODAL -->
+     
 <div class="modal-overlay" id="readModal">
   <div class="modal-box">
     <button class="icon-btn modal-close" id="modalClose">✕</button>
@@ -307,7 +287,6 @@
 <script src="contact.js"></script>
 <script src="/pwa.js" defer></script>
 
-<!-- Private Chapter-->
 <script type="module">
   import { initPrivateGate } from "./private-access.js";
   initPrivateGate({
