@@ -7,9 +7,9 @@
    ========================================================================== */
 
 import {
-  auth, db, GoogleAuthProvider, FacebookAuthProvider, RecaptchaVerifier,
+  auth, db, GoogleAuthProvider, FacebookAuthProvider,
   signInWithPopup,
-  signInWithPhoneNumber, signOut, onAuthStateChanged,
+  signOut, onAuthStateChanged,
   collection, getDocs, writeBatch,
   createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
   sendEmailVerification, updateProfile
@@ -29,14 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const signOutBtn  = document.getElementById("khSignOutBtn");
   const authError   = document.getElementById("khAuthError");
   const claimBtn    = document.getElementById("khClaimOldDataBtn");
-
-  const showPhoneFormBtn = document.getElementById("showPhoneFormBtn");
-  const phoneForm        = document.getElementById("khPhoneForm");
-  const phoneInput       = document.getElementById("khPhoneInput");
-  const sendCodeBtn      = document.getElementById("khSendCodeBtn");
-  const codeRow          = document.getElementById("khCodeRow");
-  const codeInput        = document.getElementById("khCodeInput");
-  const verifyCodeBtn    = document.getElementById("khVerifyCodeBtn");
 
   function showAuthError(msg){
     authError.textContent = msg;
@@ -76,144 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- ফোন নম্বর (OTP) ---------------- */
-  let confirmationResult = null;
-  let recaptchaVerifier = null;
-  const changeNumberBtn = document.getElementById("khChangeNumberBtn");
-
-  /* ব্যর্থ চেষ্টার পর reCAPTCHA widget নষ্ট/ব্যবহৃত অবস্থায় থেকে যেত —
-     সেটাই ছিল "দ্বিতীয়বার কোড পাঠানো যাচ্ছে না" সমস্যার মূল কারণ।
-     এখন প্রতিটা ব্যর্থ চেষ্টার পর verifier সম্পূর্ণ রিসেট করে দেওয়া হয়,
-     যাতে পরের ক্লিকে সবসময় একটা সতেজ (fresh) widget তৈরি হয়। */
-  function resetRecaptcha(){
-    try{ recaptchaVerifier?.clear(); }catch(e){ /* ignore */ }
-    recaptchaVerifier = null;
-    const container = document.getElementById("khRecaptchaContainer");
-    if(container) container.innerHTML = "";
-  }
-
-  async function ensureRecaptcha(){
-    if(recaptchaVerifier) return recaptchaVerifier;
-    recaptchaVerifier = new RecaptchaVerifier(auth, "khRecaptchaContainer", { size: "invisible" });
-    await recaptchaVerifier.render(); // render আগেই সেরে রাখা হচ্ছে, যাতে render-এর এরর এখানেই ধরা পড়ে
-    return recaptchaVerifier;
-  }
-
-  function normalizePhone(raw){
-    return (raw || "").trim().replace(/[\s\-()]/g, ""); // স্পেস/ড্যাশ/বন্ধনী বাদ — Firebase-এর কড়া E.164 ফরম্যাট লাগে
-  }
-  const PHONE_RE = /^\+[1-9]\d{7,14}$/;
-
-  showPhoneFormBtn.addEventListener("click", () => {
-    phoneForm.style.display = phoneForm.style.display === "none" ? "block" : "none";
-  });
-
-  sendCodeBtn.addEventListener("click", async () => {
-    authError.style.display = "none";
-    const phone = normalizePhone(phoneInput.value);
-    if(!PHONE_RE.test(phone)){
-      showAuthError("Enter a valid number with country code, e.g. +60123456789");
-      return;
-    }
-    sendCodeBtn.disabled = true;
-    const originalLabel = sendCodeBtn.textContent;
-    sendCodeBtn.textContent = "Sending code...";
-    try{
-      const verifier = await ensureRecaptcha();
-      confirmationResult = await signInWithPhoneNumber(auth, phone, verifier);
-      codeRow.style.display = "flex";
-      if(changeNumberBtn) changeNumberBtn.style.display = "block";
-      codeInput.value = "";
-      codeInput.focus();
-    }catch(err){
-      console.error(err);
-      resetRecaptcha(); // পরের চেষ্টায় নতুন widget তৈরি হবে
-      if(err.code === "auth/invalid-phone-number"){
-        showAuthError("Invalid phone number. Please re-enter it with the country code, e.g. +60123456789");
-      }else if(err.code === "auth/too-many-requests" || err.code === "auth/quota-exceeded"){
-        showAuthError("Too many attempts. Please try again in a little while.");
-      }else if(err.code === "auth/captcha-check-failed" || err.code === "auth/argument-error"){
-        showAuthError("Verification failed. Please refresh the page and try again.");
-      }else{
-        showAuthError("Couldn't send the code. Check your internet connection, or verify that the Phone provider is enabled in Firebase Console.");
-      }
-    }finally{
-      sendCodeBtn.disabled = false;
-      sendCodeBtn.textContent = originalLabel;
-    }
-  });
-
-  phoneInput.addEventListener("keydown", e => {
-    if(e.key === "Enter"){ e.preventDefault(); sendCodeBtn.click(); }
-  });
-
-  verifyCodeBtn.addEventListener("click", async () => {
-    authError.style.display = "none";
-    if(!confirmationResult){
-      showAuthError("Please send a code to your phone number first.");
-      return;
-    }
-    const code = codeInput.value.trim();
-    if(!code){ showAuthError("Please enter the code."); return; }
-    verifyCodeBtn.disabled = true;
-    const originalLabel = verifyCodeBtn.textContent;
-    verifyCodeBtn.textContent = "Verifying...";
-    try{
-      await confirmationResult.confirm(code);
-      // onAuthStateChanged (নিচে) সফল হলে বাকিটা সামলাবে
-    }catch(err){
-      console.error(err);
-      if(err.code === "auth/invalid-verification-code"){
-        showAuthError("Incorrect code, please try again.");
-      }else if(err.code === "auth/code-expired"){
-        showAuthError("The code has expired. Please request a new one below.");
-        confirmationResult = null;
-        codeRow.style.display = "none";
-        if(changeNumberBtn) changeNumberBtn.style.display = "none";
-        resetRecaptcha();
-      }else{
-        showAuthError("Verification failed: " + (err.code || err.message || "Unknown error"));
-      }
-    }finally{
-      verifyCodeBtn.disabled = false;
-      verifyCodeBtn.textContent = originalLabel;
-    }
-  });
-
-  codeInput.addEventListener("keydown", e => {
-    if(e.key === "Enter"){ e.preventDefault(); verifyCodeBtn.click(); }
-  });
-
-  /* নম্বর ভুল লিখলে/অন্য নম্বর দিয়ে আবার চেষ্টা করতে চাইলে — পুরো ফর্ম রিলোড না করেই */
-  changeNumberBtn?.addEventListener("click", () => {
-    authError.style.display = "none";
-    confirmationResult = null;
-    codeRow.style.display = "none";
-    changeNumberBtn.style.display = "none";
-    codeInput.value = "";
-    resetRecaptcha();
-    phoneInput.focus();
-  });
-
   signOutBtn.addEventListener("click", () => signOut(auth));
 
   onAuthStateChanged(auth, (user) => {
     if(user){
-      /* নতুন — শুধুমাত্র Email/Password দিয়ে সাইন-আপ করা এবং এখনো ইমেইল
-         ভেরিফাই করেননি এমন ইউজারের জন্য ভেরিফিকেশন গেট দেখানো হয়।
-         providerId === "password" চেক করার কারণে এটা শুধু email/password
-         ইউজারদের জন্যই প্রযোজ্য — Google, Facebook, Phone ইউজারদের জন্য
-         এই শর্ত কখনো true হবে না, তাই তাদের ফ্লো নিচের else-if এর মতোই
-         অপরিবর্তিত থাকে (Google-এর জন্য এই ব্লকে কোনো আচরণগত পরিবর্তন নেই)। */
-      const isPasswordUser = user.providerData.some(p => p.providerId === "password");
-      if(isPasswordUser && !user.emailVerified){
-        gate.style.display = "flex";
-        mainEl.style.display = "none";
-        userBar.style.display = "none";
-        if(window.__khShowVerifyGate) window.__khShowVerifyGate(user);
-        return;
-      }
-
       gate.style.display = "none";
       mainEl.style.display = "block";
       userBar.style.display = "flex";
@@ -301,16 +159,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const passwordInput = document.getElementById("khPasswordInput");
   const passwordError = document.getElementById("khPasswordError");
-  const togglePasswordBtn = document.getElementById("khTogglePassword");
 
   const confirmWrap  = document.getElementById("khConfirmPasswordWrap");
   const confirmInput = document.getElementById("khConfirmPasswordInput");
   const confirmError = document.getElementById("khConfirmPasswordError");
-  const toggleConfirmBtn = document.getElementById("khToggleConfirmPassword");
 
-  const termsWrap  = document.getElementById("khTermsWrap");
-  const termsCheckbox = document.getElementById("khTermsCheckbox");
-  const termsError = document.getElementById("khTermsError");
+  const termsTextEl = document.getElementById("khTermsText");
 
   const loginSignupBox = document.getElementById("khLoginSignupBox");
   const verifyBox      = document.getElementById("khVerifyEmailBox");
@@ -347,7 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
     clearFieldError(emailInput, emailError);
     clearFieldError(passwordInput, passwordError);
     clearFieldError(confirmInput, confirmError);
-    if(termsError) termsError.textContent = "";
   }
 
   /* এরর হলে user টাইপ করা শুরু করলে সেই ফিল্ডের error auto-clear হবে */
@@ -355,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
   emailInput?.addEventListener("input", () => clearFieldError(emailInput, emailError));
   passwordInput?.addEventListener("input", () => clearFieldError(passwordInput, passwordError));
   confirmInput?.addEventListener("input", () => clearFieldError(confirmInput, confirmError));
-  termsCheckbox?.addEventListener("change", () => { if(termsError) termsError.textContent = ""; });
 
   /* ---------------- Login / Sign up মোড টগল ---------------- */
   function setMode(newMode){
@@ -364,7 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fullNameWrap.style.display = isLogin ? "none" : "block";
     confirmWrap.style.display  = isLogin ? "none" : "block";
-    termsWrap.style.display    = isLogin ? "none" : "block";
+    if(termsTextEl) termsTextEl.style.display = isLogin ? "none" : "block";
     forgotBtn.style.display    = isLogin ? "inline-block" : "none";
     submitBtn.textContent      = isLogin ? "Log In" : "Create Account";
     if(authTitle) authTitle.textContent = isLogin ? "Welcome Back" : "Create Account";
@@ -379,20 +231,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   toggleModeBtn.addEventListener("click", () => setMode(mode === "login" ? "signup" : "login"));
-
-  /* ---------------- পাসওয়ার্ড eye আইকন (show/hide, keyboard accessible) ---------------- */
-  function wireEyeToggle(btn, input){
-    if(!btn || !input) return;
-    btn.addEventListener("click", () => {
-      const willShow = input.type === "password";
-      input.type = willShow ? "text" : "password";
-      btn.textContent = willShow ? "🙈" : "👁";
-      btn.setAttribute("aria-pressed", String(willShow));
-      btn.setAttribute("aria-label", willShow ? "Hide password" : "Show password");
-    });
-  }
-  wireEyeToggle(togglePasswordBtn, passwordInput);
-  wireEyeToggle(toggleConfirmBtn, confirmInput);
 
   /* ---------------- ভ্যালিডেশন ---------------- */
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -430,12 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(!confirmInput.value){ setFieldError(confirmInput, confirmError, "Please confirm your password."); return false; }
     if(confirmInput.value !== passwordInput.value){ setFieldError(confirmInput, confirmError, "Passwords do not match."); return false; }
     clearFieldError(confirmInput, confirmError);
-    return true;
-  }
-
-  function validateTerms(){
-    if(!termsCheckbox.checked){ termsError.textContent = "Please accept the Terms & Conditions."; return false; }
-    termsError.textContent = "";
     return true;
   }
 
@@ -490,7 +322,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if(!validateFullName()) valid = false;
       if(!validateSignupPassword()) valid = false;
       if(!validateConfirmPassword()) valid = false;
-      if(!validateTerms()) valid = false;
     }
     if(!valid) return;
 
@@ -513,15 +344,8 @@ document.addEventListener("DOMContentLoaded", () => {
           try{ await updateProfile(cred.user, { displayName: name }); }
           catch(profileErr){ console.error(profileErr); }
         }
-        try{
-          await sendEmailVerification(cred.user);
-        }catch(verifyErr){
-          // সাইন-আপ সফল হয়েছে, শুধু ভেরিফিকেশন ইমেইল পাঠাতে সমস্যা হয়েছে —
-          // ইউজার verify-gate স্ক্রিনেই "Resend" বাটন দিয়ে আবার চেষ্টা করতে পারবেন
-          console.error(verifyErr);
-        }
-        // onAuthStateChanged এখন user.emailVerified === false দেখে নিজে থেকেই
-        // verify-email গেট দেখাবে (নিচের window.__khShowVerifyGate হুক দ্রষ্টব্য)
+        // onAuthStateChanged (উপরের ব্লক) সরাসরি dashboard দেখাবে —
+        // কোনো email verification / OTP ধাপ নেই, সরাসরি account তৈরি হয়ে যায়
       }
     }catch(err){
       console.error(err);

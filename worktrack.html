@@ -55,7 +55,6 @@
       <label class="kh-email-label" for="khPasswordInput">Password</label>
       <div class="kh-password-wrap">
         <input type="password" id="khPasswordInput" class="kh-email-input" placeholder="Enter your password" required autocomplete="current-password" minlength="6" aria-describedby="khPasswordError">
-        <button type="button" id="khTogglePassword" class="kh-eye-btn" aria-label="Show password" aria-pressed="false">👁</button>
       </div>
       <span class="kh-field-error" id="khPasswordError" aria-live="polite"></span>
 
@@ -64,24 +63,19 @@
         <label class="kh-email-label" for="khConfirmPasswordInput">Confirm Password</label>
         <div class="kh-password-wrap">
           <input type="password" id="khConfirmPasswordInput" class="kh-email-input" placeholder="Confirm your password" autocomplete="new-password" minlength="6" aria-describedby="khConfirmPasswordError">
-          <button type="button" id="khToggleConfirmPassword" class="kh-eye-btn" aria-label="Show password" aria-pressed="false">👁</button>
         </div>
         <span class="kh-field-error" id="khConfirmPasswordError" aria-live="polite"></span>
-      </div>
-
-      <!-- শুধু "Create Account" মোডে দেখা যাবে -->
-      <div id="khTermsWrap" class="kh-terms-row" style="display:none;">
-        <label class="kh-terms-label">
-          <input type="checkbox" id="khTermsCheckbox">
-          I agree to the Terms &amp; Conditions and Privacy Policy
-        </label>
-        <span class="kh-field-error" id="khTermsError" aria-live="polite"></span>
       </div>
 
       <button type="button" id="khForgotPasswordBtn" class="kh-forgot-link">Forgot Password?</button>
 
       <button type="submit" id="khEmailSubmitBtn" class="btn3d btn-sky kh-provider-btn">Log In</button>
     </form>
+
+    <!-- শুধু "Create Account" মোডে দেখা যাবে — placeholder href, পরে আসল URL বসানো যাবে -->
+    <p id="khTermsText" class="kh-terms-text" style="display:none;">
+      By signing up, you agree to WorkTrack's <a href="#" class="kh-terms-link">Terms of Use</a> and <a href="#" class="kh-terms-link">Privacy Policy</a>.
+    </p>
 
     <p class="kh-auth-toggle">
       <span id="khToggleText">Don't have an account?</span>
@@ -100,25 +94,6 @@
       <span class="kh-provider-icon kh-fb-icon">f</span>
       Sign in with Facebook
     </button>
-
-    <button id="showPhoneFormBtn" class="btn3d btn-mint kh-provider-btn">
-      <span class="kh-provider-icon">📱</span>
-      Sign in with Phone Number
-    </button>
-
-    <!-- ফোন নম্বর ফর্ম (ডিফল্টে লুকানো) -->
-    <div id="khPhoneForm" class="kh-phone-form" style="display:none;">
-      <input type="tel" id="khPhoneInput" placeholder="+601XXXXXXXX" class="kh-phone-input">
-      <button id="khSendCodeBtn" class="btn3d btn-mint kh-provider-btn">Send Code</button>
-
-      <div id="khCodeRow" class="kh-code-row" style="display:none;">
-        <input type="text" id="khCodeInput" placeholder="6-digit code" class="kh-phone-input">
-        <button id="khVerifyCodeBtn" class="btn3d btn-sky kh-provider-btn">Verify</button>
-      </div>
-      <button type="button" id="khChangeNumberBtn" class="kh-forgot-link" style="display:none;">Change Number / Resend Code</button>
-    </div>
-
-    <div id="khRecaptchaContainer"></div>
 
     <p class="kh-auth-error" id="khAuthError" style="display:none;" aria-live="polite"></p>
   </div>
@@ -328,6 +303,17 @@
     display:flex; align-items:flex-start; gap:8px; font-size:.85rem; cursor:pointer; line-height:1.4;
   }
   .kh-terms-label input[type="checkbox"]{ margin-top:3px; width:16px; height:16px; flex-shrink:0; }
+
+  /* নতুন — Sign Up: Terms & Privacy disclaimer text (checkbox-এর বদলে) */
+  .kh-terms-text{
+    text-align:center; font-size:.8rem; color:rgba(0,0,0,0.55); line-height:1.5;
+    margin:2px 0 0; font-family:'Hind Siliguri',sans-serif;
+  }
+  .kh-terms-link{ color:#4F8CFF; font-weight:700; text-decoration:underline; }
+
+  /* নতুন — Google/Facebook বাটনের মাঝে স্পষ্ট ফাঁক, যাতে overlap মনে না হয় */
+  .kh-provider-btn{ margin-bottom: 14px; }
+  .kh-provider-btn:last-of-type{ margin-bottom: 0; }
 
   /* নতুন — সাবমিট বাটনের লোডিং স্টেট */
   #khEmailSubmitBtn:disabled, .kh-provider-btn:disabled{ opacity:.65; cursor:not-allowed; }
