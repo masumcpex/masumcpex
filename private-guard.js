@@ -39,30 +39,34 @@ export async function guardPrivatePage({ contentId, signOutBtnId, onReady }) {
   if (!hexKey) { redirectHome(); return; }
 
   const cipherEl = document.getElementById(contentId + "Cipher");
-  if (!cipherEl) { redirectHome(); return; }
 
-  let payload;
-  try {
-    payload = JSON.parse(cipherEl.textContent);
-  } catch (e) {
-    redirectHome();
-    return;
+  if (cipherEl) {
+    // এনক্রিপ্টেড কন্টেন্ট আছে (nasir/amar-golpo/nazim/hafsa এর মতো) — decrypt করে বসাও
+    let payload;
+    try {
+      payload = JSON.parse(cipherEl.textContent);
+    } catch (e) {
+      redirectHome();
+      return;
+    }
+    try {
+      const aesKey = await crypto.subtle.importKey(
+        "raw", hexToBytes(hexKey), { name: "AES-GCM" }, false, ["decrypt"]
+      );
+      const plainBuf = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: b64ToBytes(payload.iv) }, aesKey, b64ToBytes(payload.ct)
+      );
+      contentEl.innerHTML = new TextDecoder().decode(plainBuf);
+    } catch (e) {
+      // ভুল/মেয়াদোত্তীর্ণ key দিয়ে decrypt ব্যর্থ হলে সেশন মুছে আবার password চাওয়া হয়
+      clearSession();
+      redirectHome();
+      return;
+    }
   }
-
-  try {
-    const aesKey = await crypto.subtle.importKey(
-      "raw", hexToBytes(hexKey), { name: "AES-GCM" }, false, ["decrypt"]
-    );
-    const plainBuf = await crypto.subtle.decrypt(
-      { name: "AES-GCM", iv: b64ToBytes(payload.iv) }, aesKey, b64ToBytes(payload.ct)
-    );
-    contentEl.innerHTML = new TextDecoder().decode(plainBuf);
-  } catch (e) {
-    // ভুল/মেয়াদোত্তীর্ণ key দিয়ে decrypt ব্যর্থ হলে সেশন মুছে আবার password চাওয়া হয়
-    clearSession();
-    redirectHome();
-    return;
-  }
+  // cipherEl না থাকলে — এই পেজে এনক্রিপ্ট করার মতো গোপন কিছু নেই (যেমন unpublished.html,
+  // যেখানে শুধু অধ্যায়গুলোর লিংক আছে), তাই HTML-এ যা আগে থেকে আছে সেটাই দেখানো হবে —
+  // শুধু বৈধ সেশন (উপরের getActiveSessionKey চেক) থাকলেই।
 
   // সক্রিয়ভাবে এই পেজ দেখছে মানেই সেশনের মেয়াদ আরও ১ ঘণ্টা বেড়ে গেল
   refreshSession();

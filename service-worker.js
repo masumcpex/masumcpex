@@ -10,7 +10,7 @@
    - স্ট্যাটিক অ্যাসেট: "cache-first, background-refresh" (দ্রুত লোড + আপডেট)।
    ========================================================================== */
 
-const SW_VERSION   = "v1.0.0";
+const SW_VERSION   = "v1.0.2";
 const STATIC_CACHE = `masumcpex-static-${SW_VERSION}`;
 const PAGES_CACHE   = `masumcpex-pages-${SW_VERSION}`;
 const OFFLINE_URL   = "offline.html";
