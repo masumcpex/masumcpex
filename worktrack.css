@@ -243,9 +243,11 @@
 }
 #downloadCsvBtn,
 .btn-download{
-  background:#12B5A6 !important; color:#fff !important;
-  border:2px solid #0B8479 !important;
-  box-shadow: 0 5px 0 #0B8479, 0 8px 16px rgba(0,0,0,.18) !important;
+  background:#0B8479 !important; color:#fff !important;
+  border:2px solid #086b62 !important;
+  box-shadow: 0 5px 0 #086b62, 0 8px 16px rgba(0,0,0,.18) !important;
+  font-weight:800 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,.25);
 }
 .kh-month-delete{
   background:#FF6B6B !important; color:#fff !important;
