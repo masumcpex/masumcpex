@@ -22,9 +22,9 @@ export const SESSION_KEY = "khPrivateSession";
 const SESSION_DURATION_MS = 60 * 60 * 1000; // ১ ঘণ্টা — ৩০ মিনিট চাইলে: 30 * 60 * 1000
 
 const KEY_ITERATIONS = 210000;
-const KEY_SALT_HEX   = "143dc0f3eec381a4826725ec1596968e";
-const CANARY_IV_B64   = "Vi9GruTL99oIJdJ9";
-const CANARY_CT_B64   = "n4bH+euBLT8Uozy8+qvbg1Xewo7SqrP3a0HI";
+const KEY_SALT_HEX   = "e7a7b3ad2d7432213e2c15c7b07b275f";
+const CANARY_IV_B64   = "/kEdCyN/Wt00zTkp";
+const CANARY_CT_B64   = "PxOjXHYVtbIU5a1OsLiCnAN8IBzTBWObJopWdu9YkTm3wr+1";
 
 function hexToBytes(hex) {
   const bytes = new Uint8Array(hex.length / 2);
@@ -93,15 +93,16 @@ export function clearSession() {
 }
 
 /* ==========================================================================
-   বই-লক সিস্টেম ("চলার পথে আমার গল্প") — উপরের "Unrevealed Chapter"
-   password থেকে সম্পূর্ণ স্বতন্ত্র। আলাদা salt, আলাদা canary, আলাদা
-   localStorage session key — একটার password দিয়ে আরেকটা আনলক হবে না।
+   বই-লক সিস্টেম ("চলার পথে আমার গল্প") — এখন "Unrevealed Chapter"
+   থেকে ভিন্ন, নিজস্ব password। এই password পরিবর্তন করতে হলে শুধু নিচের
+   ৩টা value (BOOK_KEY_SALT_HEX / BOOK_CANARY_IV_B64 / BOOK_CANARY_CT_B64)
+   বদলালেই হবে — password অন্য কোথাও hardcode করা নেই।
    ========================================================================== */
 
 const BOOK_SESSION_KEY   = "khBookSession";
-const BOOK_KEY_SALT_HEX  = "7f541eb18789c3e9c272e92e1c7bfb5c";
-const BOOK_CANARY_IV_B64 = "R0zK8yw3QEGSv+05";
-const BOOK_CANARY_CT_B64 = "OGk+Y4tSMn57eEkqjiq5Dn9c";
+const BOOK_KEY_SALT_HEX  = "41a249dfa0e6c0eca0665d9099fa3fa7";
+const BOOK_CANARY_IV_B64 = "ZauK7HVIYEsFc/fc";
+const BOOK_CANARY_CT_B64 = "k9GDD4VhZo6KDAhWvd0RDcx3Et+0YIZYowWi40QaLjhQ";
 
 async function deriveBookRawKey(password) {
   const enc = new TextEncoder();

@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   ).join("");
 
   /* ---------------- LIBRARY ---------------- */
+  // "khBookSession" — "চলার পথে আমার গল্প"-এর নিজস্ব, Unrevealed Chapter
+  // থেকে ভিন্ন password/session (দেখুন private-access.js)।
   function hasBookSession() {
     try {
       const raw = localStorage.getItem("khBookSession");
@@ -46,7 +48,11 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="book-meta"><span>⏱ ${b.readingTime}</span></div>
         <div class="book-actions">
           ${isLocked
-            ? `<a href="#" data-locked-book="${b.id}">🔒 অনুমতি প্রয়োজন</a>`
+            ? `<div class="book-lock-gate">
+                 <input type="password" class="private-password-input book-lock-input" placeholder="Enter private password" data-book-pw="${b.id}">
+                 <button type="button" class="btn btn-primary book-lock-btn" data-book-unlock="${b.id}"> প্রবেশ করুন</button>
+                 <p class="private-gate-status book-lock-status" data-book-status="${b.id}" style="display:none;"></p>
+               </div>`
             : `<a class="solid" href="${b.readMoreUrl}" target="_blank" rel="noopener">Read More</a>
                <a href="${b.downloadUrl}" target="_blank" rel="noopener">Download</a>`
           }
@@ -59,23 +65,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   renderLibrary();
 
-  document.getElementById("bookGrid").addEventListener("click", async (e) => {
-    const lockBtn = e.target.closest("[data-locked-book]");
-    if (!lockBtn) return;
-    e.preventDefault();
+  function setBookStatus(bookId, msg, isError){
+    const statusEl = document.querySelector(`[data-book-status="${bookId}"]`);
+    if (!statusEl) return;
+    if (!msg) { statusEl.style.display = "none"; statusEl.textContent = ""; return; }
+    statusEl.textContent = msg;
+    statusEl.style.display = "block";
+    statusEl.classList.toggle("private-gate-error", !!isError);
+    statusEl.classList.toggle("private-gate-ok", !isError);
+  }
 
-    if (hasBookSession()) { renderLibrary(); return; }
-
-    const pw = window.prompt("এই বইটি দেখতে পাসওয়ার্ড লিখুন:");
-    if (!pw) return;
-
-    const { unlockBookWithPassword } = await import("./private-access.js");
-    const ok = await unlockBookWithPassword(pw);
-    if (ok) {
-      renderLibrary();
-    } else {
-      alert("পাসওয়ার্ড সঠিক নয়।");
+  async function tryUnlockBook(bookId) {
+    const input = document.querySelector(`[data-book-pw="${bookId}"]`);
+    const btn = document.querySelector(`[data-book-unlock="${bookId}"]`);
+    const val = (input?.value || "").trim();
+    setBookStatus(bookId, "");
+    if (!val) { setBookStatus(bookId, " Password লিখুন।", true); return; }
+    if (btn) btn.disabled = true;
+    try {
+      const { unlockBookWithPassword } = await import("./private-access.js");
+      const ok = await unlockBookWithPassword(val);
+      if (ok) {
+        renderLibrary();
+      } else {
+        setBookStatus(bookId, " Password সঠিক নয়। আবার চেষ্টা করুন।", true);
+        if (input) input.value = "";
+      }
+    } finally {
+      if (btn) btn.disabled = false;
     }
+  }
+
+  document.getElementById("bookGrid").addEventListener("click", async (e) => {
+    const unlockBtn = e.target.closest("[data-book-unlock]");
+    if (!unlockBtn) return;
+    e.preventDefault();
+    await tryUnlockBook(unlockBtn.dataset.bookUnlock);
+  });
+
+  document.getElementById("bookGrid").addEventListener("keydown", async (e) => {
+    const input = e.target.closest("[data-book-pw]");
+    if (!input || e.key !== "Enter") return;
+    e.preventDefault();
+    await tryUnlockBook(input.dataset.bookPw);
   });
 
   /* ---------------- PROJECTS ---------------- */
