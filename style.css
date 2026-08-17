@@ -278,6 +278,9 @@ img{ max-width:100%; display:block; }
     margin-top:2rem;
     animation: fadeUp .6s var(--ease) .3s both;
   }
+  .hero-photo-wrap{
+    display:none;
+  }
 }
 
 .btn{
