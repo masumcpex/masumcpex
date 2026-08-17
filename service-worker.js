@@ -25,8 +25,7 @@ const PRECACHE_URLS = [
   "manifest.json",
   "offline.html",
   "photo.png",
-  "icon-192.png",
-  "icon-512.png"
+  "bdflag.webp"
 ];
 
 /* এই ডোমেইনগুলোর কোনো রিকোয়েস্ট কখনো ক্যাশ/ইন্টারসেপ্ট করা হবে না

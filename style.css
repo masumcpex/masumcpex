@@ -262,6 +262,24 @@ img{ max-width:100%; display:block; }
 .hero .btn{ animation: fadeUp .6s var(--ease) .26s both; }
 @keyframes fadeUp{ from{ opacity:0; transform: translateY(14px); } to{ opacity:1; transform:none; } }
 
+/* ---------------- BD FLAG (mobile-only hero visual) ---------------- */
+.bdflag-mobile{ display:none; }
+.bdflag-mobile img{
+  display:block;
+  width:100%;
+  max-width:430px;
+  height:auto;
+  margin:0 auto;
+  object-fit:contain;
+}
+@media (max-width:767px){
+  .bdflag-mobile{
+    display:block;
+    margin-top:2rem;
+    animation: fadeUp .6s var(--ease) .3s both;
+  }
+}
+
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
   padding: .9rem 1.9rem; border-radius: 999px;
