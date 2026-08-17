@@ -92,6 +92,75 @@ export function clearSession() {
   localStorage.removeItem(SESSION_KEY);
 }
 
+/* ==========================================================================
+   বই-লক সিস্টেম ("চলার পথে আমার গল্প") — উপরের "Unrevealed Chapter"
+   password থেকে সম্পূর্ণ স্বতন্ত্র। আলাদা salt, আলাদা canary, আলাদা
+   localStorage session key — একটার password দিয়ে আরেকটা আনলক হবে না।
+   ========================================================================== */
+
+const BOOK_SESSION_KEY   = "khBookSession";
+const BOOK_KEY_SALT_HEX  = "7f541eb18789c3e9c272e92e1c7bfb5c";
+const BOOK_CANARY_IV_B64 = "R0zK8yw3QEGSv+05";
+const BOOK_CANARY_CT_B64 = "OGk+Y4tSMn57eEkqjiq5Dn9c";
+
+async function deriveBookRawKey(password) {
+  const enc = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveBits"]
+  );
+  const bits = await crypto.subtle.deriveBits(
+    { name: "PBKDF2", salt: hexToBytes(BOOK_KEY_SALT_HEX), iterations: KEY_ITERATIONS, hash: "SHA-256" },
+    keyMaterial, 256
+  );
+  return new Uint8Array(bits);
+}
+
+async function verifyBookPassword(password) {
+  if (!password) return null;
+  try {
+    const rawKey = await deriveBookRawKey(password);
+    const aesKey = await crypto.subtle.importKey("raw", rawKey, { name: "AES-GCM" }, false, ["decrypt"]);
+    await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: b64ToBytes(BOOK_CANARY_IV_B64) }, aesKey, b64ToBytes(BOOK_CANARY_CT_B64)
+    );
+    return bytesToHex(rawKey);
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveBookSession(hexKey) {
+  const exp = Date.now() + SESSION_DURATION_MS;
+  localStorage.setItem(BOOK_SESSION_KEY, JSON.stringify({ key: hexKey, exp }));
+}
+
+/** বই-সেশন এখনো valid থাকলে true, নাহলে false (ও পুরনো এন্ট্রি মুছে দেয়)। */
+export function hasActiveBookSession() {
+  try {
+    const raw = localStorage.getItem(BOOK_SESSION_KEY);
+    if (!raw) return false;
+    const { key, exp } = JSON.parse(raw);
+    if (!key || !exp || Date.now() > exp) {
+      localStorage.removeItem(BOOK_SESSION_KEY);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    localStorage.removeItem(BOOK_SESSION_KEY);
+    return false;
+  }
+}
+
+/** বইয়ের নিজস্ব password verify করে সঠিক হলে বইয়ের নিজস্ব session save করে। */
+export async function unlockBookWithPassword(password) {
+  const hexKey = await verifyBookPassword(password);
+  if (hexKey) {
+    saveBookSession(hexKey);
+    return true;
+  }
+  return false;
+}
+
 /** সক্রিয় থাকলে সেশনের মেয়াদ আবার ১ ঘণ্টা বাড়িয়ে দেয় (sliding expiry)। */
 export function refreshSession() {
   const raw = localStorage.getItem(SESSION_KEY);

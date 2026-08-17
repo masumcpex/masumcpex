@@ -25,9 +25,19 @@ document.addEventListener("DOMContentLoaded", () => {
   ).join("");
 
   /* ---------------- LIBRARY ---------------- */
+  function hasBookSession() {
+    try {
+      const raw = localStorage.getItem("khBookSession");
+      if (!raw) return false;
+      const { key, exp } = JSON.parse(raw);
+      return !!key && !!exp && Date.now() <= exp;
+    } catch (e) { return false; }
+  }
+
   function bookCard(b){
+    const isLocked = b.locked && !hasBookSession();
     return `
-    <div class="book-card ${b.locked ? "locked":""}">
+    <div class="book-card ${isLocked ? "locked":""}">
       <img class="book-cover" src="${b.cover}" alt="${b.title}">
       <div class="book-body">
         <span class="book-cat">${b.category}</span>
@@ -35,8 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="book-desc">${b.description}</p>
         <div class="book-meta"><span>⏱ ${b.readingTime}</span></div>
         <div class="book-actions">
-          ${b.locked
-            ? `<a href="#">🔒 অনুমতি প্রয়োজন</a>`
+          ${isLocked
+            ? `<a href="#" data-locked-book="${b.id}">🔒 অনুমতি প্রয়োজন</a>`
             : `<a class="solid" href="${b.readMoreUrl}" target="_blank" rel="noopener">Read More</a>
                <a href="${b.downloadUrl}" target="_blank" rel="noopener">Download</a>`
           }
@@ -44,7 +54,29 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>`;
   }
-  document.getElementById("bookGrid").innerHTML = SITE_DATA.books.map(bookCard).join("");
+  function renderLibrary(){
+    document.getElementById("bookGrid").innerHTML = SITE_DATA.books.map(bookCard).join("");
+  }
+  renderLibrary();
+
+  document.getElementById("bookGrid").addEventListener("click", async (e) => {
+    const lockBtn = e.target.closest("[data-locked-book]");
+    if (!lockBtn) return;
+    e.preventDefault();
+
+    if (hasBookSession()) { renderLibrary(); return; }
+
+    const pw = window.prompt("এই বইটি দেখতে পাসওয়ার্ড লিখুন:");
+    if (!pw) return;
+
+    const { unlockBookWithPassword } = await import("./private-access.js");
+    const ok = await unlockBookWithPassword(pw);
+    if (ok) {
+      renderLibrary();
+    } else {
+      alert("পাসওয়ার্ড সঠিক নয়।");
+    }
+  });
 
   /* ---------------- PROJECTS ---------------- */
   function projectCard(p){
