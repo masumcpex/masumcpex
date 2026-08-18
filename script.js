@@ -1,11 +1,5 @@
-/* ==========================================================================
-   script.js — data.js এর কনটেন্ট দিয়ে পুরো সাইট রেন্ডার করে।
-   নতুন সেকশন যোগ করতে চাইলে data.js এডিট করুন, এই ফাইলে হাত দেওয়ার দরকার নেই।
-   ========================================================================== */
-
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ---------------- HERO ---------------- */
   const hero = SITE_DATA.hero;
   document.getElementById("heroPhoto").src = hero.photo;
   document.getElementById("heroName").textContent = hero.name;
@@ -15,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   heroCta.textContent = hero.ctaText;
   heroCta.href = hero.ctaLink;
 
-  /* ---------------- ABOUT ---------------- */
   const about = SITE_DATA.about;
   document.getElementById("aboutTitle").textContent = about.title;
   document.getElementById("aboutPhoto").src = about.photo;
@@ -24,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `<div class="stat"><span class="num">${s.number}</span><span class="lbl">${s.label}</span></div>`
   ).join("");
 
-  /* ---------------- LIBRARY ---------------- */
   // "khBookSession" — "চলার পথে আমার গল্প"-এর নিজস্ব, Unrevealed Chapter
   // থেকে ভিন্ন password/session (দেখুন private-access.js)।
   function hasBookSession() {
@@ -110,7 +102,6 @@ document.addEventListener("DOMContentLoaded", () => {
     await tryUnlockBook(input.dataset.bookPw);
   });
 
-  /* ---------------- PROJECTS ---------------- */
   function projectCard(p){
     return `
     <div class="book-card">
@@ -127,14 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   document.getElementById("projectGrid").innerHTML = SITE_DATA.projects.map(projectCard).join("");
 
-  /* ---------------- JOURNAL & ARTICLES (with filters + modal) ---------------- */
   function entryCard(e){
     return `
     <div class="entry-card" data-id="${e.id}" data-type="${e._type}" data-url="${e.url || ""}">
       <span class="cat">${e.category}</span>
       <h4>${e.title}</h4>
       <p class="excerpt">${e.excerpt}</p>
-      <span class="date">${e.date}${e.readingTime ? " • ⏱ " + e.readingTime : ""}</span>
+      <span class="date">${e.date}${e.readingTime ? " •  " + e.readingTime : ""}</span>
     </div>`;
   }
 
@@ -168,8 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
     renderArticles(e.target.dataset.cat);
   });
 
-  renderJournal("সব");
-  renderArticles("সব");
+  renderJournal("All");
+  renderArticles("All");
 
   /* click on an entry card opens the read modal, or navigates if a real url is set */
   function findEntry(id, type){
@@ -196,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(e.target.id === "readModal") e.target.classList.remove("open");
   });
 
-  /* ---------------- MYSTERY ---------------- */
   const mystery = SITE_DATA.mystery;
   document.getElementById("mysteryTitle").textContent = mystery.title;
   document.getElementById("mysteryNotice").textContent = mystery.notice;
@@ -204,12 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
   mBtn.textContent = mystery.buttonText;
   mBtn.href = mystery.buttonUrl;
 
-  /* ---------------- CONTACT ----------------
-     নতুন কনট্যাক্ট পেজ এখন static markup (index.html-এ সরাসরি লেখা) —
-     ফর্ম-ভ্যালিডেশন ও কপি-টু-ক্লিপবোর্ড আলাদা contact.js ফাইলে হ্যান্ডেল হয়।
-     তাই এখানে আর SITE_DATA.contact থেকে DOM বসানোর দরকার নেই। */
-
-  /* ---------------- HOME HIGHLIGHTS ---------------- */
   function highlightCard(tag, title, desc, linkText, onClickHash){
     return `
     <div class="highlight-card">
@@ -224,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return `
     <div class="highlight-card">
       <span class="tag">Private</span>
-      <h4>🔒 বাস্তবতার অন্ধকার পৃষ্ঠা</h4>
+      <h4>বাস্তবতার অন্ধকার পৃষ্ঠা</h4>
       <p>কিছু গল্প লেখা হয় না কাউকে শোনানোর জন্য—শুধু মনে জমে থাকা কথাগুলো একদিন শব্দ হয়ে বেরিয়ে আসে। এখানে আছে আমার জীবনের কিছু বাস্তব স্মৃতি, অনুভূতি, কষ্ট ও না-বলা অধ্যায়।</p>
       ${chapters.length ? `<ul class="mini-chapter-list">${chapters.map(c => `<li>${c}</li>`).join("")}</ul>` : ""}
       <a href="#private-chapters">বিস্তারিত দেখুন →</a>
@@ -243,7 +226,6 @@ document.addEventListener("DOMContentLoaded", () => {
     privateChaptersCard()
   ].join("");
 
-  /* ---------------- ROUTING / NAV ---------------- */
   const pages = document.querySelectorAll(".page");
   const navLinks = document.querySelectorAll(".main-nav a");
 
@@ -257,12 +239,10 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("hashchange", () => showPage(location.hash.replace("#","") || "home"));
   showPage(location.hash.replace("#","") || "home");
 
-  /* ---------------- MOBILE MENU ---------------- */
   document.getElementById("menuToggle").addEventListener("click", () => {
     document.getElementById("mainNav").classList.toggle("open");
   });
 
-  /* ---------------- SEARCH ---------------- */
   const searchPanel = document.getElementById("searchPanel");
   document.getElementById("searchToggle").addEventListener("click", () => {
     searchPanel.classList.toggle("open");
