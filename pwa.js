@@ -1,14 +1,7 @@
-/* ==========================================================================
-   pwa.js
-   Masumcpex Hub — Service Worker রেজিস্ট্রেশন + "📱 Install App" বাটন।
-   এই ফাইলটি সাইটের প্রতিটি HTML পেজে যোগ করা আছে যাতে যেকোনো পেজ থেকেই
-   PWA ইনস্টল/অফলাইন সাপোর্ট কাজ করে। এটি Login/Auth সিস্টেমে হাত দেয় না।
-   ========================================================================== */
 
 (function () {
   "use strict";
 
-  /* ---------------- Service Worker রেজিস্ট্রেশন ---------------- */
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("/service-worker.js").catch((err) => {
@@ -17,7 +10,6 @@
     });
   }
 
-  /* ---------------- ইতিমধ্যে ইনস্টল করা আছে কিনা ---------------- */
   function isStandalone() {
     return (
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -88,7 +80,7 @@
       deferredPrompt = null;
       removeButton();
       if (!choice || choice.outcome !== "accepted") {
-        /* ইউজার বাতিল করলে কিছুক্ষণের জন্য আর দেখানো হবে না */
+        
         localStorage.setItem(DISMISS_KEY, String(Date.now()));
       }
     });
