@@ -1,7 +1,3 @@
-/* ==========================================================================
-   worktrack.css — style.css এর color/font টোকেন ব্যবহার করে
-   ========================================================================== */
-
 .kh-header{
   background: var(--ink);
   padding: .9rem 1.4rem;
@@ -16,9 +12,6 @@
 
 .kh-main{ max-width: 900px; margin: 0 auto; padding: 2.5rem 1.4rem 4rem; }
 
-/* ইনস্টল করা App (Masumcpex Hub) হিসেবে খোলা হলে উপরের হেডার (লোগো + "← মূল সাইট")
-   লুকিয়ে ফেলা হয় যাতে App খুললেই সরাসরি WorkTrack ফুল স্ক্রিনে দেখা যায়।
-   সাধারণ ব্রাউজারে (Chrome ট্যাব) ভিজিট করলে হেডার আগের মতোই দেখা যাবে। */
 @media (display-mode: standalone) {
   .kh-header{ display:none; }
   .kh-main{ padding-top: 1.4rem; }
@@ -38,7 +31,6 @@
 
 .kh-card-title{ font-family: var(--font-display); color: var(--ink); font-size: 1.15rem; margin: 0 0 1.1rem; }
 
-/* ---------------- রঙিন 3D বাটন সিস্টেম ---------------- */
 .btn3d{
   display:inline-block;
   border:none; cursor:pointer;
@@ -67,7 +59,6 @@
 
 .kh-back.btn3d{ padding: .6rem 1.2rem; font-size: .85rem; }
 
-/* ছোট আইকন-বাটন (রেজিস্টার রো ডিলিট, চিপ রিমুভ) এর জন্য হালকা সংস্করণ */
 .btn3d.btn-small{
   padding: .4rem .6rem; border-radius: 8px; font-size:.85rem;
   box-shadow: 0 3px 0 var(--btn-shadow, #333), 0 5px 10px rgba(0,0,0,.15);
@@ -147,11 +138,6 @@
 .kh-card--sky .kh-field select{ border: 2px solid #3B82F6; }
 .kh-card--mint .kh-add-row input{ border: 2px solid #2ECC71; }
 
-/* ==========================================================================
-   নতুন — লগইন/সাইনআপ গেট (Welcome Back / Create Account)
-   পুরনো kh-provider-btn, kh-phone-form ইত্যাদির আগের কোনো স্টাইল ছিল না,
-   তাই এখানে প্রথমবার সংজ্ঞায়িত করা হলো। বিদ্যমান কোনো ক্লাস মোছা/বদলানো হয়নি।
-   ========================================================================== */
 .kh-auth-gate{
   min-height: 70vh; display:flex; align-items:center; justify-content:center; padding: 2.2rem 1.2rem;
 }
@@ -222,21 +208,10 @@
 }
 .kh-user-email{ color: var(--muted); font-size:.85rem; margin-right:auto; }
 
-/* ==========================================================================
-   ফিক্স — হেডারের প্রোফাইল ছবির (kh-profile-photo) কোনো সাইজ সেট করা ছিল না,
-   তাই ছবিটা আসল রেজুলিউশনে (হাজার হাজার পিক্সেল) দেখাচ্ছিল। এখন ছোট গোল
-   অ্যাভাটার হিসেবে দেখাবে, brand-mark এর মতোই সাইজে।
-   ========================================================================== */
 .kh-profile-photo{
   width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
 }
 
-/* ==========================================================================
-   ফিক্স — "রিপোর্ট ডাউনলোড (CSV)" ও "এই মাস মুছুন" বাটন দুটো আগে অস্পষ্ট/সাদা
-   দেখাচ্ছিল (কোনো রঙ সেট করা ছিল না)। এখন স্পষ্ট রঙ দেওয়া হলো, এবং
-   -webkit-print-color-adjust দিয়ে নিশ্চিত করা হলো যাতে প্রিন্ট করলেও
-   এই রঙগুলো উবে না যায়, স্থায়ীভাবে থাকে।
-   ========================================================================== */
 .kh-register-actions{
   display:flex; align-items:center; justify-content:space-between; gap:.8rem; flex-wrap:wrap;
   margin-bottom: 1rem;
@@ -261,12 +236,6 @@ html, body, .kh-register-actions, #downloadCsvBtn, .kh-month-delete, .kh-month-g
   color-adjust: exact !important;
 }
 
-/* ==========================================================================
-   ফিক্স — "এই এন্ট্রিটি মুছে ফেলতে চান?" / ডুপ্লিকেট মোডাল (khApp.js এ
-   .kh-modal-overlay ও .kh-modal-card ক্লাস ব্যবহার হচ্ছিল, কিন্তু এতদিন
-   কোনো CSS সংজ্ঞায়িত ছিল না — তাই বক্সটা মাঝখানে ভেসে না উঠে পেজের নিচে
-   সাধারণ কনটেন্টের মতো বসে যাচ্ছিল। এখন এটাকে স্ক্রিনের ঠিক মাঝখানে
-   একটা fixed, full-screen ওভারলে হিসেবে দেখানো হবে। ========================================================================== */
 .kh-modal-overlay{
   display: none; /* JS দিয়ে flex করে দেখানো হয় */
   position: fixed;
