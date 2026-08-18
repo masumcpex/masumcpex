@@ -1,23 +1,3 @@
-/* ==========================================================================
-   private-access.js
-   "Unrevealed Chapter" — password-gated + AES-GCM এনক্রিপ্টেড কন্টেন্ট।
-
-   পুরনো সিস্টেমে কন্টেন্ট সবসময় পেজের HTML-এই plain text থাকতো, শুধু
-   display:none দিয়ে লুকানো হতো — View Source করলেই পড়া যেত। এখন কন্টেন্ট
-   AES-GCM দিয়ে এনক্রিপ্ট করে রাখা আছে (nasir.html, amar-golpo.html,
-   nazim.html, hafsa.html এর ভেতরে <script type="application/json"> ট্যাগে)।
-   সঠিক password থেকে PBKDF2 দিয়ে একটা key তৈরি হয়, সেই key দিয়েই
-   ব্রাউজারে decrypt হয়ে আসল লেখা দেখা যায়। ভুল password দিলে GCM
-   authentication ব্যর্থ হয়ে decrypt-ই হবে না — তাই আলাদা করে hash
-   রাখারও দরকার নেই, decryption নিজেই verification.
-
-   সেশন ১ ঘণ্টা মেয়াদে localStorage-এ থাকে (নিচে SESSION_DURATION_MS
-   দেখুন — চাইলে ৩০ মিনিট করতে শুধু ওই একটা সংখ্যা বদলান)। সক্রিয়ভাবে
-   কোনো private page দেখলে মেয়াদ আবার বেড়ে যায় (sliding session); ১ ঘণ্টা
-   কিছু না দেখলে আবার password লাগবে। ব্রাউজার রিফ্রেশ করলে বারবার
-   password লাগবে না, যতক্ষণ মেয়াদ আছে।
-   ========================================================================== */
-
 export const SESSION_KEY = "khPrivateSession";
 const SESSION_DURATION_MS = 60 * 60 * 1000; // ১ ঘণ্টা — ৩০ মিনিট চাইলে: 30 * 60 * 1000
 
@@ -50,13 +30,12 @@ async function deriveRawKey(password) {
   return new Uint8Array(bits);
 }
 
-/** সঠিক password দিলে hex key ফেরত দেয়, ভুল হলে null। */
 async function verifyPassword(password) {
   if (!password) return null;
   try {
     const rawKey = await deriveRawKey(password);
     const aesKey = await crypto.subtle.importKey("raw", rawKey, { name: "AES-GCM" }, false, ["decrypt"]);
-    // canary decrypt করে দেখা — সফল হলেই password সঠিক
+    
     await crypto.subtle.decrypt(
       { name: "AES-GCM", iv: b64ToBytes(CANARY_IV_B64) }, aesKey, b64ToBytes(CANARY_CT_B64)
     );
@@ -71,7 +50,6 @@ function saveSession(hexKey) {
   localStorage.setItem(SESSION_KEY, JSON.stringify({ key: hexKey, exp }));
 }
 
-/** সেশন এখনো valid থাকলে key হেক্স ফেরত দেয়, নাহলে null (ও পুরনো এন্ট্রি মুছে দেয়)। */
 export function getActiveSessionKey() {
   try {
     const raw = localStorage.getItem(SESSION_KEY);
@@ -91,13 +69,6 @@ export function getActiveSessionKey() {
 export function clearSession() {
   localStorage.removeItem(SESSION_KEY);
 }
-
-/* ==========================================================================
-   বই-লক সিস্টেম ("চলার পথে আমার গল্প") — এখন "Unrevealed Chapter"
-   থেকে ভিন্ন, নিজস্ব password। এই password পরিবর্তন করতে হলে শুধু নিচের
-   ৩টা value (BOOK_KEY_SALT_HEX / BOOK_CANARY_IV_B64 / BOOK_CANARY_CT_B64)
-   বদলালেই হবে — password অন্য কোথাও hardcode করা নেই।
-   ========================================================================== */
 
 const BOOK_SESSION_KEY   = "khBookSession";
 const BOOK_KEY_SALT_HEX  = "41a249dfa0e6c0eca0665d9099fa3fa7";
@@ -135,7 +106,6 @@ function saveBookSession(hexKey) {
   localStorage.setItem(BOOK_SESSION_KEY, JSON.stringify({ key: hexKey, exp }));
 }
 
-/** বই-সেশন এখনো valid থাকলে true, নাহলে false (ও পুরনো এন্ট্রি মুছে দেয়)। */
 export function hasActiveBookSession() {
   try {
     const raw = localStorage.getItem(BOOK_SESSION_KEY);
@@ -152,7 +122,6 @@ export function hasActiveBookSession() {
   }
 }
 
-/** বইয়ের নিজস্ব password verify করে সঠিক হলে বইয়ের নিজস্ব session save করে। */
 export async function unlockBookWithPassword(password) {
   const hexKey = await verifyBookPassword(password);
   if (hexKey) {
@@ -162,7 +131,6 @@ export async function unlockBookWithPassword(password) {
   return false;
 }
 
-/** সক্রিয় থাকলে সেশনের মেয়াদ আবার ১ ঘণ্টা বাড়িয়ে দেয় (sliding expiry)। */
 export function refreshSession() {
   const raw = localStorage.getItem(SESSION_KEY);
   if (!raw) return;
@@ -172,10 +140,6 @@ export function refreshSession() {
   } catch (e) {}
 }
 
-/**
- * হোমপেজের #private-chapters সেকশনে ব্যবহার করার জন্য — একমাত্র জায়গা
- * যেখানে password ফর্ম দেখানো হবে।
- */
 export function initPrivateGate(opts) {
   const {
     passwordStepId, contentId,
@@ -238,7 +202,6 @@ export function initPrivateGate(opts) {
     setStatus("");
   });
 
-  // আগে থেকে সেশন valid থাকলে সরাসরি content দেখাও, মেয়াদও বাড়িয়ে দাও।
   if (getActiveSessionKey()) {
     refreshSession();
     showStep("content");
