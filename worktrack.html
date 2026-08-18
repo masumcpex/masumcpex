@@ -19,7 +19,6 @@
 </head>
 <body>
 
-
 <header class="kh-header">
   <div class="kh-header-inner">
     <a href="index.html" class="brand kh-brand">
@@ -33,15 +32,13 @@
   </div>
 </header>
 
-<!-- ================= লগইন গেট (লগইন ছাড়া কিছুই দেখা যাবে না) ================= -->
 <div id="khAuthGate" class="kh-auth-gate">
   <div class="kh-auth-box" id="khLoginSignupBox">
     <h2 id="khAuthTitle">Welcome Back</h2>
     <p id="khAuthSubtitle">Sign in to continue to WorkTrack</p>
 
-    <!-- ---------------- Email/Password ফর্ম ---------------- -->
     <form id="khEmailForm" class="kh-email-form" novalidate>
-      <!-- শুধু "Create Account" মোডে দেখা যাবে -->
+     
       <div id="khFullNameWrap" style="display:none;">
         <label class="kh-email-label" for="khFullNameInput">Full Name</label>
         <input type="text" id="khFullNameInput" class="kh-email-input" placeholder="Enter your full name" autocomplete="name" aria-describedby="khFullNameError">
@@ -58,7 +55,6 @@
       </div>
       <span class="kh-field-error" id="khPasswordError" aria-live="polite"></span>
 
-      <!-- শুধু "Create Account" মোডে দেখা যাবে -->
       <div id="khConfirmPasswordWrap" style="display:none;">
         <label class="kh-email-label" for="khConfirmPasswordInput">Confirm Password</label>
         <div class="kh-password-wrap">
@@ -72,7 +68,6 @@
       <button type="submit" id="khEmailSubmitBtn" class="btn3d btn-sky kh-provider-btn">Log In</button>
     </form>
 
-    <!-- শুধু "Create Account" মোডে দেখা যাবে — placeholder href, পরে আসল URL বসানো যাবে -->
     <p id="khTermsText" class="kh-terms-text" style="display:none;">
       By signing up, you agree to WorkTrack's <a href="#" class="kh-terms-link">Terms of Use</a> and <a href="#" class="kh-terms-link">Privacy Policy</a>.
     </p>
@@ -84,7 +79,6 @@
 
     <div class="kh-or-divider"><span>Or</span></div>
 
-    <!-- ---------------- আগের প্রোভাইডার বাটন (অপরিবর্তিত) ---------------- -->
     <button id="googleSignInBtn" class="btn3d btn-sky kh-provider-btn">
       <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="" class="kh-provider-icon">
       Sign in with Google
@@ -98,7 +92,6 @@
     <p class="kh-auth-error" id="khAuthError" style="display:none;" aria-live="polite"></p>
   </div>
 
-  <!-- ---------------- ইমেইল ভেরিফিকেশন স্ক্রিন (সাইন আপের পর, শুধু যদি backend/Firebase সাপোর্ট করে) ---------------- -->
   <div class="kh-auth-box" id="khVerifyEmailBox" style="display:none;">
     <div class="kh-auth-icon">📧</div>
     <h2>Verify Your Email</h2>
@@ -109,10 +102,9 @@
   </div>
 </div>
 
-<!-- ================= ইউজার বার (লগইনের পর দেখা যাবে) ================= -->
 <div id="khUserBar" class="kh-user-bar" style="display:none;">
   <span id="khUserEmail" class="kh-user-email"></span>
-  <button id="khClaimOldDataBtn" class="btn3d btn-amber" style="display:none;">🗂️ Claim Old Data</button>
+  <button id="khClaimOldDataBtn" class="btn3d btn-amber" style="display:none;">Claim Old Data</button>
   <button id="khSignOutBtn" class="btn3d btn-coral">Log Out</button>
 </div>
 
@@ -124,9 +116,8 @@
     <p class="section-sub">Record daily work hours here, and add or remove members as needed. This data is now stored in the cloud (Firebase) — so you can view and update the same data in real time from any device or browser.</p>
   </div>
 
-  <!-- ---------------- সদস্য ব্যবস্থাপনা ---------------- -->
   <section class="kh-card kh-card--mint">
-    <h2 class="kh-card-title">🛠️ Member Management</h2>
+    <h2 class="kh-card-title">Member Management</h2>
     <div class="kh-add-row">
       <input type="text" id="memberInput" placeholder="Enter new member name...">
       <button class="btn3d btn-mint" id="addMemberBtn">+ Add Member</button>
@@ -135,9 +126,8 @@
     <p class="kh-empty-note" id="noMemberNote" style="display:none;">No members added yet. Enter a name above and click "Add Member".</p>
   </section>
 
-  <!-- ---------------- আজকের এন্ট্রি ---------------- -->
   <section class="kh-card kh-card--sky">
-    <h2 class="kh-card-title">📝 Record Attendance</h2>
+    <h2 class="kh-card-title">Record Attendance</h2>
     <form id="entryForm" class="kh-form">
       <div class="kh-field">
         <label>Date</label>
@@ -163,9 +153,8 @@
     <p class="kh-empty-note" id="noMemberWarn" style="display:none;">Add at least one member before recording attendance.</p>
   </section>
 
-  <!-- ---------------- সামারি ---------------- -->
   <section class="kh-card kh-card--amber">
-    <h2 class="kh-card-title">📊 Work Hours Summary</h2>
+    <h2 class="kh-card-title">Work Hours Summary</h2>
 
     <div class="filter-row kh-summary-month-row">
       <label for="summaryMonthSelect" class="kh-summary-month-label">Viewing month:</label>
@@ -174,16 +163,15 @@
 
     <div class="table-wrap">
       <table class="kh-table" id="summaryTable">
-        <thead><tr><th>Name</th><th>Total Work Days</th><th>Total Leave Days</th><th>Total Work Hours</th><th>💰 Advance (RM)</th></tr></thead>
+        <thead><tr><th>Name</th><th>Total Work Days</th><th>Total Leave Days</th><th>Total Work Hours</th><th>Advance (RM)</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
     <p class="kh-empty-note" id="noSummaryNote" style="display:none;">No records for this month yet.</p>
   </section>
 
-  <!-- ---------------- রেজিস্টার খাতা ---------------- -->
   <section class="kh-card kh-card--violet">
-    <h2 class="kh-card-title">📔 Attendance Register</h2>
+    <h2 class="kh-card-title">Attendance Register</h2>
 
     <p class="kh-loading" id="registerLoading">
       <span class="kh-dot"></span><span class="kh-dot"></span><span class="kh-dot"></span>
@@ -195,8 +183,8 @@
     </div>
 
     <div class="kh-register-actions">
-      <button type="button" class="btn3d btn-download" id="downloadPdfBtn">📄 Download This Month's Report (PDF)</button>
-      <button type="button" class="btn3d btn-download" id="downloadCsvBtn">📊 Download This Month's Report (CSV)</button>
+      <button type="button" class="btn3d btn-download" id="downloadPdfBtn">Download This Month's Report (PDF)</button>
+      <button type="button" class="btn3d btn-download" id="downloadCsvBtn">Download This Month's Report (CSV)</button>
     </div>
 
     <div id="registerGroups"><!-- JS প্রতিটা মাসকে আলাদা collapsible সেকশন হিসেবে বসায় --></div>
@@ -206,8 +194,7 @@
 </main>
 
 <style>
-  /* নতুন — Current Month / Previous Month ব্যাজ (সামারি সেকশনের উপরে), জুলাই/আগস্ট
-     যোগ না হয়ে আলাদা থাকে সেটা স্পষ্টভাবে দেখানোর জন্য। পুরনো কোনো ক্লাস ছোঁয়া হয়নি। */
+ 
   .kh-month-badges{
     display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
   }
@@ -226,7 +213,6 @@
   .kh-summary-month-row{ align-items: center; gap: 10px; margin-bottom: 12px; }
   .kh-summary-month-label{ font-size: .85rem; font-weight: 700; }
 
-  /* নতুন — শুধু মাস-ভিত্তিক গ্রুপিংয়ের জন্য, পুরনো কোনো ক্লাস ছোঁয়া হয়নি */
   .kh-month-group{
     background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
     margin-bottom: 14px; overflow: hidden;
@@ -246,7 +232,6 @@
   .kh-month-delete{ margin-left: auto; padding: 6px 12px !important; font-size: .8rem !important; }
   .kh-month-group .table-wrap{ padding: 0 14px 14px; }
 
-  /* নতুন — Member ID ব্যাজ (মেম্বার চিপের ভেতরে) */
   .member-chip{ display: inline-flex; align-items: center; gap: 6px; }
   .kh-member-id{
     font-size: .68rem; font-weight: 700; opacity: .75; font-family: monospace;
@@ -259,7 +244,6 @@
   }
   .kh-remove-member:hover{ background: rgba(179,58,58,0.4); }
 
-  /* নতুন — Email/Password লগইন ফর্ম (Welcome Back / Create Account) */
   .kh-email-form{ text-align:left; margin-top:14px; }
   .kh-email-label{ display:block; font-size:.82rem; font-weight:700; margin:12px 0 6px; }
   .kh-email-input{
@@ -286,10 +270,8 @@
   }
   .kh-or-divider::before, .kh-or-divider::after{ content:""; flex:1; height:1px; background:rgba(0,0,0,0.12); }
 
-  /* নতুন — Masum লোগো ছবি (আগের "ম" স্কয়ার + বাংলা "মাসুম" টেক্সটের বদলে) */
   .kh-logo-img{ height:34px; width:auto; display:block; }
 
-  /* নতুন — ফিল্ড-লেভেল ভ্যালিডেশন এরর (লাল বর্ডার + ছোট মেসেজ) */
   .kh-email-input.kh-input-error{ border-color:#c0392b; background:#fff6f5; }
   .kh-field-error{
     display:block; min-height:0; color:#c0392b; font-size:.78rem; font-weight:600;
@@ -297,34 +279,28 @@
   }
   .kh-field-error:empty{ margin:0; }
 
-  /* নতুন — Sign Up: Terms checkbox */
   .kh-terms-row{ margin-top:14px; }
   .kh-terms-label{
     display:flex; align-items:flex-start; gap:8px; font-size:.85rem; cursor:pointer; line-height:1.4;
   }
   .kh-terms-label input[type="checkbox"]{ margin-top:3px; width:16px; height:16px; flex-shrink:0; }
-
-  /* নতুন — Sign Up: Terms & Privacy disclaimer text (checkbox-এর বদলে) */
+  
   .kh-terms-text{
     text-align:center; font-size:.8rem; color:rgba(0,0,0,0.55); line-height:1.5;
     margin:2px 0 0; font-family:'Hind Siliguri',sans-serif;
   }
   .kh-terms-link{ color:#4F8CFF; font-weight:700; text-decoration:underline; }
-
-  /* নতুন — Google/Facebook বাটনের মাঝে স্পষ্ট ফাঁক, যাতে overlap মনে না হয় */
+  
   .kh-provider-btn{ margin-bottom: 14px; }
   .kh-provider-btn:last-of-type{ margin-bottom: 0; }
 
-  /* নতুন — সাবমিট বাটনের লোডিং স্টেট */
   #khEmailSubmitBtn:disabled, .kh-provider-btn:disabled{ opacity:.65; cursor:not-allowed; }
 
-  /* নতুন — কীবোর্ড ফোকাস স্টেট (accessibility) */
   .kh-eye-btn:focus-visible, .kh-toggle-link:focus-visible, .kh-forgot-link:focus-visible,
   .kh-provider-btn:focus-visible, .kh-email-input:focus-visible{
     outline:2px solid #4F8CFF; outline-offset:2px;
   }
 
-  /* নতুন — ইমেইল ভেরিফিকেশন স্ক্রিনের বাটনগুলো একটার নিচে একটা */
   #khVerifyEmailBox .kh-provider-btn{ width:100%; margin-top:10px; }
 </style>
 
