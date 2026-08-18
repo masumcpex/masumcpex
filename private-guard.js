@@ -1,22 +1,3 @@
-/* ==========================================================================
-   private-guard.js
-   nasir.html / amar-golpo.html / nazim.html / hafsa.html
-   — এই পেজগুলোতে কোনো password ফর্ম নেই।
-
-   প্রতিটা পেজের আসল কন্টেন্ট এখন HTML-এ plain text হিসেবে নেই — একটা
-   <script type="application/json" id="{contentId}Cipher"> ট্যাগে AES-GCM
-   এনক্রিপ্টেড অবস্থায় থাকে। এখানে শুধু চেক করা হয়: বৈধ সেশন key
-   localStorage-এ আছে কিনা (index.html#private-chapters এ সঠিক password
-   দিয়ে আনলক করার পর তৈরি হয় — private-access.js দেখুন)। থাকলে সেই key
-   দিয়ে decrypt করে কন্টেন্ট বসানো হয়; না থাকলে বা decrypt ব্যর্থ হলে
-   সরাসরি index.html#private-chapters এ পাঠিয়ে দেওয়া হয় — তাই ভুল/অনুপস্থিত
-   key নিয়ে পেজ সোর্সে আসল লেখা কখনোই থাকে না, শুধু এনক্রিপ্টেড গোলমেলে
-   টেক্সট থাকে।
-
-   এই ফাইলটা WorkTrack-এর Google/Firebase Login থেকে সম্পূর্ণ স্বতন্ত্র —
-   কোনো Firebase/Firestore ব্যবহার করে না।
-   ========================================================================== */
-
 import { getActiveSessionKey, clearSession, refreshSession } from "./private-access.js";
 
 function hexToBytes(hex) {
@@ -41,7 +22,7 @@ export async function guardPrivatePage({ contentId, signOutBtnId, onReady }) {
   const cipherEl = document.getElementById(contentId + "Cipher");
 
   if (cipherEl) {
-    // এনক্রিপ্টেড কন্টেন্ট আছে (nasir/amar-golpo/nazim/hafsa এর মতো) — decrypt করে বসাও
+    
     let payload;
     try {
       payload = JSON.parse(cipherEl.textContent);
@@ -58,21 +39,15 @@ export async function guardPrivatePage({ contentId, signOutBtnId, onReady }) {
       );
       contentEl.innerHTML = new TextDecoder().decode(plainBuf);
     } catch (e) {
-      // ভুল/মেয়াদোত্তীর্ণ key দিয়ে decrypt ব্যর্থ হলে সেশন মুছে আবার password চাওয়া হয়
+      
       clearSession();
       redirectHome();
       return;
     }
   }
-  // cipherEl না থাকলে — এই পেজে এনক্রিপ্ট করার মতো গোপন কিছু নেই (যেমন unpublished.html,
-  // যেখানে শুধু অধ্যায়গুলোর লিংক আছে), তাই HTML-এ যা আগে থেকে আছে সেটাই দেখানো হবে —
-  // শুধু বৈধ সেশন (উপরের getActiveSessionKey চেক) থাকলেই।
-
-  // সক্রিয়ভাবে এই পেজ দেখছে মানেই সেশনের মেয়াদ আরও ১ ঘণ্টা বেড়ে গেল
+ 
   refreshSession();
 
-  // innerHTML বসানোর পর পুরনো element রিপ্লেস হয়ে গেছে, তাই সাইনআউট বাটন
-  // নতুন করে খুঁজে event লাগাতে হবে
   const signOutBtn = signOutBtnId ? document.getElementById(signOutBtnId) : null;
   signOutBtn?.addEventListener("click", () => {
     clearSession();
