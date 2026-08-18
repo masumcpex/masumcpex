@@ -1,11 +1,3 @@
-/* ==========================================================================
-   style.css — মাসুম | masumcpex
-   ডিজাইন কনসেপ্ট: একটি ব্যক্তিগত "খাতা/লেজার" — পুরনো নোটবুকের উষ্ণতা,
-   নেভি কালি, সবুজাভ-তিল অ্যাকসেন্ট আর সোনালি হাইলাইট।
-   Premium refresh: Playfair Display + Inter + Poppins, 8px spacing rhythm,
-   softer shadows, consistent buttons/cards, subtle motion. Colors unchanged.
-   ========================================================================== */
-
 :root{
   color-scheme: light;
   --paper:      #F8FAFC;
@@ -82,7 +74,6 @@ img{ max-width:100%; display:block; }
 }
 .section-sub{ color: var(--muted); max-width: 60ch; margin-bottom: 2.4rem; font-size: 1rem; }
 
-/* ---------------- HEADER / NAV ---------------- */
 .site-header{
   position: sticky; top:0; z-index: 40;
   background: var(--ink);
@@ -166,7 +157,6 @@ img{ max-width:100%; display:block; }
 .icon-btn svg{ width:20px; height:20px; }
 .menu-toggle{ display:none; }
 
-/* mobile nav */
 @media (max-width: 880px){
   .header-inner{ padding: .7rem 1.1rem; }
   .main-nav{
@@ -218,7 +208,6 @@ img{ max-width:100%; display:block; }
 .search-result-item small{ color: var(--gold); display:block; font-family: var(--font-util); letter-spacing:.06em; margin-bottom:.15rem; }
 .search-result-item:hover{ background: rgba(255,255,255,.13); cursor:pointer; }
 
-/* ---------------- PAGES ---------------- */
 .page{ display:none; position:relative; z-index:2; }
 .page.active{ display:block; animation: fadeIn .45s var(--ease); }
 @keyframes fadeIn{ from{opacity:0; transform: translateY(12px);} to{opacity:1; transform:none;} }
@@ -227,7 +216,6 @@ img{ max-width:100%; display:block; }
 .page-inner.narrow{ max-width: 760px; }
 .page-inner.center{ text-align:center; }
 
-/* ---------------- HERO ---------------- */
 .hero{
   text-align:center; padding: 4.8rem 1.6rem 3.2rem;
   max-width: 640px; margin:0 auto;
@@ -262,7 +250,6 @@ img{ max-width:100%; display:block; }
 .hero .btn{ animation: fadeUp .6s var(--ease) .26s both; }
 @keyframes fadeUp{ from{ opacity:0; transform: translateY(14px); } to{ opacity:1; transform:none; } }
 
-/* ---------------- BD FLAG (mobile-only hero visual) ---------------- */
 .bdflag-mobile{ display:none; }
 .bdflag-mobile img{
   display:block;
@@ -299,7 +286,6 @@ img{ max-width:100%; display:block; }
 
 .section-block{ max-width: 1180px; margin: 0 auto; padding: 0 1.6rem 4.8rem; }
 
-/* homepage highlight cards */
 .highlight-grid{
   display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.4rem;
 }
@@ -323,7 +309,6 @@ img{ max-width:100%; display:block; }
   border-radius: 8px;
 }
 
-/* ---------------- ABOUT ---------------- */
 .about-grid{ display:flex; gap: 2.4rem; align-items:flex-start; flex-wrap:wrap; margin: 2rem 0 2.4rem; }
 .about-photo{ width: 168px; border-radius: 16px; box-shadow: var(--shadow-md); }
 .about-text p{ margin: 0 0 1.1rem; color: var(--charcoal); line-height: 1.85; }
@@ -332,7 +317,6 @@ img{ max-width:100%; display:block; }
 .stat-row .stat .num{ font-family: var(--font-display); font-size:1.6rem; font-weight:700; color: var(--teal); display:block; }
 .stat-row .stat .lbl{ color: var(--muted); font-size:.86rem; margin-top:.2rem; display:block; }
 
-/* ---------------- CARD GRID (Library / Projects) ---------------- */
 .card-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 1.8rem; }
 .book-card{
   background: var(--card-bg); border-radius: var(--radius-card); overflow:hidden;
@@ -361,7 +345,6 @@ img{ max-width:100%; display:block; }
 .book-card.locked .book-actions a{ border-color: var(--muted); color: var(--muted); pointer-events:none; }
 .book-card.locked .book-actions a:hover{ transform:none; background:none; color: var(--muted); }
 
-/* project cards */
 .projects-grid .book-card{ padding: 0; }
 .project-icon{ font-size:1.9rem; padding: 1.3rem 1.4rem 0; }
 .project-status{
@@ -370,7 +353,6 @@ img{ max-width:100%; display:block; }
   background: var(--paper-2); color: var(--teal-dark); width:fit-content; font-weight:600;
 }
 
-/* ---------------- LIST GRID (Journal / Articles) ---------------- */
 .filter-row{ display:flex; flex-wrap:wrap; gap:.6rem; margin-bottom: 2.2rem; }
 .chip{
   font-family: var(--font-nav); font-size:.85rem; font-weight:600; padding:.55rem 1.05rem; border-radius:999px;
@@ -391,7 +373,6 @@ img{ max-width:100%; display:block; }
 .entry-card .excerpt{ color: var(--muted); font-size:.92rem; line-height:1.65; margin-bottom:.8rem; }
 .entry-card .date{ font-size:.79rem; color: var(--muted); }
 
-/* ---------------- MYSTERY ---------------- */
 .mystery-title{ color: var(--ink); font-size: clamp(1.4rem,3vw,1.9rem); font-weight:700; }
 .mystery-notice{ color: var(--muted); margin-bottom: 2rem; line-height:1.75; }
 
@@ -409,7 +390,6 @@ img{ max-width:100%; display:block; }
   color: #10182B !important; -webkit-text-fill-color:#10182B;
 }
 
-/* ---------------- CONTACT ---------------- */
 .contact-intro{ padding-bottom: 1.4rem; }
 .center-sub{ margin-left:auto; margin-right:auto; }
 
@@ -431,7 +411,6 @@ img{ max-width:100%; display:block; }
 }
 @keyframes contactRise{ to{ opacity:1; transform:none; } }
 
-/* ---- left: info panel ---- */
 .contact-info{
   background: var(--ink);
   color: #fff;
@@ -474,7 +453,6 @@ img{ max-width:100%; display:block; }
 .ci-text a{ transition: color .18s var(--ease); }
 .ci-text a:hover{ color: var(--gold); }
 
-/* ---- right: form ---- */
 .contact-form-side{ padding: 2.8rem 2.6rem; background:#fff; }
 .cf-title{ font-size:1.45rem; font-weight:700; margin-bottom:.4rem; }
 .cf-sub{ color: var(--muted); font-size:.94rem; margin: 0 0 1.8rem; }
@@ -541,7 +519,6 @@ img{ max-width:100%; display:block; }
   .contact-info, .contact-form-side{ padding: 1.8rem 1.3rem; }
 }
 
-/* ---------------- MODAL (Journal/Article পড়ার জন্য) ---------------- */
 .modal-overlay{
   display:none; position:fixed; inset:0; background: rgba(27,42,69,.55);
   backdrop-filter: blur(2px);
@@ -560,14 +537,12 @@ img{ max-width:100%; display:block; }
 .modal-date{ color: var(--muted); font-size:.86rem; margin-bottom: 1.4rem; }
 .modal-content{ color: var(--charcoal); line-height:1.9; white-space: pre-line; }
 
-/* ---------------- FOOTER ---------------- */
 .site-footer{
   text-align:center; padding: 2.4rem 1rem; color: var(--muted); font-size:.85rem;
   border-top: 1px solid var(--line-soft); background: var(--paper-2);
   font-family: var(--font-util);
 }
 
-/* focus visibility for accessibility */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
   outline: 2px solid var(--teal); outline-offset: 2px;
 }
@@ -576,7 +551,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   *{ animation: none !important; transition: none !important; }
 }
 
-/* ---------------- responsive refinements ---------------- */
 @media (max-width: 640px){
   .page-inner{ padding: 3rem 1.2rem; }
   .section-block{ padding: 0 1.2rem 3.6rem; }
@@ -584,7 +558,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   .stat-row{ gap: 1.4rem; }
 }
 
-/* ================= PRIVATE CHAPTER ACCESS GATE ================= */
 .private-gate{ max-width: 460px; margin: 0 auto; text-align:center; }
 .private-gate .btn{ margin-top: .6rem; }
 .private-gate-status{
