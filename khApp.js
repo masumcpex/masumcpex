@@ -1,12 +1,3 @@
-/* ==========================================================================
-   khApp.js
-   হাজিরা খাতার মূল লজিক — সদস্য ব্যবস্থাপনা, এন্ট্রি ফর্ম, সামারি,
-   রেজিস্টার, CSV ডাউনলোড, মাসিক হিসাব মুছে ফেলা।
-   Anonymous (no-login) এবং Email/Password (login) — দুই ভার্সনই এই একই
-   ফাইল ব্যবহার করে, শুধু uid কে ভিন্নভাবে জোগাড় করে। তাই দুই জায়গায়
-   একই ফিচার/বাগ-ফিক্স রাখতে আলাদা করে কিছু বদলাতে হয় না।
-   ========================================================================== */
-
 import {
   db, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot,
   query, where, serverTimestamp, writeBatch, runTransaction, getDoc
@@ -18,7 +9,7 @@ const recordsCol = collection(db, "kh_records");
 let appStarted = false;
 
 export function initKhApp(uid){
-  if(appStarted) return; // দুইবার চালু হওয়া ঠেকানো (auth state একাধিকবার ফায়ার করলেও)
+  if(appStarted) return; 
   appStarted = true;
 
   let members = [];   // [{id, name}]
@@ -50,19 +41,14 @@ export function initKhApp(uid){
 
   entryDate.value = new Date().toISOString().slice(0,10);
 
-  /* ---------------- ছোট্ট ক্লিক-বাউন্স এফেক্ট ---------------- */
   function khBounce(el){
     if(!el) return;
     el.classList.remove("kh-bounce");
-    void el.offsetWidth; // reflow যাতে animation আবার ট্রিগার হয়
+    void el.offsetWidth; 
     el.classList.add("kh-bounce");
     el.addEventListener("animationend", () => el.classList.remove("kh-bounce"), { once:true });
   }
 
-  /* ---------------- ইউনিক Member ID তৈরি (যেমন: JAKIR-0001) ----------------
-     প্রতিটা owner-এর নিজস্ব একটা কাউন্টার (kh_meta/{uid}) থাকে, Firestore
-     transaction দিয়ে atomically বাড়ানো হয় — তাই একসাথে অনেকে সদস্য যোগ
-     করলেও কখনো একই ID দুইজনকে বসবে না, ২৩৬+ ব্যবহারকারীর জন্যও নিরাপদ। */
   async function generateMemberId(name){
     const counterRef = doc(db, "kh_meta", uid);
     const seq = await runTransaction(db, async (tx) => {
@@ -75,9 +61,8 @@ export function initKhApp(uid){
     return `${prefix}-${String(seq).padStart(4, "0")}`;
   }
 
-  /* ---------------- সদস্য রেন্ডার ---------------- */
   const CHIP_COLORS = ["chip-mint","chip-sky","chip-coral","chip-violet","chip-amber","chip-indigo","chip-rose","chip-teal"];
-  const backfillingIds = new Set(); // একই মেম্বারের জন্য দুইবার backfill শুরু হওয়া ঠেকানো
+  const backfillingIds = new Set(); 
   function renderMembers(){
     memberChips.innerHTML = members.map((m, i) => `
       <span class="member-chip ${CHIP_COLORS[i % CHIP_COLORS.length]}">
@@ -99,8 +84,6 @@ export function initKhApp(uid){
     if(members.some(m => m.name === currentEntryVal)) entryMember.value = currentEntryVal;
     if(currentFilterVal === "All" || members.some(m => m.name === currentFilterVal)) filterMember.value = currentFilterVal;
 
-    // পুরনো সদস্য (এই ফিচার আসার আগে যোগ করা) যাদের memberId নেই, তাদের জন্য
-    // নিঃশব্দে একবার Member ID তৈরি করে দেওয়া হয় — কোনো ম্যানুয়াল কাজ লাগে না
     members.forEach(async m => {
       if(m.memberId || backfillingIds.has(m.id)) return;
       backfillingIds.add(m.id);
@@ -151,7 +134,6 @@ export function initKhApp(uid){
     }
   });
 
-  /* ---------------- স্ট্যাটাস টগল (ছুটি হলে ঘণ্টা ইনপুট বন্ধ) ---------------- */
   entryForm.querySelectorAll('input[name="status"]').forEach(radio => {
     radio.addEventListener("change", () => {
       const isLeave = entryForm.querySelector('input[name="status"]:checked').value === "leave";
@@ -161,12 +143,10 @@ export function initKhApp(uid){
     });
   });
 
-  /* ---------------- ডুপ্লিকেট এন্ট্রি সংক্রান্ত সাহায্যকারী ফাংশন ---------------- */
   function findExistingRecord(date, member){
     return records.find(r => r.date === date && r.member === member);
   }
 
-  /* একই সদস্য+তারিখ নির্বাচন করলে আগের এন্ট্রি ফর্মে স্বয়ংক্রিয়ভাবে দেখানো (শুধু প্রিভিউ, এখনো সংরক্ষণ হয়নি) */
   function autoFillFromExisting(){
     const existing = findExistingRecord(entryDate.value, entryMember.value);
     if(!existing) return;
@@ -180,7 +160,6 @@ export function initKhApp(uid){
   entryMember.addEventListener("change", autoFillFromExisting);
   entryDate.addEventListener("change", autoFillFromExisting);
 
-  /* ---------------- সাধারণ নিশ্চিতকরণ মোডাল (মাস মুছে ফেলার জন্য ব্যবহৃত) ---------------- */
   function ensureConfirmModal(){
     let overlay = document.getElementById("khConfirmModalOverlay");
     if(overlay) return overlay;
@@ -220,7 +199,6 @@ export function initKhApp(uid){
     });
   }
 
-  /* প্রিমিয়াম "ডুপ্লিকেট পাওয়া গেছে" মোডাল — থিমের সাথে মিলিয়ে, alert()-এর বদলে */
   function ensureDuplicateModal(){
     let overlay = document.getElementById("khDupModalOverlay");
     if(overlay) return overlay;
@@ -258,7 +236,6 @@ export function initKhApp(uid){
     });
   }
 
-  /* ---------------- এন্ট্রি সাবমিট ---------------- */
   entryForm.addEventListener("submit", async e => {
     e.preventDefault();
     if(!members.length) return;
@@ -297,23 +274,17 @@ export function initKhApp(uid){
     }
   });
 
-  /* ---------------- মাস নির্ণয়ের সাহায্যকারী ফাংশন ----------------
-     MAIN FIX: প্রতিটা মাসের হিসাব একদম আলাদাভাবে রাখা হয় — currentYearMonth()
-     এবং previousYearMonth() সবসময় সঠিক YYYY-MM রিটার্ন করে, এবং সামারি সবসময়
-     শুধুমাত্র নির্বাচিত একটি মাসের রেকর্ড থেকে হিসাব করে, সব মাস একসাথে যোগ করে না। */
   function currentYearMonth(){
     return new Date().toISOString().slice(0,7); // "YYYY-MM"
   }
   function previousYearMonth(){
     const d = new Date();
-    d.setDate(1); // মাসের ১ তারিখে সেট করা হলো, যাতে মাস কমানোর সময় দিনের সংখ্যার কারণে ভুল মাসে না যায়
+    d.setDate(1);
     d.setMonth(d.getMonth() - 1);
     return d.toISOString().slice(0,7);
   }
 
-  /* সামারি সেকশনের উপরে "Current Month" / "Previous Month" মোট ঘণ্টার ব্যাজ —
-     ড্রপডাউনে যে মাসই নির্বাচিত থাকুক না কেন, এই দুইটা সবসময় প্রকৃত চলতি ও
-     আগের মাসের সংখ্যা দেখায়, যাতে দুই মাস কখনো একসাথে যোগ না হয়ে যায়। */
+ 
   function updateMonthBadges(){
     const cur  = currentYearMonth();
     const prev = previousYearMonth();
