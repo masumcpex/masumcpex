@@ -1,11 +1,3 @@
-/* ==========================================================================
-   kh-auth.js
-   Google লগইন নিয়ন্ত্রণ করে। লগইন করার আগে ড্যাশবোর্ড (kh-main) সম্পূর্ণ
-   লুকানো থাকে — কেউ লগইন ছাড়া কিছুই দেখতে/লিখতে পারবে না।
-   লগইন করলে, শুধু সেই ব্যবহারকারীর নিজের ডেটা (ownerId মিলিয়ে) খুলে যায়
-   (এটা khApp.js-এর initKhApp(uid) নিজেই সামলায়)।
-   ========================================================================== */
-
 import {
   auth, db, GoogleAuthProvider, FacebookAuthProvider,
   signInWithPopup,
@@ -35,7 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
     authError.style.display = "block";
   }
 
-  /* ---------------- Google ---------------- */
   signInBtn.addEventListener("click", async () => {
     authError.style.display = "none";
     signInBtn.disabled = true;
@@ -49,12 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- Facebook ----------------
-     আগে signInWithRedirect ব্যবহার হতো, কিন্তু নতুন Android Chrome-এর
-     storage-partitioning ফিচারের কারণে redirect থেকে ফেরার পর
-     sessionStorage হারিয়ে যাচ্ছিল ("missing initial state" এরর) —
-     ফলে লগইনই সম্পূর্ণ ব্যর্থ হচ্ছিল। তাই Google-এর মতোই এখন popup
-     ব্যবহার করা হচ্ছে, যেটা আধুনিক মোবাইল ব্রাউজারে বেশি নির্ভরযোগ্য। */
   fbSignInBtn.addEventListener("click", async () => {
     authError.style.display = "none";
     fbSignInBtn.disabled = true;
@@ -77,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
       userBar.style.display = "flex";
       userEmailEl.textContent = user.email || user.phoneNumber || "";
 
-      /* শুধু অ্যাডমিন ইমেইলের জন্য পুরনো (লগইনের আগের) ডেটা claim করার বাটন */
       if(user.email === ADMIN_EMAIL && claimBtn){
         claimBtn.style.display = "inline-block";
         claimBtn.onclick = () => claimOldData(user.uid, claimBtn);
@@ -94,8 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- পুরনো (ownerId ছাড়া) ডেটা অ্যাডমিনের নামে করে দেওয়া ----------------
-     এটা একবারই চালানো উচিত, টিমের অন্য কেউ লগইন করে নতুন ডেটা লেখার আগে। */
   async function claimOldData(uid, btn){
     if(!confirm("All attendance/member data from before the login system was enabled (regardless of previous ownerId) will be assigned to this account. This should only be done once. Do you want to proceed?")) return;
     btn.disabled = true;
@@ -121,23 +103,12 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
       alert("Couldn't claim old data. Check the console for errors / verify Firestore Rules.");
       btn.disabled = false;
-      btn.textContent = "🗂️ Claim Old Data";
+      btn.textContent = "Claim Old Data";
     }
   }
 
 });
 
-/* ==========================================================================
-   Welcome Back / Create Account টগল + ইমেইল-পাসওয়ার্ড লগইন
-   এটা সম্পূর্ণ আলাদা DOMContentLoaded ব্লক, উপরের Google/Facebook/Phone
-   কোড এক লাইনও ছোঁয়া হয়নি — সেগুলো আগের মতোই কাজ করবে।
-
-   আগে এই ব্লকটা khTabLogin/khTabSignup ইত্যাদি এমন সব element খুঁজত যেগুলো
-   বর্তমান HTML-এ নেই (পুরনো ডিজাইনের জন্য লেখা হয়েছিল) — ফলে শুরুতেই
-   `return` হয়ে পুরো ব্লকটাই নিষ্ক্রিয় থাকত। এখন বর্তমান HTML-এর আসল আইডি
-   (khToggleModeBtn, khConfirmPasswordWrap, khTogglePassword ইত্যাদি) দিয়ে
-   ঠিক করা হলো।
-   ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
 
   const authError = document.getElementById("khAuthError");
@@ -177,7 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let mode = "login"; // "login" | "signup"
   let isSubmitting = false;
 
-  /* ---------------- এরর হেল্পার ---------------- */
   function showAuthError(msg){
     if(!authError) return;
     authError.textContent = msg;
@@ -203,13 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
     clearFieldError(confirmInput, confirmError);
   }
 
-  /* এরর হলে user টাইপ করা শুরু করলে সেই ফিল্ডের error auto-clear হবে */
   fullNameInput?.addEventListener("input", () => clearFieldError(fullNameInput, fullNameError));
   emailInput?.addEventListener("input", () => clearFieldError(emailInput, emailError));
   passwordInput?.addEventListener("input", () => clearFieldError(passwordInput, passwordError));
   confirmInput?.addEventListener("input", () => clearFieldError(confirmInput, confirmError));
 
-  /* ---------------- Login / Sign up মোড টগল ---------------- */
   function setMode(newMode){
     mode = newMode;
     const isLogin = mode === "login";
@@ -232,7 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   toggleModeBtn.addEventListener("click", () => setMode(mode === "login" ? "signup" : "login"));
 
-  /* ---------------- ভ্যালিডেশন ---------------- */
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function validateEmail(){
@@ -271,7 +238,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return true;
   }
 
-  /* ---------------- Firebase error code → ফিল্ড-লেভেল বার্তা ---------------- */
   function handleAuthError(err){
     const code = err && err.code ? err.code : "";
     if(mode === "login"){
@@ -309,7 +275,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /* ---------------- ফর্ম সাবমিট (Enter কী দিয়েও কাজ করবে) ---------------- */
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if(isSubmitting) return; // ডুপ্লিকেট রিকোয়েস্ট প্রতিরোধ
@@ -336,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try{
       if(mode === "login"){
         await signInWithEmailAndPassword(auth, email, password);
-        // সফল হলে onAuthStateChanged (উপরের ব্লক) নিজেই gate লুকিয়ে dashboard দেখাবে
+     
       }else{
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         const name = fullNameInput.value.trim();
@@ -344,8 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
           try{ await updateProfile(cred.user, { displayName: name }); }
           catch(profileErr){ console.error(profileErr); }
         }
-        // onAuthStateChanged (উপরের ব্লক) সরাসরি dashboard দেখাবে —
-        // কোনো email verification / OTP ধাপ নেই, সরাসরি account তৈরি হয়ে যায়
+        
       }
     }catch(err){
       console.error(err);
@@ -357,7 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- পাসওয়ার্ড ভুলে গেছেন ---------------- */
   forgotBtn.addEventListener("click", async () => {
     clearAuthError();
     if(!validateEmail()) return;
@@ -379,7 +342,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* ---------------- ইমেইল ভেরিফিকেশন গেট (সাইন-আপের পর) ---------------- */
   window.__khShowVerifyGate = function(){
     if(loginSignupBox) loginSignupBox.style.display = "none";
     if(verifyBox) verifyBox.style.display = "block";
@@ -391,9 +353,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(loginSignupBox) loginSignupBox.style.display = "block";
   };
 
-  /* Resend বাটনে ৬০ সেকেন্ড cooldown — খুব দ্রুত বারবার চাপলে Firebase নিজেই
-     auth/too-many-requests দিয়ে ব্লক করে দেয় (স্প্যাম-বিরোধী সুরক্ষা)।
-     এই cooldown সেই সমস্যা এড়াতে সাহায্য করবে। */
   let resendCooldownTimer = null;
   function startResendCooldown(seconds){
     if(!resendBtn) return;
@@ -436,8 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         verifyError.style.display = "block";
       }
-      // too-many-requests এলে বাটন সাথে সাথে আবার সক্রিয় করলে একই সমস্যা হতে পারে,
-      // তাই এখানেও একটা ছোট cooldown দেওয়া হচ্ছে
+     
       startResendCooldown(err.code === "auth/too-many-requests" ? 60 : 5);
     }
   });
