@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `<div class="stat"><span class="num">${s.number}</span><span class="lbl">${s.label}</span></div>`
   ).join("");
 
-  // "khBookSession" — "চলার পথে আমার গল্প"-এর নিজস্ব, Unrevealed Chapter
-  // থেকে ভিন্ন password/session (দেখুন private-access.js)।
   function hasBookSession() {
     try {
       const raw = localStorage.getItem("khBookSession");
@@ -158,10 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
     renderArticles(e.target.dataset.cat);
   });
 
-  renderJournal("All");
-  renderArticles("All");
+  renderJournal("সব");
+  renderArticles("সব");
 
-  /* click on an entry card opens the read modal, or navigates if a real url is set */
   function findEntry(id, type){
     return (type === "journal" ? SITE_DATA.journal : SITE_DATA.articles).find(e => e.id === id);
   }
